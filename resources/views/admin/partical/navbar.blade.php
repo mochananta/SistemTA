@@ -124,8 +124,8 @@
                     </li>
                 </ul>
                 <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo" href="index.html"><img
-                            src="{{ asset('admin/images/logo.svg') }}" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('admin/images/logo.svg') }}"
+                            alt="logo" /></a>
                     <a class="navbar-brand brand-logo-mini" href="index.html"><img
                             src="{{ asset('admin/images/logo-mini.svg') }}" alt="logo" /></a>
                 </div>
@@ -157,23 +157,44 @@
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
                             id="profileDropdown">
-                            <span class="nav-profile-name">Johnson</span>
+                            @php
+                                $fullName = Auth::user()->name;
+                                $parts = explode(' - ', $fullName);
+                                $namePart = $parts[0];
+                                $desaPart = $parts[1] ?? '';
+
+                                $words = explode(' ', $namePart);
+                                $count = count($words);
+
+                                $formatted = '';
+                                foreach ($words as $i => $word) {
+                                    if ($i < $count - 1) {
+                                        $formatted .= strtoupper(substr($word, 0, 1)) . '. ';
+                                    } else {
+                                        $formatted .= $word;
+                                    }
+                                }
+
+                                $displayName = trim($formatted);
+                                if ($desaPart) {
+                                    $displayName .= ' - ' . $desaPart;
+                                }
+                            @endphp
+
+                            <span class="nav-profile-name">{{ $displayName }}</span>
                             <span class="online-status"></span>
-                            <img src="{{ asset('admin/images/faces/face28.png') }}" alt="profile" />
+                            <img src="{{ asset('admin/images/admin.png') }}" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                             aria-labelledby="profileDropdown">
-                            <a class="dropdown-item">
-                                <i class="mdi mdi-settings text-primary"></i>
-                                Settings
-                            </a>
                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                 @csrf
-                                <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a href="{{ route('logout') }}" class="dropdown-item"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="mdi mdi-logout text-primary"></i>
                                     Logout
                                 </a>
-                            </form>                                               
+                            </form>
                         </div>
                     </li>
                 </ul>
@@ -188,7 +209,7 @@
         <div class="container">
             <ul class="nav page-navigation">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="{{ url('/dashboard') }}">
                         <i class="mdi mdi-file-document-box menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
@@ -209,16 +230,16 @@
                     </div>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="mdi mdi-chart-areaspline menu-icon"></i>
-                        <span class="menu-title">Form Elements</span>
+                    <a href="{{ route('admin.surat.view') }}" class="nav-link">
+                        <i class="mdi mdi-file-document menu-icon"></i>
+                        <span class="menu-title">Layanan Pengajuan Surat</span>
                         <i class="menu-arrow"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/charts/chartjs.html" class="nav-link">
-                        <i class="mdi mdi-finance menu-icon"></i>
-                        <span class="menu-title">Charts</span>
+                    <a href="{{ route('admin.konsultasi.view') }}" class="nav-link">
+                        <i class="mdi mdi-message-text-outline menu-icon"></i>
+                        <span class="menu-title">Layanan Konsultasi</span>
                         <i class="menu-arrow"></i>
                     </a>
                 </li>
@@ -244,15 +265,14 @@
                     </a>
                     <div class="submenu">
                         <ul class="submenu-item">
-                            <li class="nav-item"><a class="nav-link"
-                                    href="pages/samples/login.html">Login</a>
+                            <li class="nav-item"><a class="nav-link" href="pages/samples/login.html">Login</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="pages/samples/login-2.html">Login
                                     2</a></li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="pages/samples/register.html">Register</a></li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="pages/samples/register-2.html">Register 2</a></li>
+                            <li class="nav-item"><a class="nav-link" href="pages/samples/register.html">Register</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="pages/samples/register-2.html">Register
+                                    2</a></li>
                             <li class="nav-item"><a class="nav-link"
                                     href="pages/samples/lock-screen.html">Lockscreen</a></li>
                         </ul>

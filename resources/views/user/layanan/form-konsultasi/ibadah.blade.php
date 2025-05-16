@@ -8,11 +8,13 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <span class="text-gray-600 dark:text-gray-300">Pengajuan Surat</span>
+                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan Konsultasi</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
             </div>
             <!-- Title -->
             <div class="mb-12 text-center">
-                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Layanan Nikah</h2>
+                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rumah Ibadah</h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 text-lg">
                     Silakan lengkapi data dan persyaratan berikut dengan benar.
                 </p>
@@ -42,7 +44,8 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                     <form action="#" method="POST" class="space-y-6">
                         @csrf
-
+                        
+                        <input type="hidden" name="jenis_surat" value="Rumah Ibadah">
                         <div>
                             <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
                                 Lengkap</label>
@@ -55,6 +58,14 @@
                             <label for="nik" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor
                                 KTP</label>
                             <input type="text" id="nik" name="nik"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                                placeholder="16 digit NIK" required>
+                        </div>
+
+                        <div>
+                            <label for="nik" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Upload File</label>
+                            <input type="file" id="nik" name="nik"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
                                 placeholder="16 digit NIK" required>
                         </div>

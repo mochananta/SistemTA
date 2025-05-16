@@ -21,13 +21,20 @@ class AdminSeeder extends Seeder
             'role' => 'admin_sistem',
         ]);
 
-        // Admin KUA
         User::create([
-            'name' => 'Admin KUA A',
-            'email' => 'admin@kua.com',
+            'name' => 'Admin KUA Giri',
+            'email' => 'kua@giri.com',
             'password' => Hash::make('1234'),
             'role' => 'admin_kua',
-            'kua_id' => 1, // nanti bisa dikaitkan ke tabel kua
+            'kua_id' => 1,
+        ]);
+    
+        User::create([
+            'name' => 'Admin KUA Rogojampi',
+            'email' => 'kua@rogojampi.com',
+            'password' => Hash::make('1234'),
+            'role' => 'admin_kua',
+            'kua_id' => 2,
         ]);
     }
 }

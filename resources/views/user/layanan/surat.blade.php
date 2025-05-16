@@ -28,7 +28,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
                     Ajukan surat rekomendasi kegiatan keagamaan, pendidikan, atau sosial dari Kementerian Agama.
                 </p>
-                <a href="{{ route('user.layanan.form-surat.form') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
+                <a href="{{ url('/form/nikah') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                     Lihat Detail →
                 </a>
             </div>
@@ -42,7 +42,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
                     Gunakan layanan ini untuk mengajukan izin resmi penyelenggaraan kegiatan keagamaan.
                 </p>
-                <a href="#" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
+                <a href="{{ url('/form/ikrar') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                     Lihat Detail →
                 </a>
             </div>
@@ -52,11 +52,11 @@
                 <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
                     <i class="fas fa-mosque text-xl text-primary-600 dark:text-primary-400"></i>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Legalisir Buku Nikah</h3>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Rumah Ibadah</h3>
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
                     Untuk mengajukan surat keterangan atau legalitas tempat ibadah di wilayah Anda.
                 </p>
-                <a href="#" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
+                <a href="{{ url('/form/surat-ibadah') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                     Lihat Detail →
                 </a>
             </div>
@@ -70,7 +70,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
                     Untuk mengajukan surat keterangan atau legalitas tempat ibadah di wilayah Anda.
                 </p>
-                <a href="#" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
+                <a href="{{ url('/form/rekomendasi-nikah') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                     Lihat Detail →
                 </a>
             </div>

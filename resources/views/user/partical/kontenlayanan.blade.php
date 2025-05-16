@@ -124,45 +124,4 @@
         </div>
     </section>
 
-    <!-- Form Lacak Layanan -->
-    <section id="lacak" class="py-16 bg-green-50 dark:bg-gray-900 transition-all duration-300">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <div
-                    class="inline-block px-3 py-1 text-xs font-semibold text-green-600 dark:text-green-400 bg-green-100 dark:bg-gray-700 rounded-full">
-                    Pelacakan Layanan
-                </div>
-                <h2 class="text-3xl font-bold mt-4 text-gray-900 dark:text-white">
-                    Lacak Status Layanan Anda
-                </h2>
-                <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    Pantau progres layanan Anda secara real-time dengan transparansi dan akses mudah terhadap data layanan publik.
-                </p>
-            </div>
-
-            <div class="max-w-xl mx-auto bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <form id="formLacakLayanan" class="space-y-4">
-                    <div>
-                        <label for="idLayanan" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            ID Layanan
-                        </label>
-                        <input type="text" id="idLayanan" name="idLayanan" placeholder="Masukkan No Layanan" required
-                            class="mt-1 block w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    </div>
-                    <div>
-                        <label for="noHP" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Nomor HP
-                        </label>
-                        <input type="text" id="noHP" name="noHP" placeholder="Masukkan No HP" required
-                            class="mt-1 block w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    </div>
-                    <button type="submit"
-                        class="w-full py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                        Lacak Layanan
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     

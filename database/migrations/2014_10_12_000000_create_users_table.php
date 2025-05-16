@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('kua_id')->nullable();
+            $table->string('role')->default('user');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -29,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('pengajuan_surats', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+    
         Schema::dropIfExists('users');
     }
 };

@@ -6,4 +6,7 @@
     @include('user.partical.layanan')
 
     @include('user.partical.kontenlayanan')
+    
+    @include('user.partical.lacaklayanan')
+
 @endsection
