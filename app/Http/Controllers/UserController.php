@@ -22,6 +22,7 @@ class UserController extends Controller
         'surat-pendaftaran-pernikahan' => view('user.layanan.form-surat.pendaftaran-pernikahan', compact('kuas')),
         'surat-rekomendasi-nikah' => view('user.layanan.form-surat.rekomendasi-nikah', compact('kuas')),
 
+        //arelll
         // Form Konsultasi
         'konsultasi-ibadah' => view('user.layanan.form-konsultasi.ibadah', compact('kuas')),
         'konsultasi-pendaftaran-pernikahan' => view('user.layanan.form-konsultasi.pendaftaran-pernikahan', compact('kuas')),
