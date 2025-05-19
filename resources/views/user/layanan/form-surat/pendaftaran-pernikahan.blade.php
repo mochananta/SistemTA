@@ -8,13 +8,13 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan Konsultasi</a>
+                <a href="{{ route('user.layanan.surat') }}"" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Pengajuan Surat</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
+                <span class="text-gray-600 dark:text-gray-300">Pelayanan Pendaftaran Pernikahan</span>
             </div>
             <!-- Title -->
             <div class="mb-12 text-center">
-                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rumah Ibadah</h2>
+                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Pendaftaran Pernikahan </h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 text-lg">
                     Silakan lengkapi data dan persyaratan berikut dengan benar.
                 </p>
@@ -42,10 +42,10 @@
 
                 <!-- Kanan - Form -->
                 <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700">
-                    <form action="{{ route('konsultasi.store') }}" method="POST" enctype="multipart/form-data"
+                    <form action="{{ route('pengajuan.store') }}" method="POST" enctype="multipart/form-data"
                         class="space-y-6">
                         @csrf
-                        <input type="hidden" name="jenis_konsultasi" value="Rumah Ibadah">
+                        <input type="hidden" name="jenis_surat" value="Pendaftaran pernikahan">
                         <div>
                             <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap
@@ -66,8 +66,7 @@
 
                         <div>
                             <label for="nohp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span
-                                    class="text-red-600">*</span>
+                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span class="text-red-600">*</span>
                             </label>
                             <input type="text" id="nohp" name="nohp"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
@@ -79,52 +78,24 @@
                         </div>
 
                         <div>
-                            <label for="tanggal_konsultasi"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-calendar-alt mr-1 text-green-600"></i> Tanggal Konsultasi
+                            <label for="tanggal_pengajuan" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-calendar-alt mr-1 text-green-600"></i> Tanggal Pengajuan
                             </label>
-                            <input type="date" id="tanggal_konsultasi" name="tanggal_konsultasi"
+                            <input type="date" id="tanggal_pengajuan" name="tanggal_pengajuan"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
                                 required>
                         </div>
 
                         <div>
-                            <label for="jam_konsultasi"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                <i class="fas fa-clock mr-1 text-green-600"></i> Jam Konsultasi
-                            </label>
-                            <div class="relative">
-                                <select id="jam_konsultasi" name="jam_konsultasi" required
-                                    class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 
-                                           rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 
-                                           focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                    <option disabled selected>-- Pilih Jam --</option>
-                                    @for ($i = 8; $i <= 16; $i++)
-                                        <option value="{{ sprintf('%02d:00', $i) }}">{{ sprintf('%02d:00', $i) }}</option>
-                                    @endfor
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
                             <label for="kua_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span
-                                    class="text-red-600">*</span>
+                                <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span class="text-red-600">*</span>
                             </label>
                             <div class="relative">
                                 <select id="kua_id" name="kua_id" required
                                     class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                                     <option value="" disabled selected>-- Pilih KUA Tujuan --</option>
                                     @foreach ($kuas as $kua)
-                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}
-                                        </option>
+                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}</option>
                                     @endforeach
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -136,9 +107,10 @@
                                 </div>
                             </div>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
-                                Pilih KUA sesuai lokasi tujuan konsultasi.
+                                Pilih KUA sesuai lokasi tujuan pengajuan.
                             </p>
                         </div>
+                        
 
                         <div>
                             <label for="alamat" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -150,21 +122,8 @@
                         </div>
 
                         <div>
-                            <label for="isi_konsultasi"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                <i class="fas fa-comments mr-1 text-green-600"></i> Isi Konsultasi
-                            </label>
-                            <textarea id="isi_konsultasi" name="isi_konsultasi" rows="4"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                                        bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 
-                                        focus:ring-green-500 focus:outline-none transition"
-                                placeholder="Jelaskan permasalahan atau kebutuhan Anda..." required></textarea>
-                        </div>
-
-                        <div>
                             <label for="file_path" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-upload mr-1 text-green-600"></i> Upload Dokumen Persyaratan <span
-                                    class="text-red-600">*</span>
+                                <i class="fas fa-upload mr-1 text-green-600"></i> Upload Dokumen Persyaratan <span class="text-red-600">*</span>
                             </label>
                             <input type="file" id="file_path" name="file_path" required
                                 class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-100
@@ -174,13 +133,12 @@
                                        hover:file:bg-green-100
                                        dark:file:bg-green-900 dark:file:text-green-200 dark:hover:file:bg-green-800
                                        transition" />
-
+                            
                             <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                                File wajib diunggah. Format diperbolehkan: <strong>PDF, JPG, JPEG, PNG</strong>. Maksimal
-                                ukuran: <strong>5MB</strong>.
+                                File wajib diunggah. Format diperbolehkan: <strong>PDF, JPG, JPEG, PNG</strong>. Maksimal ukuran: <strong>5MB</strong>.
                             </p>
                         </div>
-
+                        
 
                         <div class="text-right">
                             <button type="submit"
@@ -189,9 +147,7 @@
                             </button>
                         </div>
                         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                            Jika proses permohonan berhasil, pemohon akan mendapatkan <strong>NOMOR LAYANAN</strong> yang
-                            akan tampil melalui dialog box dan juga dikirim melalui pesan whatsapp (jika nomor HP pemohon
-                            nomor whatsapp).
+                            Jika proses permohonan berhasil, pemohon akan mendapatkan <strong>NOMOR LAYANAN</strong> yang akan tampil melalui dialog box dan juga dikirim melalui pesan whatsapp (jika nomor HP pemohon nomor whatsapp).
                         </p>
                     </form>
                 </div>
