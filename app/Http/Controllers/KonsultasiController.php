@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Konsultasi;
+use App\Models\Kua;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class KonsultasiController extends Controller
@@ -11,17 +13,28 @@ class KonsultasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+        $query = Konsultasi::with(['user', 'kua']);
 
         if ($user->role === 'admin_kua') {
-            $data = Konsultasi::where('kua_id', $user->kua_id)->with(['user', 'kua'])->latest()->get();
-        } else {
-            $data = Konsultasi::with(['user', 'kua'])->latest()->get();
+            $query->where('kua_id', $user->kua_id);
         }
 
-        return view('admin.konsultasi.view', compact('data'));
+        if ($request->filled('kua_id') && $user->role === 'admin_sistem') {
+            $query->where('kua_id', $request->kua_id);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('nama', 'like', "%$search%");
+        }
+
+        $data = $query->latest()->paginate(10)->withQueryString();
+        $kualist = $user->role === 'admin_sistem' ? Kua::all() : collect();
+
+        return view('admin.konsultasi.view', compact('data', 'kualist'));
     }
 
     /**
@@ -133,8 +146,8 @@ class KonsultasiController extends Controller
     {
         $konsultasi = Konsultasi::findOrFail($id);
 
-        if ($konsultasi->file_path && \Storage::exists($konsultasi->file_path)) {
-            \Storage::delete($konsultasi->file_path);
+        if ($konsultasi->file_path && Storage::exists($konsultasi->file_path)) {
+            Storage::delete($konsultasi->file_path);
         }
 
         $konsultasi->delete();

@@ -1,5 +1,8 @@
 @extends('admin.dashboard')
 @section('content')
+    @php
+        $isAdminSistem = Auth::user()->role === 'admin_sistem';
+    @endphp
     <div class="container-fluid page-body-wrapper">
         <div class="main-panel">
             <div class="content-wrapper">
@@ -8,7 +11,32 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Item List</h4>
+                                <h4 class="card-title">List Data Konsultasi</h4>
+                                <form method="GET" class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                                    @if ($isAdminSistem)
+                                        <div class="flex-grow-1 flex-sm-grow-0" style="min-width: 200px;">
+                                            <select name="kua_id" class="form-select">
+                                                <option value="">-- Semua KUA --</option>
+                                                @foreach ($kualist as $kua)
+                                                    <option value="{{ $kua->id }}"
+                                                        {{ request('kua_id') == $kua->id ? 'selected' : '' }}>
+                                                        {{ $kua->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+
+                                    <div style="width: 400px">
+                                        <input type="search" name="search" placeholder="Cari nama..." class="form-control"
+                                            value="{{ request('search') }}">
+                                    </div>
+
+                                    <div class="d-flex gap-2 flex-wrap flex-sm-nowrap">
+                                        <button type="submit" class="btn btn-primary">Cari</button>
+                                        <a href="{{ route('admin.surat.view') }}" class="btn btn-secondary">Reset</a>
+                                    </div>
+                                </form>
                                 <div class="table-responsive custom-scroll">
                                     <table class="table table-bordered">
                                         <thead>
@@ -38,7 +66,8 @@
                                                     <td>{{ $item->jam_konsultasi }}</td>
                                                     <td>{{ $item->tanggal_konsultasi }}</td>
                                                     <td>{{ $item->jenis_konsultasi }}</td>
-                                                    <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}</td>
+                                                    <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}
+                                                    </td>
                                                     <td>{{ $item->isi_konsultasi }}</td>
                                                     <td>
                                                         <a href="{{ asset('storage/' . $item->file_path) }}"
@@ -77,6 +106,15 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
+                                            @if ($data->isEmpty())
+                                                <tr>
+                                                    <td colspan="{{ $isAdminSistem ? 15 : 15 }}"
+                                                        class="text-center py-4 text-muted">
+                                                        <i class="mdi mdi-database-remove display-4 d-block mb-2"></i>
+                                                        <strong>Belum ada data masuk.</strong>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -107,7 +145,6 @@
                                         </div>
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                     </div>

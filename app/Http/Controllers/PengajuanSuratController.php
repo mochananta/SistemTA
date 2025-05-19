@@ -2,27 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kua;
 use App\Models\PengajuanSurat;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PengajuanSuratController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+        $query = PengajuanSurat::with(['user', 'kua']);
 
         if ($user->role === 'admin_kua') {
-            $data = PengajuanSurat::where('kua_id', $user->kua_id)->with(['user', 'kua'])->latest()->get();
-        } else {
-            $data = PengajuanSurat::with(['user', 'kua'])->latest()->get();
+            $query->where('kua_id', $user->kua_id);
         }
 
-        return view('admin.surat.view', compact('data'));
+        if ($request->filled('kua_id') && $user->role === 'admin_sistem') {
+            $query->where('kua_id', $request->kua_id);
+        }
+
+        if ($request->filled('search')) {
+            $search = strtolower(trim($request->search));
+            $letters = str_split($search);
+
+            $query->where(function ($q) use ($letters) {
+                foreach ($letters as $letter) {
+                    $q->whereRaw('LOWER(nama) LIKE ?', ["%$letter%"]);
+                }
+            });
+        }
+
+        $data = $query->latest()->paginate(10)->withQueryString();
+        $kualist = $user->role === 'admin_sistem' ? Kua::all() : collect();
+
+        return view('admin.surat.view', compact('data', 'kualist'));
     }
 
     /**
@@ -128,8 +147,8 @@ class PengajuanSuratController extends Controller
     {
         $surat = PengajuanSurat::findOrFail($id);
 
-        if ($surat->file_path && \Storage::exists($surat->file_path)) {
-            \Storage::delete($surat->file_path);
+        if ($surat->file_path && Storage::exists($surat->file_path)) {
+            Storage::delete($surat->file_path);
         }
 
         $surat->delete();
