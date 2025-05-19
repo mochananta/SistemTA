@@ -40,6 +40,7 @@
                         * Semua dokumen wajib dibawa dalam bentuk fotokopi & asli saat verifikasi.
                     </p>
                 </div>
+                {{-- hsksk --}}
 
                 <div
                     class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">

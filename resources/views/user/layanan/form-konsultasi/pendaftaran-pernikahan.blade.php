@@ -10,11 +10,11 @@
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
+                <span class="text-gray-600 dark:text-gray-300">Pelayanan Rekomendasi Pindah Nikah</span>
             </div>
             <!-- Title -->
             <div class="mb-12 text-center">
-                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rumah Ibadah</h2>
+                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rekomendasi Pindah Nikah</h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 text-lg">
                     Silakan lengkapi data dan persyaratan berikut dengan benar.
                 </p>
@@ -45,7 +45,7 @@
                     <form action="{{ route('konsultasi.store') }}" method="POST" enctype="multipart/form-data"
                         class="space-y-6">
                         @csrf
-                        <input type="hidden" name="jenis_konsultasi" value="Rumah Ibadah">
+                        <input type="hidden" name="jenis_konsultasi" value="Pendaftaran Pernikahan">
                         <div>
                             <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap

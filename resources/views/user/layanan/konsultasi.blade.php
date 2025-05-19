@@ -43,11 +43,11 @@
                         class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-calendar-check text-xl text-primary-600 dark:text-primary-400"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Rekomendasi Pindah Nikah</h3>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Pendaftaran Pernikahan</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
                         Gunakan layanan ini untuk mengajukan izin resmi penyelenggaraan kegiatan keagamaan.
                     </p>
-                    <a href="{{ url('/form/rekomendasi-pindah') }}"
+                   <a href="{{ url('/form/konsultasi-pendaftaran-pernikahan') }}"
                         class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                         Lihat Detail →
                     </a>
@@ -64,7 +64,7 @@
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
                         Untuk mengajukan surat keterangan atau legalitas tempat ibadah di wilayah Anda.
                     </p>
-                    <a href="{{ url('/form/wakaf') }}"
+                    <a href="{{ url('/form/konsultasi-wakaf') }}"
                         class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                         Lihat Detail →
                     </a>
@@ -81,7 +81,7 @@
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
                         Untuk mengajukan surat keterangan atau legalitas tempat ibadah di wilayah Anda.
                     </p>
-                    <a href="{{ url('/form/ibadah') }}"
+                   <a href="{{ url('/form/konsultasi-ibadah') }}"
                         class="text-sm font-semibold text-primary-600 hover:text-primary-800 dark:hover:text-primary-400">
                         Lihat Detail →
                     </a>
