@@ -78,10 +78,10 @@
                 <div class="mb-4 flex justify-between items-center">
                     <input type="text" id="searchInput" placeholder="Cari data..."
                         class="w-full md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
-                    <button id="downloadCSV"
+                    {{-- <button id="downloadCSV"
                         class="ml-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                         Download CSV
-                    </button>
+                    </button> --}}
                 </div>
                 <table id="ibadahTable"
                     class="min-w-full table-auto text-sm text-left text-gray-500 dark:text-gray-300">
@@ -92,7 +92,7 @@
                             <th class="px-6 py-3">Nama Tempat</th>
                             <th class="px-6 py-3">Jenis</th>
                             <th class="px-6 py-3">Alamat</th>
-                            <th class="px-6 py-3">Jumlah Jamaah</th>
+                            <th class="px-6 py-3">Kecamatan</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800">
