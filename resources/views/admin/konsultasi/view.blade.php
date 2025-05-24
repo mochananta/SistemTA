@@ -50,6 +50,8 @@
                                                 <th>Tanggal Konsultasi</th>
                                                 <th>Jenis Konsultasi</th>
                                                 <th>KUA Tujuan</th>
+                                                <th>Nama Rumah Ibadah</th>
+                                                <th>Jenis Rumah Ibadah</th>
                                                 <th>Isi Konsultasi</th>
                                                 <th>Dokumen File</th>
                                                 <th>Action</th>
@@ -58,7 +60,7 @@
                                         <tbody id="itemList">
                                             @foreach ($data as $index => $item)
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $data->firstItem() + $index }}</td>
                                                     <td>{{ $item->nama }}</td>
                                                     <td>{{ $item->nik }}</td>
                                                     <td>{{ $item->nohp }}</td>
@@ -68,6 +70,8 @@
                                                     <td>{{ $item->jenis_konsultasi }}</td>
                                                     <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}
                                                     </td>
+                                                    <td>{{ $item->rumahIbadah ? $item->rumahIbadah->nama . ' - ' . $item->rumahIbadah->alamat : '-' }}</td>
+                                                    <td>{{ $item->rumahIbadah ? $item->rumahIbadah->jenis : '-' }}</td>
                                                     <td>{{ $item->isi_konsultasi }}</td>
                                                     <td>
                                                         <a href="{{ asset('storage/' . $item->file_path) }}"
@@ -118,6 +122,15 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-4 flex-column">
+                                    <nav>
+                                        <ul class="pagination pagination-sm">
+                                            {{ $data->links() }}
+                                        </ul>
+                                    </nav>
+                                </div>
+
                                 @foreach ($data as $item)
                                     <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
                                         aria-labelledby="rejectModalLabel" aria-hidden="true">

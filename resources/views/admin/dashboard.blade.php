@@ -16,48 +16,6 @@
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
     <!-- endinject -->
     <link rel="shortcut icon" href="#" />
-    <style>
-        .card {
-            border-radius: 12px;
-            background-color: #fff;
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-
-        .text-primary {
-            color: #007bff;
-        }
-
-        .text-success {
-            color: #28a745;
-        }
-
-        .text-danger {
-            color: #dc3545;
-        }
-
-        .pagination .page-item .page-link {
-    border-radius: 2px;
-    margin: 0 3px;
-    color: #0d6efd;
-    border: 1px solid #dee2e6;
-    transition: all 0.2s ease-in-out;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #0d6efd;
-    color: white;
-    border-color: #0d6efd;
-}
-
-.pagination .page-item .page-link:hover {
-    background-color: #e2e6ea;
-}
-
-    </style>
 </head>
 
 <body>
@@ -88,6 +46,44 @@
     <script src="{{ asset('admin/vendors/justgage/justgage.js') }}"></script>
     <script src="{{ asset('admin/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('admin/js/dashboard.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    @if (session('warning'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ditolak',
+                text: '{{ session('warning') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Dihapus',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
 
     <script>
         const monthlyLabels = {!! json_encode($months ?? []) !!};

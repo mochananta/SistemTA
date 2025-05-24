@@ -13,7 +13,6 @@
                             <div class="card-body">
                                 <h4 class="card-title">List Data Pengajuan Surat</h4>
                                 <form method="GET" class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                                    {{-- Filter KUA --}}
                                     @if ($isAdminSistem)
                                         <div class="flex-grow-1 flex-sm-grow-0" style="min-width: 200px;">
                                             <select name="kua_id" class="form-select">
@@ -28,13 +27,11 @@
                                         </div>
                                     @endif
 
-                                    {{-- Search --}}
                                     <div style="width: 400px">
                                         <input type="search" name="search" placeholder="Cari nama..." class="form-control"
                                             value="{{ request('search') }}">
                                     </div>
 
-                                    {{-- Buttons --}}
                                     <div class="d-flex gap-2 flex-wrap flex-sm-nowrap">
                                         <button type="submit" class="btn btn-primary">Cari</button>
                                         <a href="{{ route('admin.surat.view') }}" class="btn btn-secondary">Reset</a>
@@ -119,7 +116,7 @@
                                     </table>
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+                                <div class="d-flex justify-content-between align-items-center mt-4 flex-column">
                                     <nav>
                                         <ul class="pagination pagination-sm">
                                             {{ $data->links() }}

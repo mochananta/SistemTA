@@ -101,7 +101,7 @@ class PengajuanSuratController extends Controller
             'catatan' => $request->catatan ?? 'Disetujui oleh admin',
         ]);
 
-        return back()->with('success', 'Pengajuan disetujui.');
+        return redirect()->back()->with('success', 'Pengajuan surat berhasil disetujui.');
     }
 
     public function rejectSurat($id, Request $request)
@@ -112,7 +112,7 @@ class PengajuanSuratController extends Controller
             'catatan' => $request->catatan ?? 'Ditolak oleh admin',
         ]);
 
-        return back()->with('success', 'Pengajuan ditolak.');
+        return redirect()->back()->with('warning', 'Pengajuan surat telah ditolak.');
     }
 
 
@@ -153,6 +153,6 @@ class PengajuanSuratController extends Controller
 
         $surat->delete();
 
-        return redirect()->back()->with('success', 'Data surat berhasil dihapus.');
+        return redirect()->back()->with('error', 'Pengajuan surat berhasil dihapus.');
     }
 }

@@ -107,10 +107,6 @@
                             </a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link count-indicator "><i
-                                class="mdi mdi-message-reply-text"></i></a>
-                    </li>
                 </ul>
                 <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                     <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('admin/images/logo.svg') }}"
@@ -233,16 +229,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/tables/basic-table.html" class="nav-link">
+                    <a href="{{ route('admin.ibadah.view') }}" class="nav-link">
                         <i class="mdi mdi-grid menu-icon"></i>
-                        <span class="menu-title">Tables</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/icons/mdi.html" class="nav-link">
-                        <i class="mdi mdi-emoticon menu-icon"></i>
-                        <span class="menu-title">Icons</span>
+                        <span class="menu-title">Data Rumah Ibadah</span>
                         <i class="menu-arrow"></i>
                     </a>
                 </li>

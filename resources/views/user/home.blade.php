@@ -5,8 +5,7 @@
 
     @include('user.partical.layanan')
 
-    @include('user.partical.kontenlayanan')
+    @include('user.partical.kontenlayanan', ['rumahIbadah' => $rumahIbadah])
     
     @include('user.partical.lacaklayanan')
-
 @endsection

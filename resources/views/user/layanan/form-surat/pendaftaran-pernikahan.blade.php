@@ -45,7 +45,7 @@
                     <form action="{{ route('pengajuan.store') }}" method="POST" enctype="multipart/form-data"
                         class="space-y-6">
                         @csrf
-                        <input type="hidden" name="jenis_surat" value="Pendaftaran pernikahan">
+                        <input type="hidden" name="jenis_surat" value="Pendaftaran Pernikahan">
                         <div>
                             <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap

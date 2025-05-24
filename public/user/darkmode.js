@@ -153,7 +153,6 @@ options: {
 });
 }
 
-// Create Donut Chart for Service Distribution
 function createDonutChart() {
 const ctx = document.getElementById('donutChart');
 
@@ -191,7 +190,6 @@ options: {
 });
 }
 
-// Create Line Chart for Service Growth
 function createLineChart() {
 const ctx = document.getElementById('lineChart');
 
@@ -274,16 +272,12 @@ options: {
 });
 }
 
-    // Update chart colors when switching themes
     document.getElementById('darkModeToggle').addEventListener('click', function() {
-    // Give time for the DOM to update with the new theme
     setTimeout(() => {
-    // Destroy existing charts
     Chart.getChart('pieChart')?.destroy();
     Chart.getChart('donutChart')?.destroy();
     Chart.getChart('lineChart')?.destroy();
 
-    // Recreate charts with updated theme colors
     createPieChart();
     createDonutChart();
     createLineChart();
