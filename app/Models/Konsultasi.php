@@ -16,6 +16,7 @@ class Konsultasi extends Model
         'jenis_konsultasi',
         'nama',
         'nik',
+        'rumah_ibadah_id',
         'nohp',
         'alamat',
         'tanggal_konsultasi',
@@ -34,5 +35,10 @@ class Konsultasi extends Model
     public function kua()
     {
         return $this->belongsTo(Kua::class);
+    }
+
+    public function rumahIbadah()
+    {
+        return $this->belongsTo(RumahIbadah::class, 'rumah_ibadah_id');
     }
 }

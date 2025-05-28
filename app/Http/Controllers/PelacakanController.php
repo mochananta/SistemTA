@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Konsultasi;
 use App\Models\PengajuanSurat;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PelacakanController extends Controller
@@ -34,12 +36,24 @@ class PelacakanController extends Controller
         return redirect(url('/') . "#lacak")->with('lacak_data', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function downloadPDF($kode_layanan)
     {
-        //
+        $data = PengajuanSurat::where('kode_layanan', $kode_layanan)->first()
+            ?? Konsultasi::where('kode_layanan', $kode_layanan)->first();
+
+        if (!$data || $data->status !== 'disetujui') {
+            abort(404);
+        }
+
+        $isSurat = get_class($data) === PengajuanSurat::class;
+
+        $pdf = Pdf::loadView('user.pdf.bukti_pengajuan', [
+            'data' => $data,
+            'isSurat' => $isSurat
+        ]);
+
+        return $pdf->download('bukti_pengajuan_' . $kode_layanan . '.pdf');
     }
 
     /**

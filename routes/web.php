@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\PelacakanController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\RumahIbadahController;
 use App\Http\Controllers\UserController;
 use App\Models\PengajuanSurat;
 use Illuminate\Support\Facades\Route;
@@ -19,13 +21,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('user.home');
-});
-Route::get('/pengajuan surat', [UserController::class, 'jenissuratview'])->name('user.layanan.surat');
+Route::get('/', [UserController::class, 'index'])->name('user.home');
+
+Route::get('/pengajuan-surat', [UserController::class, 'jenissuratview'])->name('user.layanan.surat');
 Route::get('/konsultasi', [UserController::class, 'jeniskonsultasiview'])->name('user.layanan.konsultasi');
 Route::post('/lacak-layanan', [PelacakanController::class, 'cek'])->name('lacak.cek');
+Route::get('/lacak/download/{kode_layanan}', [PelacakanController::class, 'downloadPDF'])->name('lacak.download');
 
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
 
 //form pengajuan surat & konsultasi
 Route::middleware(['auth'])->group(function () {
@@ -53,6 +57,9 @@ Route::middleware([
     Route::post('/Konsultasi/{id}/approve', [KonsultasiController::class, 'approveKonsultasi'])->name('Konsultasi.approve');
     Route::post('/Konsultasi/{id}/reject', [KonsultasiController::class, 'rejectKonsultasi'])->name('Konsultasi.reject');
     Route::delete('/Konsultasi/{id}', [KonsultasiController::class, 'destroyKonsultasi'])->name('Konsultasi.delete');
+
+    Route::get('/ibadahview', [RumahIbadahController::class, 'index'])->name('admin.ibadah.view');
+    Route::post('/import-rumah-ibadah', [RumahIbadahController::class, 'import'])->name('rumah-ibadah.import');
 });
 
 

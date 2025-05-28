@@ -8,7 +8,8 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan Konsultasi</a>
+                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
+                    Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
             </div>
@@ -138,6 +139,50 @@
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
                                 Pilih KUA sesuai lokasi tujuan konsultasi.
                             </p>
+                        </div>
+
+                        <!-- 1. Pilih Kecamatan -->
+                        <div>
+                            <label for="kecamatan" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Kecamatan <span class="text-red-600">*</span>
+                            </label>
+                            <select name="kecamatan" id="kecamatan"
+                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                <option value="">-- Pilih Kecamatan --</option>
+                                @foreach ($kecamatans as $kecamatan)
+                                    <option value="{{ $kecamatan->kecamatan }}">{{ $kecamatan->kecamatan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- 2. Pilih Jenis Rumah Ibadah -->
+                        <div>
+                            <label for="jenis" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Jenis Rumah Ibadah <span class="text-red-600">*</span>
+                            </label>
+                            <select id="jenis" name="jenis"
+                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                <option value="">-- Pilih Jenis --</option>
+                                <option value="Masjid">Masjid</option>
+                                <option value="Gereja">Gereja</option>
+                                <option value="Pura">Pura</option>
+                                <option value="Vihara">Vihara</option>
+                                <option value="Klenteng">Klenteng</option>
+                                <!-- Tambahkan jenis lain sesuai kebutuhan -->
+                            </select>
+                        </div>
+
+                        <!-- 3. Pilih Rumah Ibadah -->
+                        <div>
+                            <label for="rumah_ibadah_id"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Rumah Ibadah <span class="text-red-600">*</span>
+                            </label>
+
+                            <select name="rumah_ibadah_id" id="rumah_ibadah_id"
+                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                <option value="">-- Pilih Rumah Ibadah --</option>
+                            </select>
                         </div>
 
                         <div>

@@ -50,11 +50,11 @@
                         <i data-feather="lock" class="w-5 h-5"></i>
                     </span>
                     <input type="password" id="password" name="password" required
-                        class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
                         placeholder="••••••••">
-                    <button type="button" onclick="togglePassword()"
+                    <button type="button" onclick="togglePassword('password', 'eyeIcon1')"
                         class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
-                        <i id="eyeIcon" data-feather="eye" class="w-5 h-5"></i>
+                        <i id="eyeIcon1" data-feather="eye" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             <div class="flex-grow h-px bg-gray-300"></div>
         </div>
 
-        <a href="#"
+        <a href="{{ route('google.login') }}"
             class="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100">
             <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" class="h-5 w-5 mr-2">
             Masuk dengan Google

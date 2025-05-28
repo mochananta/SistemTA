@@ -99,6 +99,12 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">
                                                 Pastikan dokumen yang di bawa sesuai dengan yang telah diunggah.
                                             </p>
+                                            <div class="text-center mt-4">
+                                                <a href="{{ route('lacak.download', ['kode_layanan' => $data->kode_layanan]) }}"
+                                                    class="inline-block bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
+                                                    <i class="fas fa-download mr-2"></i> Download Bukti Pengajuan (PDF)
+                                                </a>
+                                            </div>
                                         @elseif (get_class($data) === \App\Models\Konsultasi::class)
                                             <p class="text-sm text-gray-800 dark:text-gray-200">
                                                 Silakan datang ke kantor KUA sesuai jadwal konsultasi berikut:
@@ -112,6 +118,12 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
                                                 Harap hadir tepat waktu dan bawa dokumen pendukung jika diminta.
                                             </p>
+                                            <div class="text-center mt-4">
+                                                <a href="{{ route('lacak.download', ['kode_layanan' => $data->kode_layanan]) }}"
+                                                    class="inline-block bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
+                                                    <i class="fas fa-download mr-2"></i> Download Bukti Pengajuan (PDF)
+                                                </a>
+                                            </div>
                                         @endif
                                     </div>
                                 @elseif ($data->status === 'ditolak')

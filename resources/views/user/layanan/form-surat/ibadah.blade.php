@@ -13,7 +13,7 @@
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
             </div>
-            
+
             <div class="mb-12 text-center">
                 <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Rumah Ibadah</h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 text-lg">
@@ -22,7 +22,8 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">
+                <div
+                    class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">
                     <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center">
                         <i class="fas fa-file-alt mr-2 text-green-600 dark:text-green-400"></i> Persyaratan
                     </h3>
@@ -38,7 +39,8 @@
                     </p>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">
+                <div
+                    class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">
                     <form action="{{ route('pengajuan.store') }}" method="POST" enctype="multipart/form-data"
                         class="space-y-6">
                         @csrf
@@ -63,7 +65,8 @@
 
                         <div>
                             <label for="nohp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span class="text-red-600">*</span>
+                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span
+                                    class="text-red-600">*</span>
                             </label>
                             <input type="text" id="nohp" name="nohp"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
@@ -75,7 +78,8 @@
                         </div>
 
                         <div>
-                            <label for="tanggal_pengajuan" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="tanggal_pengajuan"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-calendar-alt mr-1 text-green-600"></i> Tanggal Pengajuan
                             </label>
                             <input type="date" id="tanggal_pengajuan" name="tanggal_pengajuan"
@@ -85,14 +89,16 @@
 
                         <div>
                             <label for="kua_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span class="text-red-600">*</span>
+                                <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span
+                                    class="text-red-600">*</span>
                             </label>
                             <div class="relative">
                                 <select id="kua_id" name="kua_id" required
                                     class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                                     <option value="" disabled selected>-- Pilih KUA Tujuan --</option>
                                     @foreach ($kuas as $kua)
-                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}</option>
+                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -107,7 +113,7 @@
                                 Pilih KUA sesuai lokasi tujuan pengajuan.
                             </p>
                         </div>
-                        
+
 
                         <div>
                             <label for="alamat" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -120,7 +126,8 @@
 
                         <div>
                             <label for="file_path" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-upload mr-1 text-green-600"></i> Upload Dokumen Persyaratan <span class="text-red-600">*</span>
+                                <i class="fas fa-upload mr-1 text-green-600"></i> Upload Dokumen Persyaratan <span
+                                    class="text-red-600">*</span>
                             </label>
                             <input type="file" id="file_path" name="file_path" required
                                 class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-100
@@ -130,12 +137,13 @@
                                        hover:file:bg-green-100
                                        dark:file:bg-green-900 dark:file:text-green-200 dark:hover:file:bg-green-800
                                        transition" />
-                            
+
                             <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                                File wajib diunggah. Format diperbolehkan: <strong>PDF, JPG, JPEG, PNG</strong>. Maksimal ukuran: <strong>5MB</strong>.
+                                File wajib diunggah. Format diperbolehkan: <strong>PDF, JPG, JPEG, PNG</strong>. Maksimal
+                                ukuran: <strong>5MB</strong>.
                             </p>
                         </div>
-                        
+
 
                         <div class="text-right">
                             <button type="submit"
@@ -144,7 +152,9 @@
                             </button>
                         </div>
                         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                            Jika proses permohonan berhasil, pemohon akan mendapatkan <strong>NOMOR LAYANAN</strong> yang akan tampil melalui dialog box dan juga dikirim melalui pesan whatsapp (jika nomor HP pemohon nomor whatsapp).
+                            Jika proses permohonan berhasil, pemohon akan mendapatkan <strong>NOMOR LAYANAN</strong> yang
+                            akan tampil melalui dialog box dan juga dikirim melalui pesan whatsapp (jika nomor HP pemohon
+                            nomor whatsapp).
                         </p>
                     </form>
                 </div>

@@ -11,21 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <body
-
-    @if(session('kode_layanan') && session('nohp')) 
-        data-kodelayanan="{{ session('kode_layanan') }}" 
-        data-nohp="{{ session('nohp') }}" 
-    @endif
-
+    @if (session('kode_layanan') && session('nohp')) data-kodelayanan="{{ session('kode_layanan') }}" 
+        data-nohp="{{ session('nohp') }}" @endif
     class="h-full w-full w-screen h-screen font-sans bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300">
 
     <!-- Navigation -->
     @include('user.partical.navbar')
 
 
-
     <!-- Main Content -->
-     @yield('content')
+    @yield('content')
 
     <!-- Footer -->
     @include('user.partical.footer')
@@ -42,20 +37,57 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.37.3"></script>
     <script src="{{ asset('user/darkmode.js') }}"></script>
     <script src="{{ asset('user/kodelayanan.js') }}"></script>
     <script src="{{ asset('user/animasi.js') }}"></script>
     <script src="{{ asset('user/statistik.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.37.3"></script>
-    <!-- Donut Chart -->
     <script>
-
+        window.chartData = {
+            donutLabels: @json($labels ?? []),
+            donutSeries: @json($donutSeries ?? []),
+            lineLabels: @json($tahunList ?? []),
+            lineSurat: @json($suratPerTahun ?? []),
+            lineKonsultasi: @json($konsultasiPerTahun ?? []),
+        };
     </script>
 
-    <!-- Line Chart -->
     <script>
+        const kecamatanSelect = document.getElementById('kecamatan');
+        const jenisSelect = document.getElementById('jenis');
+        const rumahIbadahSelect = document.getElementById('rumah_ibadah_id');
 
+        kecamatanSelect.addEventListener('change', fetchRumahIbadah);
+        jenisSelect.addEventListener('change', fetchRumahIbadah);
+
+        function fetchRumahIbadah() {
+            const kecamatan = kecamatanSelect.value;
+            const jenis = jenisSelect.value;
+            console.log('Dipilih kecamatan:', kecamatan, 'jenis:', jenis);
+
+            if (!kecamatan || !jenis) {
+                rumahIbadahSelect.innerHTML = '<option value="">-- Pilih Rumah Ibadah --</option>';
+                return;
+            }
+
+            fetch(`/api/rumah-ibadah?kecamatan=${encodeURIComponent(kecamatan)}&jenis=${encodeURIComponent(jenis)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Data rumah ibadah diterima:', data);
+                    rumahIbadahSelect.innerHTML = '<option value="">-- Pilih Rumah Ibadah --</option>';
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = `${item.nama} - ${item.alamat}`;
+                        rumahIbadahSelect.appendChild(opt);
+                    });
+                })
+                .catch(error => {
+                    console.error('Gagal memuat rumah ibadah:', error);
+                });
+        }
     </script>
+
 </body>
 </head>
 

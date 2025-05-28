@@ -22,7 +22,6 @@
 
             <!-- Grid 2 kolom -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <!-- Kiri - Persyaratan -->
                 <div
                     class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-green-200 dark:border-gray-700">
                     <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center">
@@ -40,12 +39,11 @@
                     </p>
                 </div>
 
-                <!-- Kanan - Form -->
                 <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                     <form action="{{ route('konsultasi.store') }}" method="POST" enctype="multipart/form-data"
                         class="space-y-6">
                         @csrf
-                        <input type="hidden" name="jenis_konsultasi" value="wakaf">
+                        <input type="hidden" name="jenis_konsultasi" value="Wakaf">
                         <div>
                             <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap

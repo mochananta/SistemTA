@@ -12,50 +12,90 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <!-- Card 1 -->
                 <div
                     class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">554,124+</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mt-2">Jamaah Haji yang dilayani</p>
+                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">
+                        {{ number_format($statistikLayanan['Pendaftaran Pernikahan'] ?? 0) }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Pendaftaran Pernikahan</p>
                 </div>
 
-                <!-- Card 2 -->
                 <div
                     class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">221,000</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mt-2">Pernikahan tercatat</p>
+                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">
+                        {{ number_format($statistikLayanan['Wakaf'] ?? 0) }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Wakaf</p>
                 </div>
 
-                <!-- Card 3 -->
                 <div
                     class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">1.65 Juta</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mt-2">Pelajar madrasah</p>
+                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">
+                        {{ number_format($statistikLayanan['Rumah Ibadah'] ?? 0) }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Rumah Ibadah</p>
                 </div>
 
-                <!-- Card 4 -->
                 <div
                     class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">82,400+</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mt-2">Wakaf tanah terdaftar</p>
+                    <h3 class="text-4xl font-bold text-primary-600 dark:text-primary-400">
+                        {{ number_format($statistikLayanan['Rekomendasi Pernikahan'] ?? 0) }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Rekomendasi Pernikahan</p>
                 </div>
             </div>
 
-            <div class="mb-12">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Distribusi Layanan Kementerian
-                    Agama (2023)</h3>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Distribusi Jenis Layanan</h3>
+
+                        <div class="relative inline-block text-left">
+                            <button id="toggleFilterMenu"
+                                class="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-3 py-2 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none">
+                                ☰
+                            </button>
+
+                            <div id="filterMenu"
+                                class="hidden absolute right-0 z-10 mt-2 w-36 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                                <div class="py-1">
+                                    <button data-filter="all"
+                                        class="w-full text-left px-5 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Semua</button>
+                                    <button data-filter="surat"
+                                        class="w-full text-left px-5 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Surat</button>
+                                    <button data-filter="konsultasi"
+                                        class="w-full text-left px-5 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Konsultasi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="donutChart" class="w-full h-64"></div>
                 </div>
-            </div>
 
-            <div>
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Perkembangan Layanan Kementerian
-                    Agama (2019-2023)</h3>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300">
+                <!-- Line Chart -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Perkembangan Layanan per Tahun
+                    </h3>
                     <div id="lineChart" class="w-full h-64"></div>
                 </div>
             </div>
+
+            {{-- <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Distribusi Layanan Masyarakat</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <div id="donutChart" class="w-full h-64"></div>
+                </div>
+            </div> --}}
+            {{-- <div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Perkembangan Pengajuan Tiap Tahun
+                </h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <div id="lineChart" class="w-full h-64"></div>
+                </div>
+            </div> --}}
+
         </div>
     </section>
 
@@ -63,11 +103,11 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8">
                 <div
-                    class="inline-block px-3 py-1 text-xs font-semibold text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-gray-700 rounded-full">
+                    class="inline-block px-3 py-1 text-xs font-semibold text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-gray-700 rounded-full transition-colors duration-300">
                     Data Tempat Ibadah
                 </div>
                 <h2 class="text-3xl font-bold mt-4 text-gray-900 dark:text-white">
-                    Data Tempat Ibadah di Indonesia
+                    Data Tempat Ibadah di Banyuwangi
                 </h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                     Menampilkan jenis tempat ibadah, jumlah, dan lokasinya berdasarkan data terbaru.
@@ -75,14 +115,14 @@
             </div>
 
             <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 overflow-x-auto">
-                <div class="mb-4 flex justify-between items-center">
+                {{--<div class="mb-4 flex justify-between items-center">
                     <input type="text" id="searchInput" placeholder="Cari data..."
                         class="w-full md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
-                    {{-- <button id="downloadCSV"
+                     <button id="downloadCSV"
                         class="ml-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                         Download CSV
-                    </button> --}}
-                </div>
+                    </button> 
+                </div>--}}
                 <table id="ibadahTable"
                     class="min-w-full table-auto text-sm text-left text-gray-500 dark:text-gray-300">
                     <thead
@@ -93,35 +133,34 @@
                             <th class="px-6 py-3">Jenis</th>
                             <th class="px-6 py-3">Alamat</th>
                             <th class="px-6 py-3">Kecamatan</th>
+                            <th class="px-6 py-3">Kontak</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800">
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="px-6 py-4">1</td>
-                            <td class="px-6 py-4">Masjid Istiqlal</td>
-                            <td class="px-6 py-4">Masjid</td>
-                            <td class="px-6 py-4">Jakarta Pusat</td>
-                            <td class="px-6 py-4">20000</td>
-                        </tr>
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="px-6 py-4">2</td>
-                            <td class="px-6 py-4">Gereja Katedral</td>
-                            <td class="px-6 py-4">Gereja Katolik</td>
-                            <td class="px-6 py-4">Jakarta Pusat</td>
-                            <td class="px-6 py-4">5000</td>
-                        </tr>
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="px-6 py-4">3</td>
-                            <td class="px-6 py-4">Pura Besakih</td>
-                            <td class="px-6 py-4">Pura</td>
-                            <td class="px-6 py-4">Bali</td>
-                            <td class="px-6 py-4">3500</td>
-                        </tr>
-                        <!-- Tambahkan data lainnya -->
+                        @forelse ($rumahIbadah as $index => $item)
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4">{{ $index + 1 }}</td>
+                                <td class="px-6 py-4">{{ $item->nama }}</td>
+                                <td class="px-6 py-4">{{ $item->jenis }}</td>
+                                <td class="px-6 py-4">{{ $item->alamat }}</td>
+                                <td class="px-6 py-4">{{ $item->kecamatan ?? '-' }}</td>
+                                <td class="px-6 py-4">{{ $item->kontak ?? '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center px-6 py-4 text-gray-500 dark:text-gray-400">
+                                    Tidak ada data rumah ibadah tersedia.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+                <div class="mt-6 text-center">
+                    <a href="https://docs.google.com/spreadsheets/d/1wO58I9B6IsX0RjnjzRUsVJcR5fFexehK/edit?usp=sharing&ouid=111628064766446575941&rtpof=true&sd=true"
+                        class="inline-block bg-indigo-600 text-white text-sm px-5 py-2 rounded hover:bg-indigo-700 transition">
+                        Lihat Semua Rumah Ibadah
+                    </a>
+                </div>
             </div>
         </div>
     </section>
-
-    
