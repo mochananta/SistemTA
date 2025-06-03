@@ -47,7 +47,7 @@
     <script src="{{ asset('admin/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('admin/js/dashboard.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @if (session('success'))
         <script>
             Swal.fire({
@@ -143,6 +143,45 @@
             }
         });
     </script>
+
+    <script>
+        function handleSuratStatusChange(selectElement, id) {
+            const selectedStatus = selectElement.value;
+
+            if (selectedStatus === 'Disetujui') {
+                const modal = new bootstrap.Modal(document.getElementById(`jadwalModalSurat${id}`));
+                modal.show();
+                return;
+            }
+
+            if (selectedStatus === 'Selesai Diambil') {
+                const modal = new bootstrap.Modal(document.getElementById(`diambilModalSurat${id}`));
+                modal.show();
+                return;
+            }
+
+            if (selectedStatus !== '') {
+                selectElement.form.submit();
+            }
+        }
+    </script>
+
+    <script>
+        function handleKonsultasiStatusChange(selectElement, id) {
+            const selectedStatus = selectElement.value;
+
+            if (selectedStatus === 'Dijadwalkan') {
+                const modalId = `#jadwalModal${id}`;
+                const modal = new bootstrap.Modal(document.querySelector(modalId));
+                modal.show();
+                selectElement.value = '';
+            } else if (selectedStatus !== '') {
+                selectElement.form.submit();
+            }
+        }
+    </script>
+
+
 
 </body>
 

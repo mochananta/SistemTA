@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 mb-3 mb-lg-0">
+            {{-- <div class="col-lg-4 mb-3 mb-lg-0">
                 <div class="card congratulation-bg text-center">
                     <div class="card-body pb-0">
                         <h2 class="mt-3 text-white mb-3 font-weight-bold">
@@ -93,7 +93,7 @@
                         </p>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="row">
             <div class="col-sm-8 flex-column d-flex stretch-card">

@@ -10,9 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<body
-    @if (session('kode_layanan') && session('nohp')) data-kodelayanan="{{ session('kode_layanan') }}" 
-        data-nohp="{{ session('nohp') }}" @endif
+<body @if (session('kode_layanan')) data-kodelayanan="{{ session('kode_layanan') }}" @endif
     class="h-full w-full w-screen h-screen font-sans bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300">
 
     <!-- Navigation -->
@@ -38,17 +36,47 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.37.3"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('user/darkmode.js') }}"></script>
     <script src="{{ asset('user/kodelayanan.js') }}"></script>
     <script src="{{ asset('user/animasi.js') }}"></script>
     <script src="{{ asset('user/statistik.js') }}"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+
+    @if (session('success'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3500)" x-show="show"
+            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+            class="fixed top-5 right-5 z-50 flex items-center gap-3 bg-green-500 text-white text-sm px-4 py-3 rounded-lg shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <script>
         window.chartData = {
             donutLabels: @json($labels ?? []),
             donutSeries: @json($donutSeries ?? []),
-            lineLabels: @json($tahunList ?? []),
-            lineSurat: @json($suratPerTahun ?? []),
-            lineKonsultasi: @json($konsultasiPerTahun ?? []),
+            lineLabels: @json($lineLabels ?? []),
+            lineSurat: @json($lineSurat ?? []),
+            lineKonsultasi: @json($lineKonsultasi ?? []),
         };
     </script>
 
@@ -86,6 +114,80 @@
                     console.error('Gagal memuat rumah ibadah:', error);
                 });
         }
+    </script>
+
+    <script>
+        $(function() {
+            if ($('#kode_layanan_field').length) {
+                let kodeLayanan = $('#kode_layanan_field').val();
+                let nohp = $('#hidden_nohp').val(); // ambil dari hidden field, bukan input yang sudah hilang
+
+                if (kodeLayanan && nohp) {
+                    setInterval(function() {
+                        $.ajax({
+                            url: '/api/status-layanan',
+                            method: 'GET',
+                            data: {
+                                kode_layanan: kodeLayanan,
+                                nohp: nohp
+                            },
+                            success: function(res) {
+                                $('.status-layanan-text').text(res.status);
+                                $('.status-layanan-updated').text(res.updated_at);
+
+                                if (res.catatan) {
+                                    $('.catatan-text').text(res.catatan);
+                                    $('.status-layanan-catatan').show();
+                                } else {
+                                    $('.catatan-text').text('');
+                                    $('.status-layanan-catatan').hide();
+                                }
+
+                                let box = $('.status-detail-box');
+                                let html = '';
+
+                                switch (res.status) {
+                                    case 'disetujui':
+                                        html = `<div class="bg-green-50 dark:bg-green-900 p-5 rounded-lg border border-green-200 dark:border-green-700 shadow-md">
+                                    <h3 class="text-green-700 dark:text-green-300 text-2xl font-bold mb-3 flex justify-center items-center gap-2">
+                                        <i class="fas fa-check-circle"></i> Disetujui
+                                    </h3>
+                                    <p class="text-sm text-gray-800 dark:text-gray-200">
+                                        Silakan bawa berkas asli ke kantor KUA tujuan untuk proses lebih lanjut.
+                                    </p>
+                                </div>`;
+                                        break;
+
+                                    case 'ditolak':
+                                        html = `<div class="bg-red-50 dark:bg-red-900 p-5 rounded-lg border border-red-200 dark:border-red-700 shadow-md">
+                                    <h3 class="text-red-700 dark:text-red-300 text-2xl font-bold mb-3 flex justify-center items-center gap-2">
+                                        <i class="fas fa-times-circle"></i> Ditolak
+                                    </h3>
+                                    <p class="text-sm text-gray-800 dark:text-gray-200">
+                                        Pengajuan Anda ditolak. Silakan baca catatan berikut:
+                                    </p>
+                                    <div class="mt-3 bg-white dark:bg-gray-800 text-red-700 dark:text-red-200 p-3 rounded border border-red-300 dark:border-red-600 text-sm">
+                                        ${res.catatan || 'Tidak ada catatan yang diberikan.'}
+                                    </div>
+                                </div>`;
+                                        break;
+
+                                    default:
+                                        html = `<div class="bg-gray-50 dark:bg-gray-700 p-5 rounded-lg border border-gray-300 dark:border-gray-600 shadow-md">
+                                    <p>Status saat ini: ${res.status}</p>
+                                </div>`;
+                                }
+
+                                box.html(html);
+                            },
+                            error: function(err) {
+                                console.error('Gagal ambil status layanan:', err);
+                            }
+                        });
+                    }, 10000); // polling 10 detik
+                }
+            }
+        });
     </script>
 
 </body>

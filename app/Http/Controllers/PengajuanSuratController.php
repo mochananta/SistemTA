@@ -38,7 +38,11 @@ class PengajuanSuratController extends Controller
             });
         }
 
-        $data = $query->latest()->paginate(10)->withQueryString();
+        $data = $query
+            ->whereNotIn('status', ['ditolak', 'Selesai Diambil', 'gagal diambil'])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
         $kualist = $user->role === 'admin_sistem' ? Kua::all() : collect();
 
         return view('admin.surat.view', compact('data', 'kualist'));
@@ -58,9 +62,6 @@ class PengajuanSuratController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16',
-            'nohp' => 'required|string|max:15',
             'alamat' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'file_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5048',
@@ -70,16 +71,18 @@ class PengajuanSuratController extends Controller
 
         $path = $request->file('file_path')->store('pengajuan_surat', 'public');
 
-        $kodeLayanan = 'LYN-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
+        $kodeLayanan = now()->format('YmdHis') . uniqid();
+        $user = auth()->user();
+        $nohp = $user->nohp ?? $request->input('nohp', 'tidak tersedia');
+
 
         $pengajuan = PengajuanSurat::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'kua_id' => $request->kua_id,
             'kode_layanan' => $kodeLayanan,
+            'name' => $user->name,
+            'nohp' => $nohp,
             'jenis_surat' => $request->jenis_surat,
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'nohp' => $request->nohp,
             'alamat' => $request->alamat,
             'tanggal_pengajuan' => $request->tanggal_pengajuan,
             'file_path' => $path,
@@ -89,39 +92,131 @@ class PengajuanSuratController extends Controller
         return redirect()->back()->with([
             'success' => 'Pengajuan berhasil dikirim.',
             'kode_layanan' => $pengajuan->kode_layanan,
-            'nohp' => $pengajuan->nohp,
+            'nohp' => $nohp,
         ]);
     }
 
-    public function approveSurat($id, Request $request)
+    public function updatesuratStatus(Request $request, $id)
     {
-        $surat = PengajuanSurat::findOrFail($id);
-        $surat->update([
-            'status' => 'disetujui',
-            'catatan' => $request->catatan ?? 'Disetujui oleh admin',
+        $request->validate([
+            'status' => 'required|string',
+            'catatan' => 'nullable|string',
         ]);
 
-        return redirect()->back()->with('success', 'Pengajuan surat berhasil disetujui.');
+        $surat = PengajuanSurat::findOrFail($id);
+
+        if ($request->status === 'ditolak') {
+            if (!$request->has('catatan') || trim($request->catatan) === '') {
+                return back()->with('error', 'Mohon isi catatan alasan penolakan terlebih dahulu.');
+            }
+
+            $surat->status = 'ditolak';
+            $surat->catatan = $request->catatan;
+            $surat->save();
+
+            return back()->with('success', 'Status berhasil diperbarui ke Ditolak.');
+        }
+
+        $allowedStatuses = [
+            'Menunggu Verifikasi',
+            'Diverifikasi',
+            'Dokumen Lengkap',
+            'Disetujui',
+            'Selesai Diambil',
+            'gagal diambil',
+        ];
+
+        $currentIndex = array_search($surat->status, $allowedStatuses);
+        $newIndex = array_search($request->status, $allowedStatuses);
+
+        if ($request->status === 'Dokumen Lengkap' && !$surat->file_path) {
+            return back()->with('error', 'Tidak bisa melanjutkan, file dokumen belum tersedia.');
+        }
+
+        if ($newIndex === false || $currentIndex === false) {
+            return back()->with('error', 'Status tidak valid.');
+        }
+
+        if ($newIndex < $currentIndex) {
+            return back()->with('error', 'Tidak bisa kembali ke status sebelumnya.');
+        }
+
+        if ($newIndex - $currentIndex > 1) {
+            return back()->with('error', 'Status harus mengikuti urutan langkah demi langkah.');
+        }
+
+        switch ($request->status) {
+            case 'Disetujui':
+                if (!$request->filled('jadwal_pengambilan')) {
+                    return back()->with('error', 'Mohon tentukan jadwal pengambilan.');
+                }
+                $surat->jadwal_pengambilan = $request->jadwal_pengambilan;
+                break;
+            default:
+                $surat->jadwal_pengambilan = null;
+                break;
+
+            case 'Selesai Diambil':
+                if (!$request->filled('diambil_pada')) {
+                    return back()->with('error', 'Mohon tentukan tanggal pengambilan.');
+                }
+                $surat->diambil_pada = $request->diambil_pada;
+                break;
+        }
+
+
+        $surat->status = $request->status;
+        $surat->catatan = null;
+        $surat->save();
+
+        return back()->with('success', 'Status berhasil diperbarui.');
     }
 
-    public function rejectSurat($id, Request $request)
+    public function rejectSurat(Request $request, $id)
     {
-        $surat = PengajuanSurat::findOrFail($id);
-        $surat->update([
-            'status' => 'ditolak',
-            'catatan' => $request->catatan ?? 'Ditolak oleh admin',
+        $request->validate([
+            'catatan' => 'required|string',
+            'dokumen_penolakan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        return redirect()->back()->with('warning', 'Pengajuan surat telah ditolak.');
+        $surat = PengajuanSurat::findOrFail($id);
+
+        $surat->status = 'ditolak';
+        $surat->catatan = $request->catatan;
+
+        if ($request->hasFile('dokumen_penolakan')) {
+            $file = $request->file('dokumen_penolakan');
+            $filename = 'penolakan_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('penolakan', $filename, 'public');
+            $surat->dokumen_penolakan = $path; // Pastikan kolom ini ada di DB
+        }
+
+        $surat->status = 'ditolak';
+        $surat->catatan = $request->catatan;
+        $surat->save();
+
+        return back()->with('success', 'Pengajuan surat berhasil ditolak dengan catatan.');
     }
 
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function reapply($id)
     {
-        //
+        $surat = PengajuanSurat::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        if (!in_array(strtolower($surat->status), ['gagal diambil', 'ditolak'])) {
+            return redirect()->back()->with('error', 'Surat ini tidak bisa diajukan ulang.');
+        }
+
+        $newSurat = $surat->replicate();
+        $newSurat->status = 'Menunggu Verifikasi';
+        $newSurat->created_at = now();
+        $newSurat->updated_at = now();
+        $newSurat->save();
+
+        return redirect()->back()->with('success', 'Pengajuan ulang berhasil dikirim.');
     }
 
     /**

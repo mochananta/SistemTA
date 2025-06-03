@@ -47,38 +47,6 @@
                         @csrf
                         <input type="hidden" name="jenis_konsultasi" value="Pendaftaran Pernikahan">
                         <div>
-                            <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap
-                            </label>
-                            <input type="text" id="nama" name="nama"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="Masukkan nama lengkap..." required>
-                        </div>
-
-                        <div>
-                            <label for="nik" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-id-card mr-1 text-green-600"></i> NIK
-                            </label>
-                            <input type="text" id="nik" name="nik"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="16 digit NIK" required>
-                        </div>
-
-                        <div>
-                            <label for="nohp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span
-                                    class="text-red-600">*</span>
-                            </label>
-                            <input type="text" id="nohp" name="nohp"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="Masukkan nomor anda..." required>
-
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
-                                ( Nomor WhatsApp/HP yang dapat dihubungi, contoh: 08123456789 )
-                            </p>
-                        </div>
-
-                        <div>
                             <label for="tanggal_konsultasi"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-calendar-alt mr-1 text-green-600"></i> Tanggal Konsultasi
@@ -86,31 +54,6 @@
                             <input type="date" id="tanggal_konsultasi" name="tanggal_konsultasi"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
                                 required>
-                        </div>
-
-                        <div>
-                            <label for="jam_konsultasi"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                <i class="fas fa-clock mr-1 text-green-600"></i> Jam Konsultasi
-                            </label>
-                            <div class="relative">
-                                <select id="jam_konsultasi" name="jam_konsultasi" required
-                                    class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 
-                                           rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 
-                                           focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                    <option disabled selected>-- Pilih Jam --</option>
-                                    @for ($i = 8; $i <= 16; $i++)
-                                        <option value="{{ sprintf('%02d:00', $i) }}">{{ sprintf('%02d:00', $i) }}</option>
-                                    @endfor
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </div>
                         </div>
 
                         <div>

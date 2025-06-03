@@ -76,10 +76,10 @@
 
                 <!-- Line Chart -->
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Perkembangan Layanan per Tahun
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Perkembangan Layanan per Bulan
                     </h3>
                     <div id="lineChart" class="w-full h-64"></div>
-                </div>
+                </div>  
             </div>
 
             {{-- <div class="mb-12">

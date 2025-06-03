@@ -18,16 +18,14 @@ return new class extends Migration
             $table->unsignedBigInteger('rumah_ibadah_id')->nullable();
             $table->string('kode_layanan')->unique();
             $table->string('jenis_konsultasi');
-            $table->string('nama');
-            $table->string('nik');
-            $table->string('nohp');
             $table->date('tanggal_konsultasi');
-            $table->string('jam_konsultasi');
+            $table->date('jadwal_konsultasi_tanggal')->nullable();
+            $table->time('jadwal_konsultasi_jam')->nullable();
             $table->text('isi_konsultasi');
             $table->text('alamat');
             $table->text('catatan')->nullable();
             $table->string('file_path');
-            $table->string('status')->default('Menunggu Verifikasi');
+            $table->string('status');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

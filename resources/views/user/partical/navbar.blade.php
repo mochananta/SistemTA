@@ -4,8 +4,10 @@
 
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-3">
-                <img src="{{ asset('user/kemenag.png')}}" alt="Logo Kementerian Agama" class="h-10 w-10 object-contain">
-                <span class="font-semibold text-primary-700 dark:text-primary-300 text-sm sm:text-base md:text-lg">Kementerian Agama</span>
+                <img src="{{ asset('user/kemenag.png') }}" alt="Logo Kementerian Agama" class="h-10 w-10 object-contain">
+                <span
+                    class="font-semibold text-primary-700 dark:text-primary-300 text-sm sm:text-base md:text-lg">Kementerian
+                    Agama</span>
             </a>
 
             <!-- Desktop Menu -->
@@ -17,55 +19,67 @@
                 <a href="{{ url('/') }}#statistik"
                     class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition">Statistik</a>
                 <a href="{{ url('/') }}#data"
-                    class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition">Data Keagamaan</a>
+                    class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition">Data
+                    Keagamaan</a>
                 <a href="{{ url('/') }}#lacak"
-                    class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition">Lacak Layanan</a>
+                    class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition">Lacak
+                    Layanan</a>
             </div>
 
             <!-- Auth Buttons or User Dropdown (Desktop) -->
             <div class="hidden xl:flex items-center gap-4">
                 @auth
-                    <!-- User Dropdown -->
                     <div class="relative group">
-                        <button class="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition">
-                            <img src="{{ Auth::user()->profile_photo_url ?? asset('default-avatar.png') }}"
-                                alt="Avatar"
+                        <button
+                            class="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition">
+                            <img src="{{ Auth::user()->profile_photo_url ?? asset('default-avatar.png') }}" alt="Avatar"
                                 class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</span>
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                            <span <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                                {{ \Illuminate\Support\Str::limit(Auth::user()->name, 9, '...') }}
+                            </span>
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 
-                    <!-- Dropdown Menu -->
-                    <div class="absolute right-0 mt-3 w-40 bg-white dark:bg-gray-700 rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="w-5 h-5 mr-2 text-red-500"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="1.5">
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute right-0 mt-3 w-44 bg-white dark:bg-gray-700 rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <!-- Link to Profile -->
+                            <a href="{{ route('user.profile') }}"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-500" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6.75A2.25 2.25 0 004.5 5.25v13.5A2.25 2.25 0 006.75 21h6.75a2.25 2.25 0 002.25-2.25V15M18 12H9m0 0l3-3m-3 3l3 3" />
+                                        d="M5.121 17.804A8 8 0 1112 20a7.965 7.965 0 01-6.879-2.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                Logout
-                            </button>
-                        </form>
-                    </div>
+                                Profil Saya
+                            </a>
+
+                            <!-- Logout -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-red-500" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6.75A2.25 2.25 0 004.5 5.25v13.5A2.25 2.25 0 006.75 21h6.75a2.25 2.25 0 002.25-2.25V15M18 12H9m0 0l3-3m-3 3l3 3" />
+                                    </svg>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 @else
                     <!-- Login/Register Buttons -->
                     <a href="{{ route('login') }}"
-                    class="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition">
+                        class="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition">
                         Sign in
                     </a>
                     <a href="{{ route('register') }}"
-                    class="px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow hover:bg-primary-600 hover:text-white transition">
+                        class="px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow hover:bg-primary-600 hover:text-white transition">
                         Sign up
                     </a>
                 @endauth
@@ -91,8 +105,8 @@
                 <!-- Hamburger for Mobile -->
                 <button id="mobileMenuButton"
                     class="xl:hidden p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -101,31 +115,42 @@
         </div>
     </div>
 
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="xl:hidden bg-white dark:bg-gray-800 shadow-md transition-all duration-300 ease-in-out">
-    <div class="px-6 py-4 space-y-3">
-        <!-- Link Menu -->
-        <a href="{{ url('/') }}" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Beranda</a>
-        <a href="#layanan" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Layanan</a>
-        <a href="#statistik" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Statistik</a>
-        <a href="#data" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Data Keagamaan</a>
-        <a href="#lacak" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Lacak Layanan</a>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="xl:hidden bg-white dark:bg-gray-800 shadow-md transition-all duration-300 ease-in-out">
+        <div class="px-6 py-4 space-y-3">
+            <!-- Link Menu -->
+            <a href="{{ url('/') }}"
+                class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Beranda</a>
+            <a href="#layanan"
+                class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Layanan</a>
+            <a href="#statistik"
+                class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Statistik</a>
+            <a href="#data"
+                class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Data
+                Keagamaan</a>
+            <a href="#lacak"
+                class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Lacak
+                Layanan</a>
 
-        <!-- Authenticated User Menu -->
-        @auth
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" 
+            <!-- Authenticated User Menu -->
+            @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
                         class="block w-1/2 text-center px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow-md hover:bg-primary-600 hover:text-white transition">
-                    Logout
-                </button>
-            </form>
-        @else
-            <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition">Sign In</a>
-            <a href="{{ route('register') }}" class="block w-full text-center px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow-md hover:bg-primary-600 hover:text-white transition">Sign Up</a>
-        @endauth
+                        Logout
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}"
+                    class="block w-full text-center px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg shadow-md hover:bg-primary-700 transition">Sign
+                    In</a>
+                <a href="{{ route('register') }}"
+                    class="block w-full text-center px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow-md hover:bg-primary-600 hover:text-white transition">Sign
+                    Up</a>
+            @endauth
+        </div>
     </div>
-</div>
 
 
 

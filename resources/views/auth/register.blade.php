@@ -51,6 +51,19 @@
                 </div>
             </div>
 
+            <!-- No HP -->
+            <div class="mb-4">
+                <label for="nohp" class="block text-sm font-medium text-gray-700 mb-1">Nomor HP / WhatsApp</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i data-feather="phone" class="w-5 h-5"></i>
+                    </span>
+                    <input type="text" id="nohp" name="nohp" value="{{ old('nohp') }}" required
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
+                        placeholder="08123456789">
+                </div>
+            </div>
+
             <!-- Password -->
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>

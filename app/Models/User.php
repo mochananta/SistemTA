@@ -26,15 +26,34 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'nohp',
         'google_id',
         'password',
     ];
 
-    public function pengajuanSurats()
+    // public function pengajuanSurats()
+    // {
+    //     return $this->hasMany(PengajuanSurat::class);
+    // }
+
+    public function pengajuanSurat()
     {
         return $this->hasMany(PengajuanSurat::class);
     }
 
+    public function konsultasi()
+    {
+        return $this->hasMany(Konsultasi::class);
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo_path) {
+            return asset('storage/' . $this->profile_photo_path);
+        }
+
+        return asset('default-avatar.png');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

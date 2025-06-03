@@ -45,37 +45,6 @@
                         class="space-y-6">
                         @csrf
                         <input type="hidden" name="jenis_surat" value="Rumah Ibadah">
-                        <div>
-                            <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-user mr-1 text-green-600"></i> Nama Lengkap
-                            </label>
-                            <input type="text" id="nama" name="nama"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="Masukkan nama lengkap..." required>
-                        </div>
-
-                        <div>
-                            <label for="nik" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-id-card mr-1 text-green-600"></i> NIK
-                            </label>
-                            <input type="text" id="nik" name="nik"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="16 digit NIK" required>
-                        </div>
-
-                        <div>
-                            <label for="nohp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <i class="fas fa-phone mr-1 text-green-600"></i> Nomor WhatsApp/HP Pemohon<span
-                                    class="text-red-600">*</span>
-                            </label>
-                            <input type="text" id="nohp" name="nohp"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                placeholder="Masukkan nomor anda..." required>
-
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
-                                ( Nomor WhatsApp/HP yang dapat dihubungi, contoh: 08123456789 )
-                            </p>
-                        </div>
 
                         <div>
                             <label for="tanggal_pengajuan"
