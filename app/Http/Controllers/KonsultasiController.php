@@ -33,7 +33,11 @@ class KonsultasiController extends Controller
             $query->where('nama', 'like', "%$search%");
         }
 
-        $data = $query->latest()->paginate(10)->withQueryString();
+        $data = $query
+            ->whereNotIn('status', ['ditolak', 'Selesai', 'Tidak Hadir'])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
         $kualist = $user->role === 'admin_sistem' ? Kua::all() : collect();
 
         return view('admin.konsultasi.view', compact('data', 'kualist'));
@@ -53,12 +57,8 @@ class KonsultasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16',
-            'nohp' => 'required|string|max:15',
             'alamat' => 'required|string',
             'tanggal_konsultasi' => 'required|date',
-            'jam_konsultasi' => 'required|string',
             'isi_konsultasi' => 'required|string',
             'jenis_konsultasi' => 'required|string',
             'rumah_ibadah_id' => 'nullable|exists:rumah_ibadah,id',
@@ -69,18 +69,19 @@ class KonsultasiController extends Controller
 
         $path = $request->file('file_path')->store('konsultasi', 'public');
 
-        $kodeLayanan = 'LYN-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
+        $kodeLayanan = now()->format('YmdHis') . uniqid();
+        $user = auth()->user();
+        $nohp = $user->nohp ?? $request->input('nohp', 'tidak tersedia');
+
 
         $konsultasi = Konsultasi::create([
             'user_id' => auth()->id(),
             'kua_id' => $request->kua_id,
             'kode_layanan' => $kodeLayanan,
             'jenis_konsultasi' => $request->jenis_konsultasi,
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'nohp' => $request->nohp,
+            'name' => $user->name,
+            'nohp' => $nohp,
             'alamat' => $request->alamat,
-            'jam_konsultasi' => $request->jam_konsultasi,
             'tanggal_konsultasi' => $request->tanggal_konsultasi,
             'isi_konsultasi' => $request->isi_konsultasi,
             'rumah_ibadah_id' => $request->rumah_ibadah_id,
@@ -91,41 +92,94 @@ class KonsultasiController extends Controller
         return redirect()->back()->with([
             'success' => 'Pengajuan berhasil dikirim.',
             'kode_layanan' => $konsultasi->kode_layanan,
-            'nohp' => $konsultasi->nohp,
+            'nohp' => $nohp,
         ]);
     }
 
 
-    public function approveKonsultasi($id, Request $request)
+    public function updatekonsultasiStatus(Request $request, $id)
     {
-        $konsultasi = Konsultasi::findOrFail($id);
-        $konsultasi->update([
-            'status' => 'disetujui',
-            'catatan' => $request->catatan ?? 'Disetujui oleh admin',
+        $request->validate([
+            'status' => 'required|string',
+            'catatan' => 'nullable|string',
+            'jadwal_konsultasi_tanggal' => 'nullable|date',
+            'jadwal_konsultasi_jam' => 'nullable|date_format:H:i',
         ]);
 
-        return redirect()->back()->with('success', 'Konsultasi berhasil disetujui.');
-    }
-
-    public function rejectKonsultasi($id, Request $request)
-    {
         $konsultasi = Konsultasi::findOrFail($id);
-        $konsultasi->update([
-            'status' => 'ditolak',
-            'catatan' => $request->catatan ?? 'Ditolak oleh admin',
-        ]);
 
-        return redirect()->back()->with('warning', 'Konsultasi telah ditolak.');
+        if ($request->status === 'Ditolak') {
+            if (!$request->has('catatan') || trim($request->catatan) === '') {
+                return back()->with('error', 'Mohon isi catatan alasan penolakan terlebih dahulu.');
+            }
+
+            $konsultasi->status = 'Ditolak';
+            $konsultasi->catatan = $request->catatan;
+            $konsultasi->save();
+
+            return back()->with('success', 'Status berhasil diperbarui ke Ditolak.');
+        }
+
+        $allowedStatuses = [
+            'Menunggu Verifikasi',
+            'Diproses',
+            'Dijadwalkan',
+            'Selesai',
+            'Tidak Hadir',
+        ];
+
+        $currentIndex = array_search($konsultasi->status, $allowedStatuses);
+        $newIndex = array_search($request->status, $allowedStatuses);
+
+        if ($newIndex === false || $currentIndex === false) {
+            return back()->with('error', 'Status tidak valid.');
+        }
+
+        if ($newIndex < $currentIndex) {
+            return back()->with('error', 'Tidak bisa kembali ke status sebelumnya.');
+        }
+
+        if ($newIndex - $currentIndex > 1) {
+            return back()->with('error', 'Status harus mengikuti urutan langkah demi langkah.');
+        }
+
+        if ($request->status === 'Dijadwalkan') {
+            if (!$request->jadwal_konsultasi_tanggal || !$request->jadwal_konsultasi_jam) {
+                return back()->with('error', 'Tanggal dan jam konsultasi wajib diisi saat menjadwalkan.');
+            }
+
+            $konsultasi->jadwal_konsultasi_tanggal = $request->jadwal_konsultasi_tanggal;
+            $konsultasi->jadwal_konsultasi_jam = $request->jadwal_konsultasi_jam;
+        }
+
+        if ($request->status === 'Tidak Hadir') {
+            $konsultasi->catatan = 'Pemohon tidak hadir sesuai jadwal konsultasi.';
+        } else {
+            $konsultasi->catatan = null;
+        }
+
+        $konsultasi->status = $request->status;
+        $konsultasi->save();
+
+        return back()->with('success', 'Status berhasil diperbarui.');
     }
-
 
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function rejectKonsultasi(Request $request, $id)
     {
-        //
+        $request->validate([
+            'catatan' => 'required|string',
+        ]);
+
+        $konsultasi = Konsultasi::findOrFail($id);
+        $konsultasi->status = 'Ditolak';
+        $konsultasi->catatan = $request->catatan;
+        $konsultasi->save();
+
+        return back()->with('success', 'Pengajuan konsultasi berhasil ditolak.');
     }
 
     /**

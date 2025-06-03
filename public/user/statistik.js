@@ -1,9 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const { donutLabels, donutSeries, lineLabels, lineSurat, lineKonsultasi } = window.chartData;
+    const { donutLabels, donutSeries, lineLabels, lineSurat, lineKonsultasi } =
+        window.chartData;
 
     const colorPalette = [
-        "#3B82F6", "#6366F1", "#60A5FA", "#10B981", "#34D399",
-        "#059669", "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6"
+        "#3B82F6",
+        "#6366F1",
+        "#60A5FA",
+        "#10B981",
+        "#34D399",
+        "#059669",
+        "#F59E0B",
+        "#EF4444",
+        "#8B5CF6",
+        "#14B8A6",
     ];
 
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -19,7 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const filtered = donutLabels
             .map((label, index) => ({ label, index }))
             .filter((item) =>
-                item.label.toLowerCase().startsWith(capitalize(type).toLowerCase())
+                item.label
+                    .toLowerCase()
+                    .startsWith(capitalize(type).toLowerCase())
             );
 
         return {
@@ -161,17 +172,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Dropdown item click handler
-    document.querySelectorAll("#filterMenu button[data-filter]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const type = btn.getAttribute("data-filter");
-            renderDonut(type);
-            filterMenu.classList.add("hidden");
+    document
+        .querySelectorAll("#filterMenu button[data-filter]")
+        .forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const type = btn.getAttribute("data-filter");
+                renderDonut(type);
+                filterMenu.classList.add("hidden");
+            });
         });
-    });
 
     // Click outside to close menu
     document.addEventListener("click", (e) => {
-        if (!toggleButton.contains(e.target) && !filterMenu.contains(e.target)) {
+        if (
+            !toggleButton.contains(e.target) &&
+            !filterMenu.contains(e.target)
+        ) {
             filterMenu.classList.add("hidden");
         }
     });

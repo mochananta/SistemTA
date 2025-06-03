@@ -5,9 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\PelacakanController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\RekapController;
 use App\Http\Controllers\RumahIbadahController;
 use App\Http\Controllers\UserController;
-use App\Models\PengajuanSurat;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +35,18 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::middleware(['auth'])->group(function () {
     Route::post('/pengajuan-surat/store', [PengajuanSuratController::class, 'store'])->name('pengajuan.store');
     Route::post('/konsultasi/store', [KonsultasiController::class, 'store'])->name('konsultasi.store');
-    Route::get('/form/{jenis}', [UserController::class, 'showForm']);
+    Route::get('/form/{jenis}', [UserController::class, 'showForm'])->name('form.jenis');
+    Route::get('/profil', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
+
+    Route::get('/profile/password', [UserController::class, 'editPassword'])->name('password.edit');
+    Route::post('/profile/password', [UserController::class, 'updatePassword'])->name('password.update');
+    Route::delete('/profile/delete', [UserController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/surat/{id}/reapply', [PengajuanSuratController::class, 'reapply'])->name('surat.reapply');
+
+
 });
 
 //admin kua & sistem
@@ -48,18 +59,20 @@ Route::middleware([
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.index');
 
     Route::get('/suratview', [PengajuanSuratController::class, 'index'])->name('admin.surat.view');
-    Route::post('/Surat/{id}/approve', [PengajuanSuratController::class, 'approveSurat'])->name('Surat.approve');
+    Route::post('/Surat/{id}/updatesuratStatus', [PengajuanSuratController::class, 'updatesuratStatus'])->name('Surat.updateStatus');
     Route::post('/Surat/{id}/reject', [PengajuanSuratController::class, 'rejectSurat'])->name('Surat.reject');
     Route::delete('/Surat/{id}', [PengajuanSuratController::class, 'destroySurat'])->name('Surat.delete');
 
 
     Route::get('/konsultasiview', [KonsultasiController::class, 'index'])->name('admin.konsultasi.view');
-    Route::post('/Konsultasi/{id}/approve', [KonsultasiController::class, 'approveKonsultasi'])->name('Konsultasi.approve');
+    Route::post('/Konsultasi/{id}/updatekonsultasiStatus', [KonsultasiController::class, 'updatekonsultasiStatus'])->name('Konsultasi.updateStatus');
     Route::post('/Konsultasi/{id}/reject', [KonsultasiController::class, 'rejectKonsultasi'])->name('Konsultasi.reject');
     Route::delete('/Konsultasi/{id}', [KonsultasiController::class, 'destroyKonsultasi'])->name('Konsultasi.delete');
 
     Route::get('/ibadahview', [RumahIbadahController::class, 'index'])->name('admin.ibadah.view');
     Route::post('/import-rumah-ibadah', [RumahIbadahController::class, 'import'])->name('rumah-ibadah.import');
+
+    Route::get('/rekapview', [RekapController::class, 'index'])->name('admin.rekap.view');
 });
 
 

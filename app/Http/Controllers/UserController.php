@@ -9,6 +9,7 @@ use App\Models\RumahIbadah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -19,7 +20,6 @@ class UserController extends Controller
         $totalLayanan = $totalSurat + $totalKonsultasi;
 
         $jenisLayanan = ['Pendaftaran Pernikahan', 'Wakaf', 'Rumah Ibadah', 'Rekomendasi Pernikahan'];
-
         $statistikLayanan = [];
 
         foreach ($jenisLayanan as $jenis) {
@@ -48,31 +48,39 @@ class UserController extends Controller
             array_values($konsultasiPerJenis)
         );
 
-        $tahunList = range(date('Y') - 4, date('Y'));
-        $suratPerTahun = [];
-        $konsultasiPerTahun = [];
+        $bulanList = range(1, 12);
+        $tahun = date('Y');
 
-        foreach ($tahunList as $tahun) {
-            $suratPerTahun[] = PengajuanSurat::whereYear('created_at', $tahun)->count();
-            $konsultasiPerTahun[] = Konsultasi::whereYear('created_at', $tahun)->count();
+        $suratPerBulan = [];
+        $konsultasiPerBulan = [];
+
+        foreach ($bulanList as $bulan) {
+            $suratPerBulan[] = PengajuanSurat::whereYear('created_at', $tahun)
+                ->whereMonth('created_at', $bulan)
+                ->count();
+
+            $konsultasiPerBulan[] = Konsultasi::whereYear('created_at', $tahun)
+                ->whereMonth('created_at', $bulan)
+                ->count();
         }
+
+        $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $rumahIbadah = RumahIbadah::limit(10)->get();
 
-        return view('user.home', compact(
-            'labels',
-            'donutSeries',
-            'tahunList',
-            'suratPerTahun',
-            'konsultasiPerTahun',
-            'rumahIbadah',
-            'totalSurat',
-            'totalKonsultasi',
-            'totalLayanan',
-            'statistikLayanan'
-        ));
+        return view('user.home', [
+            'labels' => $labels,
+            'donutSeries' => $donutSeries,
+            'lineLabels' => $bulanLabels,
+            'lineSurat' => $suratPerBulan,
+            'lineKonsultasi' => $konsultasiPerBulan,
+            'rumahIbadah' => $rumahIbadah,
+            'totalSurat' => $totalSurat,
+            'totalKonsultasi' => $totalKonsultasi,
+            'totalLayanan' => $totalLayanan,
+            'statistikLayanan' => $statistikLayanan,
+        ]);
     }
-
 
     public function showForm($jenis)
     {
@@ -89,13 +97,11 @@ class UserController extends Controller
             ->get();
 
         return match ($jenis) {
-            // Form Pengajuan Surat
             'surat-ibadah' => view('user.layanan.form-surat.ibadah', compact('kuas')),
             'surat-wakaf' => view('user.layanan.form-surat.wakaf', compact('kuas')),
             'surat-pendaftaran-pernikahan' => view('user.layanan.form-surat.pendaftaran-pernikahan', compact('kuas')),
             'surat-rekomendasi-nikah' => view('user.layanan.form-surat.rekomendasi-nikah', compact('kuas')),
 
-            // Form Konsultasi
             'konsultasi-ibadah' => view('user.layanan.form-konsultasi.ibadah', compact('kuas', 'kecamatans')),
             'konsultasi-pendaftaran-pernikahan' => view('user.layanan.form-konsultasi.pendaftaran-pernikahan', compact('kuas')),
             'konsultasi-wakaf' => view('user.layanan.form-konsultasi.wakaf', compact('kuas')),
@@ -112,5 +118,86 @@ class UserController extends Controller
     public function jeniskonsultasiview()
     {
         return view('user.layanan.konsultasi');
+    }
+
+    public function profile()
+    {
+        $user = auth()->user();
+
+        $pengajuanSurat = [
+            'diproses' => $user->pengajuanSurat()->whereIn('status', ['Menunggu Verifikasi', 'Diverifikasi', 'Dokumen Lengkap'])->latest()->get(),
+            'disetujui' => $user->pengajuanSurat()->where('status', 'Disetujui')->latest()->get(),
+            'selesai' => $user->pengajuanSurat()->where('status', 'Selesai Diambil')->latest()->get(),
+            'gagal' => $user->pengajuanSurat()->where('status', 'gagal diambil')->latest()->get(),
+            'ditolak' => $user->pengajuanSurat()->where('status', 'Ditolak')->get(),
+        ];
+        $konsultasi = [
+            'diproses' => $user->konsultasi()->where('status', ['Menunggu Verifikasi','Diproses'])->latest()->get(),
+            'dijadwalkan' => $user->konsultasi()->where('status', 'Dijadwalkan')->latest()->get(),
+            'selesai' => $user->konsultasi()->where('status', 'Selesai')->latest()->get(),
+            'tidak_hadir' => $user->konsultasi()->where('status', 'Tidak Hadir')->latest()->get(),
+            'ditolak' => $user->konsultasi()->where('status', 'Ditolak')->latest()->get(),
+        ];
+
+        return view('profile.profile', compact('user', 'pengajuanSurat', 'konsultasi'));
+    }
+
+    public function edit()
+    {
+        return view('profile.edit-profile', ['user' => Auth::user()]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'nohp' => 'nullable|string|max:20',
+            'profile_photo' => 'nullable|image|max:2048',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->nohp = $request->nohp;
+
+        if ($request->hasFile('profile_photo')) {
+            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+            $user->profile_photo_path = $path;
+        }
+        $user->save();
+        return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function editPassword()
+    {
+        return view('profile.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('password.edit')->with('success', 'Password berhasil diperbarui.');
+    }
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+
+        Auth::logout();
+        $user->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Akun Anda berhasil dihapus.');
     }
 }

@@ -43,10 +43,9 @@
                                             <tr class="text-black">
                                                 <th>No</th>
                                                 <th>Nama</th>
-                                                <th>NIK</th>
-                                                <th>Nomor Handphone</th>
+                                                <th>Email</th>
+                                                <th>Nomor HP</th>
                                                 <th>Alamat</th>
-                                                <th>Jam Konsultasi</th>
                                                 <th>Tanggal Konsultasi</th>
                                                 <th>Jenis Konsultasi</th>
                                                 <th>KUA Tujuan</th>
@@ -61,40 +60,57 @@
                                             @foreach ($data as $index => $item)
                                                 <tr>
                                                     <td>{{ $data->firstItem() + $index }}</td>
-                                                    <td>{{ $item->nama }}</td>
-                                                    <td>{{ $item->nik }}</td>
-                                                    <td>{{ $item->nohp }}</td>
+                                                    <td>{{ $item->user->name ?? '-' }}</td>
+                                                    <td>{{ $item->user->email ?? '-' }}</td>
+                                                    <td>{{ $item->user->nohp ?? '-' }}</td>
                                                     <td>{{ $item->alamat }}</td>
-                                                    <td>{{ $item->jam_konsultasi }}</td>
                                                     <td>{{ $item->tanggal_konsultasi }}</td>
                                                     <td>{{ $item->jenis_konsultasi }}</td>
                                                     <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}
                                                     </td>
-                                                    <td>{{ $item->rumahIbadah ? $item->rumahIbadah->nama . ' - ' . $item->rumahIbadah->alamat : '-' }}</td>
+                                                    <td>{{ $item->rumahIbadah ? $item->rumahIbadah->nama . ' - ' . $item->rumahIbadah->alamat : '-' }}
+                                                    </td>
                                                     <td>{{ $item->rumahIbadah ? $item->rumahIbadah->jenis : '-' }}</td>
                                                     <td>{{ $item->isi_konsultasi }}</td>
                                                     <td>
-                                                        <a href="{{ asset('storage/' . $item->file_path) }}"
-                                                            target="_blank" title="Lihat File"
-                                                            style="color: #0d6efd; text-decoration: none; margin-right: 8px;">
-                                                            <i class="mdi mdi-file-document mdi-24px"></i>
-                                                        </a>
+                                                        @if ($item->status !== 'Menunggu Verifikasi')
+                                                            <a href="{{ asset('storage/' . $item->file_path) }}"
+                                                                target="_blank" class="text-primary">
+                                                                <i class="mdi mdi-file-document mdi-24px"></i>
+                                                            </a>
+                                                        @else
+                                                            <span class="text-muted">Belum diproses</span>
+                                                        @endif
                                                     </td>
-                                                    <td>
-                                                        <form action="{{ route('Konsultasi.approve', $item->id) }}"
-                                                            method="POST" class="d-inline">
+                                                    <td> <span class="badge bg-primary">{{ ucfirst($item->status) }}</span>
+                                                    </td>
+                                                    <td class="d-flex gap-2">
+                                                        <form action="{{ route('Konsultasi.updateStatus', $item->id) }}"
+                                                            method="POST">
                                                             @csrf
-                                                            <input type="hidden" name="catatan"
-                                                                value="Diterima oleh admin">
-                                                            <button type="submit" title="Setujui"
-                                                                style="background: none; border: none; color: green; padding: 0; margin-right: 8px; cursor: pointer;">
-                                                                <i class="mdi mdi-check-circle-outline mdi-24px"></i>
-                                                            </button>
+                                                            <select name="status" class="form-select form-select-sm"
+                                                                onchange="handleKonsultasiStatusChange(this, {{ $item->id }})">
+                                                                <option value="">Pilih Status</option>
+                                                                @php
+                                                                    $statusOptions = [
+                                                                        'Diproses',
+                                                                        'Dijadwalkan',
+                                                                        'Selesai',
+                                                                        'Tidak Hadir',
+                                                                    ];
+                                                                @endphp
+                                                                @foreach ($statusOptions as $status)
+                                                                    <option value="{{ $status }}"
+                                                                        @if ($status == $item->status) selected @endif>
+                                                                        {{ ucfirst($status) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
                                                         </form>
 
                                                         <button type="button" data-bs-toggle="modal"
                                                             data-bs-target="#rejectModal{{ $item->id }}" title="Tolak"
-                                                            style="background: none; border: none; color: orange; padding: 0; margin-right: 8px; cursor: pointer;">
+                                                            style="background: none; border: none; color: orange; cursor: pointer;">
                                                             <i class="mdi mdi-close-circle-outline mdi-24px"></i>
                                                         </button>
 
@@ -103,7 +119,8 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" title="Hapus"
-                                                                style="background: none; border: none; color: red; padding: 0; cursor: pointer;">
+                                                                onclick="return confirm('Yakin ingin menghapus data ini?')"
+                                                                style="background: none; border: none; color: red; cursor: pointer;">
                                                                 <i class="mdi mdi-delete mdi-24px"></i>
                                                             </button>
                                                         </form>
@@ -130,37 +147,70 @@
                                         </ul>
                                     </nav>
                                 </div>
-
-                                @foreach ($data as $item)
-                                    <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
-                                        aria-labelledby="rejectModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <form action="{{ route('Konsultasi.reject', $item->id) }}" method="POST">
-                                                @csrf
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Tolak Pengajuan</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label for="catatan" class="form-label">Catatan
-                                                                Penolakan</label>
-                                                            <textarea name="catatan" id="catatan" class="form-control" rows="3" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
                         </div>
                     </div>
+                    @foreach ($data as $item)
+                        <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
+                            aria-labelledby="rejectModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="{{ route('Konsultasi.reject', $item->id) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Tolak Pengajuan</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="catatan" class="form-label">Catatan
+                                                    Penolakan</label>
+                                                <textarea name="catatan" id="catatan" class="form-control" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Kirim</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="jadwalModal{{ $item->id }}" tabindex="-1"
+                            aria-labelledby="jadwalModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="{{ route('Konsultasi.updateStatus', $item->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="status" value="Dijadwalkan">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Atur Jadwal Konsultasi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="jadwal_konsultasi_tanggal{{ $item->id }}"
+                                                    class="form-label">Tanggal</label>
+                                                <input type="date" class="form-control" name="jadwal_konsultasi_tanggal"
+                                                    id="jadwal_konsultasi_tanggal{{ $item->id }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="jadwal_konsultasi_jam{{ $item->id }}"
+                                                    class="form-label">Jam</label>
+                                                <input type="time" class="form-control" name="jadwal_konsultasi_jam"
+                                                    id="jadwal_konsultasi_jam{{ $item->id }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Simpan Jadwal</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

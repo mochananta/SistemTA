@@ -109,10 +109,10 @@
                     </li>
                 </ul>
                 <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('admin/images/logo.svg') }}"
+                    <a class="navbar-brand brand-logo" ><img src="{{ asset('user/kemenag.png') }}"
                             alt="logo" /></a>
-                    <a class="navbar-brand brand-logo-mini" href="index.html"><img
-                            src="{{ asset('admin/images/logo-mini.svg') }}" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo-mini"><img
+                            src="{{ asset('user/kemenag.png') }}" alt="logo" /></a>
                 </div>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown  d-lg-flex d-none">
@@ -236,31 +236,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="mdi mdi-codepen menu-icon"></i>
-                        <span class="menu-title">Sample Pages</span>
+                    <a href="{{ route('admin.rekap.view') }}" class="nav-link">
+                        <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                        <span class="menu-title">Rekap Data</span>
                         <i class="menu-arrow"></i>
                     </a>
-                    <div class="submenu">
-                        <ul class="submenu-item">
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/login.html">Login</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/login-2.html">Login
-                                    2</a></li>
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/register.html">Register</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/register-2.html">Register
-                                    2</a></li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="pages/samples/lock-screen.html">Lockscreen</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="docs/documentation.html" class="nav-link">
-                        <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                        <span class="menu-title">Documentation</span></a>
-                </li>
+                </li>   
             </ul>
         </div>
     </nav>

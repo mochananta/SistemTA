@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Konsultasi;
 use App\Models\PengajuanSurat;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -14,26 +15,35 @@ class PelacakanController extends Controller
      */
     public function cek(Request $request)
     {
-        $request->validate([
-            'kode_layanan' => 'required|string',
-            'nohp' => 'required|string',
-        ]);
+    $request->validate([
+        'kode_layanan' => 'required|string',
+        'nohp' => 'required|string',
+    ]);
 
-        $data = \App\Models\PengajuanSurat::where('kode_layanan', $request->kode_layanan)
-            ->where('nohp', $request->nohp)
+    $user = User::where('nohp', $request->nohp)->first();
+
+    if (!$user) {
+        return redirect(url('/') . "#lacak")->with('lacak_error', 'Nomor HP tidak ditemukan.');
+    }
+
+    $data = PengajuanSurat::where('kode_layanan', $request->kode_layanan)
+        ->where('user_id', $user->id)
+        ->first();
+
+    if (!$data) {
+        $data = Konsultasi::where('kode_layanan', $request->kode_layanan)
+            ->where('user_id', $user->id)
             ->first();
+    }
 
-        if (!$data) {
-            $data = \App\Models\Konsultasi::where('kode_layanan', $request->kode_layanan)
-                ->where('nohp', $request->nohp)
-                ->first();
-        }
+    if (!$data) {
+        return redirect(url('/') . "#lacak")->with('lacak_error', 'Data layanan tidak ditemukan. Periksa kembali input Anda.');
+    }
 
-        if (!$data) {
-            return redirect(url('/') . "#lacak")->with('lacak_error', 'Data layanan tidak ditemukan. Periksa kembali input Anda.');
-        }
+    // Pastikan relasi user di-load
+    $data->load('user');
 
-        return redirect(url('/') . "#lacak")->with('lacak_data', $data);
+    return redirect(url('/') . "#lacak")->with('lacak_data', $data);
     }
 
 
