@@ -107,15 +107,17 @@ class KonsultasiController extends Controller
         ]);
 
         $konsultasi = Konsultasi::findOrFail($id);
+        $newStatus = $request->status;
 
-        if ($request->status === 'Ditolak') {
-            if (!$request->has('catatan') || trim($request->catatan) === '') {
+        if ($newStatus === 'Ditolak') {
+            if (!trim($request->catatan)) {
                 return back()->with('error', 'Mohon isi catatan alasan penolakan terlebih dahulu.');
             }
 
-            $konsultasi->status = 'Ditolak';
-            $konsultasi->catatan = $request->catatan;
-            $konsultasi->save();
+            $konsultasi->update([
+                'status' => 'Ditolak',
+                'catatan' => $request->catatan,
+            ]);
 
             return back()->with('success', 'Status berhasil diperbarui ke Ditolak.');
         }
@@ -129,21 +131,25 @@ class KonsultasiController extends Controller
         ];
 
         $currentIndex = array_search($konsultasi->status, $allowedStatuses);
-        $newIndex = array_search($request->status, $allowedStatuses);
+        $newIndex = array_search($newStatus, $allowedStatuses);
 
         if ($newIndex === false || $currentIndex === false) {
             return back()->with('error', 'Status tidak valid.');
         }
 
-        if ($newIndex < $currentIndex) {
-            return back()->with('error', 'Tidak bisa kembali ke status sebelumnya.');
+        $bypassStrictOrder = $konsultasi->status === 'Dijadwalkan' && in_array($newStatus, ['Tidak Hadir', 'Selesai']);
+
+        if (!$bypassStrictOrder) {
+            if ($newIndex < $currentIndex) {
+                return back()->with('error', 'Tidak bisa kembali ke status sebelumnya.');
+            }
+
+            if ($newIndex - $currentIndex > 1) {
+                return back()->with('error', 'Status harus mengikuti urutan langkah demi langkah.');
+            }
         }
 
-        if ($newIndex - $currentIndex > 1) {
-            return back()->with('error', 'Status harus mengikuti urutan langkah demi langkah.');
-        }
-
-        if ($request->status === 'Dijadwalkan') {
+        if ($newStatus === 'Dijadwalkan') {
             if (!$request->jadwal_konsultasi_tanggal || !$request->jadwal_konsultasi_jam) {
                 return back()->with('error', 'Tanggal dan jam konsultasi wajib diisi saat menjadwalkan.');
             }
@@ -152,13 +158,11 @@ class KonsultasiController extends Controller
             $konsultasi->jadwal_konsultasi_jam = $request->jadwal_konsultasi_jam;
         }
 
-        if ($request->status === 'Tidak Hadir') {
-            $konsultasi->catatan = 'Pemohon tidak hadir sesuai jadwal konsultasi.';
-        } else {
-            $konsultasi->catatan = null;
-        }
+        $konsultasi->catatan = $newStatus === 'Tidak Hadir'
+            ? 'Pemohon tidak hadir sesuai jadwal konsultasi.'
+            : null;
 
-        $konsultasi->status = $request->status;
+        $konsultasi->status = $newStatus;
         $konsultasi->save();
 
         return back()->with('success', 'Status berhasil diperbarui.');
@@ -179,23 +183,75 @@ class KonsultasiController extends Controller
         $konsultasi->catatan = $request->catatan;
         $konsultasi->save();
 
-        return back()->with('success', 'Pengajuan konsultasi berhasil ditolak.');
+        return back()->with('success', 'konsultasi berhasil ditolak.');
     }
+
+
+    public function reapply($id)
+    {
+        $konsultasi = Konsultasi::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if (!in_array(strtolower($konsultasi->status), ['tidak hadir', 'ditolak'])) {
+            return redirect()->back()->with('error', 'Konsultasi ini tidak bisa diajukan ulang.');
+        }
+
+        return redirect()->back()
+            ->with('show_reapply_modal', $konsultasi->id)
+            ->with('info', 'Silakan perbaiki data sebelum mengajukan ulang.');
+    }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
-    }
+        $konsultasi = Konsultasi::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
+        return view('konsultasi.edit', compact('konsultasi'));
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'alamat' => 'required|string',
+            'isi_konsultasi' => 'required|string',
+            'tanggal_konsultasi' => 'required|date',
+            'kua_id' => 'required|exists:kuas,id',
+            'file_path' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5048',
+        ]);
+
+        $konsultasi = Konsultasi::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $data = [
+            'alamat' => $request->alamat,
+            'isi_konsultasi' => $request->isi_konsultasi,
+            'tanggal_konsultasi' => $request->tanggal_konsultasi,
+            'kua_id' => $request->kua_id,
+            'updated_at' => now(),
+        ];
+
+        if ($request->has('is_reapply')) {
+            $data['status'] = 'Menunggu Verifikasi';
+            $data['catatan'] = null;
+        }
+
+        if ($request->hasFile('file_path')) {
+            $path = $request->file('file_path')->store('konsultasi', 'public');
+            $data['file_path'] = $path;
+        }
+
+        $konsultasi->update($data);
+
+        return redirect()->back()->with('success', 'Konsultasi berhasil diperbarui.');
     }
 
     /**

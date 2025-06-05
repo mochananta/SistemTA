@@ -45,8 +45,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile/delete', [UserController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/surat/{id}/reapply', [PengajuanSuratController::class, 'reapply'])->name('surat.reapply');
+    Route::get('/pengajuan/{id}/edit', [PengajuanSuratController::class, 'edit'])->name('pengajuan.edit');
+    Route::post('/pengajuan/{id}/update', [PengajuanSuratController::class, 'update'])->name('pengajuan.update');
 
-
+    Route::post('/konsultasi/{id}/reapply', [KonsultasiController::class, 'reapply'])->name('konsultasi.reapply');
+    Route::get('/konsultasi/{id}/edit', [KonsultasiController::class, 'edit'])->name('konsultasi.edit');
+    Route::put('/konsultasi/{id}', [KonsultasiController::class, 'update'])->name('konsultasi.update');
 });
 
 //admin kua & sistem

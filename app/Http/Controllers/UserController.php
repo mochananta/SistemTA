@@ -122,6 +122,7 @@ class UserController extends Controller
 
     public function profile()
     {
+        $kuas = Kua::all();
         $user = auth()->user();
 
         $pengajuanSurat = [
@@ -132,14 +133,14 @@ class UserController extends Controller
             'ditolak' => $user->pengajuanSurat()->where('status', 'Ditolak')->get(),
         ];
         $konsultasi = [
-            'diproses' => $user->konsultasi()->where('status', ['Menunggu Verifikasi','Diproses'])->latest()->get(),
+            'diproses' => $user->konsultasi()->whereIn('status', ['Menunggu Verifikasi', 'Diproses'])->latest()->get(),
             'dijadwalkan' => $user->konsultasi()->where('status', 'Dijadwalkan')->latest()->get(),
             'selesai' => $user->konsultasi()->where('status', 'Selesai')->latest()->get(),
             'tidak_hadir' => $user->konsultasi()->where('status', 'Tidak Hadir')->latest()->get(),
             'ditolak' => $user->konsultasi()->where('status', 'Ditolak')->latest()->get(),
         ];
 
-        return view('profile.profile', compact('user', 'pengajuanSurat', 'konsultasi'));
+        return view('profile.profile', compact('user', 'pengajuanSurat', 'konsultasi', 'kuas'));
     }
 
     public function edit()
