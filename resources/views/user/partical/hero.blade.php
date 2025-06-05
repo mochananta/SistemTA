@@ -8,15 +8,17 @@
                         Layanan Kementerian Agama <br>
                         <span class="text-green-700">Kab. Banyuwangi</span>
                     </h1>
-                    <p class="text-lg text-gray-700 dark:text-gray-300">Memberikan pelayanan terbaik untuk membangun
-                        kehidupan beragama yang harmonis dan berkeadilan bagi seluruh rakyat Indonesia.</p>
+                    <p class="text-lg text-gray-700 dark:text-gray-300">Memberikan pelayanan terbaik melalui layanan
+                        konsultasi dan pengajuan surat untuk mendukung kehidupan beragama yang harmonis, berkeadilan,
+                        dan tertib administrasi bagi seluruh masyarakat Banyuwangi.
+
+                    </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="#layanan"
+                        <a href="{{ url('/') }}#layanan"
                             class="px-6 py-3 bg-green-700 hover:bg-green-800 text-white font-medium rounded-lg shadow-lg transition duration-300">Layanan
-                            Digital</a>
-                        <a href="#tentang"
-                            class="px-6 py-3 text-green-700 font-medium rounded-lg shadow-md border border-green-700 text-primary-600 rounded-lg shadow-md hover:bg-green-700 hover:text-white transition">Tentang
-                            Kami</a>
+                            Kami
+                        </a>
+
                     </div>
                 </div>
 

@@ -28,17 +28,83 @@
                     <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center">
                         <i class="fas fa-file-alt mr-2 text-green-600 dark:text-green-400"></i> Persyaratan Wakaf
                     </h3>
-                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 leading-relaxed">
-                        <li>Surat pengantar nikah dari desa/kelurahan</li>
-                        <li>Fotokopi akta kelahiran</li>
-                        <li>Fotokopi KTP calon suami & istri</li>
-                        <li>Fotokopi Kartu Keluarga (KK)</li>
-                        <li>Pas foto 3x4 (4 lembar)</li>
-                        <li>Surat keterangan sehat dari fasilitas kesehatan</li>
-                        <li>Persetujuan catin</li>
-                        <li>Surat izin orang tua (jika usia < 21 tahun)</li>
-                        <li>Surat dispensasi kawin dari pengadilan (jika usia < 19 tahun)</li>
-                        <li>Akta cerai / kematian (jika duda/janda)</li>
+                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+                        <li>
+                            <button onclick="toggleModal()" class="text-green-600 hover:underline font-semibold">
+                                Persyaratan (Klik di sini)
+                            </button>
+                        </li>
+                        <li> Jadikan Persyaratan Dalam Satu File Berbentuk (PDF)</li>
+                        <li> Masukan Kedalam Form Upload Dokumen</li>
+                    </ul>
+                    <!-- Pop Up daftar Persyaratan-->
+                    <div id="modalPersyaratan"
+                        class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+                            <h4 class="text-lg font-bold mb-4 text-green-700 dark:text-green-400">Daftar Persyaratan
+                            </h4>
+                            <!-- Konten persyaratan di sini -->
+                            <div class="mb-6">
+                                <h4 class="mb-3 font-semibold text-lg text-green-600 dark:text-green-400">Persyaratan
+                                    Pengajuan Tanah Wakaf </h4>
+
+                                <h5 class="mb-2 font-semibold text-md text-green-700 dark:text-green-300">Dari Wakif (yang
+                                    mewakafkan):</h5>
+                                <ol class="list-decimal list-inside text-gray-700 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>Fotokopi KTP</li>
+                                    <li>Sertifikat tanah / bukti kepemilikan asli</li>
+                                    <li>SPPT PBB terakhir</li>
+                                    <li>Surat pernyataan tanah tidak dalam sengketa</li>
+                                    <li>Surat pernyataan tanah tidak dalam agunan</li>
+                                    <li>Surat pernyataan ikhlas mewakafkan</li>
+                                    <li><em>(Opsional)</em> Surat keterangan tanah dari desa/kelurahan</li>
+                                    <li><em>(Opsional)</em> Fotokopi KK</li>
+                                </ol>
+
+                                <h5 class="mb-2 font-semibold text-md text-green-700 dark:text-green-300">Dari Nadzir
+                                    (pengelola wakaf):</h5>
+                                <ol class="list-decimal list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                                    <li>Fotokopi KTP</li>
+                                    <li>Surat pernyataan kesanggupan sebagai nadzir</li>
+                                    <li><em>(Opsional)</em> SK pengangkatan nadzir (jika organisasi/yayasan)</li>
+                                    <li><em>(Opsional)</em> SK kepengurusan (jika badan hukum)</li>
+                                    <li><em>(Opsional)</em> Pas foto 3×4</li>
+                                </ol>
+                            </div>
+
+
+                            <div class="mt-6 text-right">
+                                <button onclick="toggleModal()"
+                                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function toggleModal() {
+                            const modal = document.getElementById('modalPersyaratan');
+                            modal.classList.toggle('hidden');
+                        }
+                    </script>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center">
+                        <i class="fas fa-file-alt mr-2 text-green-600 dark:text-green-400"></i> Alur Pelayanan
+                    </h3>
+                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+                        <li>Mengisi Form data dan tanggal pengajuan</li>
+                        <li>Manginputkan file pengajua surat</li>
+                        <li>Klik tombol kirim Formulir</li>
+                        <li>Jika data permohonan berhasil dikirim, pemohon akan mendapatkan nomor layanan melalui kotak
+                            dialog (jangan lupa menyalin nomor layanan agar formulir konsultasi dapat di lacak)</li>
+                        <li>Untuk memastikan Pengajuan Surat sudah selesai, anda bisa mengecek status layanan dimenu Lacak
+                            Layanan dengan memasukkan nomor layanan dan nomor hp pemohon.</li>
+                        <li>Status layanan: - Menunggu persetujuan, permohonan menunggu persetujuan kepala kantor/unit kerja
+                            terkait - Masih dalam proses, permohonan masih dalam proses verifikasi kepala kantor/unit kerja
+                            terkait.</li>
+                        <li>Selesai, permohonan sudah disetujui, bila surat membutuhkan jawaban dokumen siap untuk
+                            didownload pemohon melalui lacak layanan.</li>
+                        <li> Anda dapat memeriksa status pengajuan surat pada bagian Profil. </li>
                     </ul>
                     <p class="mt-4 text-sm italic text-gray-500 dark:text-gray-400">
                         * Semua dokumen wajib diupload saat pengajuan.

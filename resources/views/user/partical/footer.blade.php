@@ -32,15 +32,16 @@
                 <ul class="space-y-3">
                     <li class="flex items-start space-x-3">
                         <i class="fas fa-map-marker-alt mt-1 text-primary-400"></i>
-                        <span>Jl. Mesjid Raya No.1, Jakarta, Indonesia</span>
+                        <span>Jl. Adi Sucipto No.112, Sobo, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur
+                            68418</span>
                     </li>
                     <li class="flex items-start space-x-3">
                         <i class="fas fa-phone mt-1 text-primary-400"></i>
-                        <span>(021) 3812344</span>
+                        <span> (0333) 421349</span>
                     </li>
                     <li class="flex items-start space-x-3">
                         <i class="fas fa-envelope mt-1 text-primary-400"></i>
-                        <span>info@kemenag.go.id</span>
+                        <span>www.kemenagbanyuwangi.web.id</span>
                     </li>
                 </ul>
             </div>
@@ -48,35 +49,28 @@
             <div>
                 <h4 class="text-lg font-semibold mb-4">Layanan Utama</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Haji
-                            dan Umrah</a></li>
-                    <li><a href="#"
-                            class="text-gray-300 hover:text-white hover:underline transition">Layanan
-                            Pernikahan</a></li>
-                    <li><a href="#"
-                            class="text-gray-300 hover:text-white hover:underline transition">Pendidikan
-                            Madrasah</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Wakaf
-                            dan Zakat</a></li>
-                    <li><a href="#"
-                            class="text-gray-300 hover:text-white hover:underline transition">Bimbingan
-                            Masyarakat</a></li>
+                    <li><a href="{{ route('user.layanan.konsultasi') }}"
+                            class="text-white-300 hover:text-white hover:underline transition">Layanan
+                            Konsultasi</a></li>
+                    <li><a href="{{ route('user.layanan.surat') }}"
+                            class="text-white-300 hover:text-white hover:underline transition">Layanan
+                            Pengajuan Surat</a></li>
+                    <li><a href="{{ url('/') }}#statistik"
+                            class="text-white-300 hover:text-white hover:underline transition">Layanan
+                            Statistik</a></li>
+                    <li><a href="{{ url('/') }}#data"
+                            class="text-white-300 hover:text-white hover:underline transition">Layanan
+                            Data Tempat Ibadah</a></li>
+
                 </ul>
             </div>
 
             <div>
                 <h4 class="text-lg font-semibold mb-4">Hubungi Kami</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Pusat
-                            Bantuan</a></li>
-                    <li><a href="#"
-                            class="text-gray-300 hover:text-white hover:underline transition">FAQ</a></li>
-                    <li><a href="#"
-                            class="text-gray-300 hover:text-white hover:underline transition">Pengaduan</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Kritik
-                            & Saran</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Kontak
-                            Media</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Pusat Bantuan</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">FAQ</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white hover:underline transition">Kritik & Saran</a></li>
                 </ul>
             </div>
         </div>

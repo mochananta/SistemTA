@@ -8,13 +8,15 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan Konsultasi</a>
+                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
+                    Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rekomendasi Pindah Nikah</span>
             </div>
             <!-- Title -->
             <div class="mb-12 text-center">
-                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rekomendasi Pindah Nikah</h2>
+                <h2 class="text-3xl font-extrabold text-green-700 dark:text-green-400">Formulir Pelayanan Rekomendasi Pindah
+                    Nikah</h2>
                 <p class="mt-2 text-gray-600 dark:text-gray-400 text-lg">
                     Silakan lengkapi data dan persyaratan berikut dengan benar.
                 </p>
@@ -29,11 +31,72 @@
                         <i class="fas fa-file-alt mr-2 text-green-600 dark:text-green-400"></i> Persyaratan
                     </h3>
                     <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
-                        <li>Fotokopi KTP Calon Suami & Istri</li>
-                        <li>Surat Pengantar dari RT/RW setempat</li>
-                        <li>Pas Foto 3x4 (4 lembar)</li>
-                        <li>Fotokopi Akta Kelahiran</li>
-                        <li>Surat Izin Orang Tua (jika usia &lt; 21 tahun)</li>
+                        <li>
+                            <button onclick="toggleModal()" class="text-green-600 hover:underline font-semibold">
+                                Persyaratan (Klik di sini)
+                            </button>
+                        </li>
+                        <li> Jadikan Persyaratan Dalam Satu File Berbentuk (PDF)</li>
+                        <li> Masukan Kedalam Form Upload Dokumen</li>
+                    </ul>
+                    <!-- Pop Up daftar Persyaratan-->
+                    <div id="modalPersyaratan"
+                        class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+                            <h4 class="text-lg font-bold mb-4 text-green-700 dark:text-green-400">Daftar Persyaratan
+                            </h4>
+                            <!-- Konten persyaratan di sini -->
+                            <div class="mb-6">
+                                <h4 class="mb-3 font-semibold text-lg text-green-600 dark:text-green-400">Persyaratan
+                                    Konsultasi
+                                    Pendaftaran Pernikahan
+                                </h4>
+                                <ol class="list-decimal list-inside text-gray-700 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>Surat pengantar nikah dari desa/kelurahan tempat tinggal calon pengantin (catin)
+                                    </li>
+                                    <li>Fotokopi KTP calon pengantin</li>
+                                    <li>Fotokopi Kartu Keluarga (KK) calon pengantin</li>
+                                    <li>Informasi rencana tanggal dan tempat pernikahan</li>
+                                    <li>Surat rekomendasi nikah dari KUA setempat jika rencana nikah di luar kecamatan
+                                        tempat tinggal</li>
+                                    <li>Informasi status pernikahan (janda/duda/pertama kali menikah)</li>
+                                    <li>(Opsional) Informasi izin dari orang tua/wali jika usia belum memenuhi syarat</li>
+                                </ol>
+                            </div>
+
+
+                            <div class="mt-6 text-right">
+                                <button onclick="toggleModal()"
+                                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function toggleModal() {
+                            const modal = document.getElementById('modalPersyaratan');
+                            modal.classList.toggle('hidden');
+                        }
+                    </script>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center">
+                        <i class="fas fa-file-alt mr-2 text-green-600 dark:text-green-400"></i> Alur Pelayanan
+                    </h3>
+                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+                        <li>Mengisi Form data dan tanggal Konsultasi</li>
+                        <li>Menyampaikan point inti konsultasi</li>
+                        <li>Klik tombol kirim Formulir</li>
+                        <li>Jika data permohonan berhasil dikirim, pemohon akan mendapatkan nomor layanan melalui kotak
+                            dialog (jangan lupa menyalin nomor layanan agar formulir konsultasi dapat di lacak)</li>
+                        <li>Untuk memastikan konsultasi sudah dijawab, anda bisa mengecek status layanan dimenu Lacak
+                            Layanan dengan memasukkan nomor layanan dan nomor hp pemohon.</li>
+                        <li>Status layanan: - Menunggu persetujuan, permohonan menunggu persetujuan kepala kantor/unit kerja
+                            terkait - Masih dalam proses, permohonan masih dalam proses verifikasi kepala kantor/unit kerja
+                            terkait.</li>
+                        <li>Selesai, permohonan sudah disetujui, bila surat membutuhkan jawaban dokumen siap untuk
+                            didownload pemohon melalui lacak layanan.</li>
+                        <li> Anda dapat memeriksa status konsultasi pada bagian Profil. </li>
                     </ul>
                     <p class="mt-4 text-sm italic text-gray-500 dark:text-gray-400">
                         * Semua dokumen wajib dibawa dalam bentuk fotokopi & asli saat verifikasi.
