@@ -37,7 +37,8 @@
     <!-- container-scroller -->
     <!-- base:js -->
     <script src="{{ asset('admin/vendors/base/vendor.bundle.base.js') }}"></script>
-    <!-- endinject -->
+    <script src="{{ asset('admin/js/counter.js') }}"></script>
+    <script src="{{ asset('admin/js/dashboard-charts.js') }}"></script>
     <script src="{{ asset('admin/js/template.js') }}"></script>
     <script src="{{ asset('admin/vendors/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/progressbar.js/progressbar.min.js') }}"></script>
@@ -46,7 +47,17 @@
     <script src="{{ asset('admin/vendors/justgage/justgage.js') }}"></script>
     <script src="{{ asset('admin/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('admin/js/dashboard.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    @if (isset($bulanLabels) && isset($jumlahPengajuan) && isset($jumlahSelesai))
+        <script>
+            const pengajuanLabels = @json($bulanLabels);
+            const pengajuanData = @json($jumlahPengajuan);
+            const selesaiData = @json($jumlahSelesai);
+        </script>
+        <script src="{{ asset('js/admin/dashboard-charts.js') }}"></script>
+    @endif
 
     @if (session('success'))
         <script>
@@ -84,66 +95,6 @@
         </script>
     @endif
 
-
-    <script>
-        const monthlyLabels = {!! json_encode($months ?? []) !!};
-        const monthlyCounts = {!! json_encode(
-            isset($monthlyCountsSurat, $monthlyCountsKonsultasi)
-                ? collect($monthlyCountsSurat)->zip($monthlyCountsKonsultasi)->map(fn($pair) => $pair[0] + $pair[1])->toArray()
-                : array_fill(0, 12, 0),
-        ) !!};
-
-        const jenisSuratLabels = {!! json_encode($jenisSuratLabels ?? []) !!};
-        const jenisSuratCounts = {!! json_encode($jenisSuratCounts ?? []) !!};
-
-        new Chart(document.getElementById('monthlyChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: monthlyLabels,
-                datasets: [{
-                    label: 'Total Layanan',
-                    data: monthlyCounts,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                responsive: true
-            }
-        });
-
-        // Jenis Surat Pie Chart
-        new Chart(document.getElementById('jenisSuratChart').getContext('2d'), {
-            type: 'pie',
-            data: {
-                labels: jenisSuratLabels,
-                datasets: [{
-                    data: jenisSuratCounts,
-                    backgroundColor: [
-                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
-    </script>
-
     <script>
         function handleSuratStatusChange(selectElement, id) {
             const selectedStatus = selectElement.value;
@@ -180,7 +131,6 @@
             }
         }
     </script>
-
 
 
 </body>

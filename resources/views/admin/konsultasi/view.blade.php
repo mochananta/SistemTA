@@ -53,6 +53,7 @@
                                                 <th>Jenis Rumah Ibadah</th>
                                                 <th>Isi Konsultasi</th>
                                                 <th>Dokumen File</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -193,7 +194,8 @@
                                             <div class="mb-3">
                                                 <label for="jadwal_konsultasi_tanggal{{ $item->id }}"
                                                     class="form-label">Tanggal</label>
-                                                <input type="date" class="form-control" name="jadwal_konsultasi_tanggal"
+                                                <input type="date" class="form-control"
+                                                    name="jadwal_konsultasi_tanggal"
                                                     id="jadwal_konsultasi_tanggal{{ $item->id }}" required>
                                             </div>
                                             <div class="mb-3">

@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('alamat');
+            $table->string('kecamatan')->nullable();
             $table->timestamps();
         });
     }
-    
+
     public function down(): void
     {
         Schema::dropIfExists('kuas');
-    }    
+    }
 };

@@ -19,6 +19,8 @@
 
     <!-- Main Content -->
     @yield('content')
+    @push('script')
+    @endpush
 
     <!-- Footer -->
     @include('user.partical.footer')
@@ -44,7 +46,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
 
     @if (session('success'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3500)" x-show="show"
@@ -189,6 +191,84 @@
             }
         });
     </script>
+
+    <script>
+        function searchRumahIbadah() {
+            const keyword = document.getElementById('searchInput').value;
+            const tbody = document.getElementById('rumahIbadahBody');
+
+            if (keyword.trim() === '') return;
+
+            fetch(`/search-rumah-ibadah?q=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => {
+                    tbody.innerHTML = '';
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center px-6 py-4 text-gray-500 dark:text-gray-400">
+                                Tidak ada hasil ditemukan.
+                            </td>
+                        </tr>`;
+                        return;
+                    }
+
+                    data.forEach((item, index) => {
+                        tbody.innerHTML += `
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4">${index + 1}</td>
+                            <td class="px-6 py-4">${item.nama}</td>
+                            <td class="px-6 py-4">${item.jenis}</td>
+                            <td class="px-6 py-4">${item.alamat}</td>
+                            <td class="px-6 py-4">${item.kecamatan ?? '-'}</td>
+                            <td class="px-6 py-4">${item.kontak ?? '-'}</td>
+                        </tr>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const kuaSelect = document.getElementById('kua_id');
+            const kecamatanSelect = document.getElementById('kecamatan');
+
+            kuaSelect.addEventListener('change', async function() {
+                const kuaId = this.value;
+                if (!kuaId) return;
+
+                try {
+                    const response = await fetch(`/api/kuas/${kuaId}`);
+                    const data = await response.json();
+
+                    let optionExists = false;
+                    for (const option of kecamatanSelect.options) {
+                        if (option.value === data.kecamatan) {
+                            option.selected = true;
+                            optionExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!optionExists && data.kecamatan) {
+                        const newOption = document.createElement('option');
+                        newOption.value = data.kecamatan;
+                        newOption.textContent = data.kecamatan + ' (otomatis)';
+                        newOption.selected = true;
+                        kecamatanSelect.appendChild(newOption);
+                    }
+
+                } catch (err) {
+                    console.error('Gagal ambil kecamatan:', err);
+                }
+            });
+        });
+    </script>
+
 
 </body>
 </head>

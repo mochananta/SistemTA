@@ -74,28 +74,12 @@
                     <div id="donutChart" class="w-full h-64"></div>
                 </div>
 
-                <!-- Line Chart -->
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Perkembangan Layanan per Bulan
                     </h3>
                     <div id="lineChart" class="w-full h-64"></div>
-                </div>  
+                </div>
             </div>
-
-            {{-- <div class="mb-12">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Distribusi Layanan Masyarakat</h3>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <div id="donutChart" class="w-full h-64"></div>
-                </div>
-            </div> --}}
-            {{-- <div>
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Perkembangan Pengajuan Tiap Tahun
-                </h3>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <div id="lineChart" class="w-full h-64"></div>
-                </div>
-            </div> --}}
-
         </div>
     </section>
 
@@ -115,6 +99,17 @@
             </div>
 
             <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 overflow-x-auto">
+                <div class="relative mb-4">
+                    <input type="text" id="searchInput" placeholder="Cari Nama Tempat Ibadah..."
+                        class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        onkeyup="searchRumahIbadah()">
+                    <div class="absolute left-3 top-2.5 text-gray-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
+                        </svg>
+                    </div>
+                </div>
                 <table class="min-w-full text-sm text-left text-gray-600 dark:text-gray-300">
                     <thead class="bg-gray-200 dark:bg-gray-700 uppercase text-xs">
                         <tr>
@@ -126,7 +121,7 @@
                             <th class="px-6 py-3">Kontak</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white dark:bg-gray-800">
+                    <tbody id="rumahIbadahBody" class="bg-white dark:bg-gray-800">
                         @forelse ($rumahIbadah as $index => $item)
                             <tr class="border-b dark:border-gray-700">
                                 <td class="px-6 py-4">{{ $index + 1 }}</td>
@@ -154,3 +149,5 @@
             </div>
         </div>
     </section>
+
+    

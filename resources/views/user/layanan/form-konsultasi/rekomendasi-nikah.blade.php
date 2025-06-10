@@ -8,7 +8,7 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
+                <a href="{{ route('user.layanan.konsultasi') }}" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
                     Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rekomendasi Nikah</span>
@@ -57,23 +57,26 @@
                                 required>
                         </div>
 
-                        <div>
+                        <div x-data="{ open: false }">
                             <label for="kua_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span
                                     class="text-red-600">*</span>
                             </label>
                             <div class="relative">
-                                <select id="kua_id" name="kua_id" required
+                                <select id="kua_id" name="kua_id" required @focus="open = true" @blur="open = false"
                                     class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                                     <option value="" disabled selected>-- Pilih KUA Tujuan --</option>
                                     @foreach ($kuas as $kua)
-                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}
+                                        <option value="{{ $kua->id }}">
+                                            {{ \Illuminate\Support\Str::limit($kua->nama . ' - ' . $kua->alamat, 60) }}
                                         </option>
                                     @endforeach
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg x-bind:class="open ? 'rotate-180' : ''"
+                                        class="w-4 h-4 text-gray-500 dark:text-gray-400 transform transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
                                     </svg>

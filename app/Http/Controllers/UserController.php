@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -66,7 +69,7 @@ class UserController extends Controller
 
         $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-        $rumahIbadah = RumahIbadah::limit(10)->get();
+        $rumahIbadah = RumahIbadah::limit(15)->get();
 
         return view('user.home', [
             'labels' => $labels,
@@ -164,12 +167,18 @@ class UserController extends Controller
         $user->nohp = $request->nohp;
 
         if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo_path && !Str::startsWith($user->profile_photo_path, 'http')) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
             $user->profile_photo_path = $path;
         }
+
         $user->save();
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
+
 
     public function editPassword()
     {
@@ -178,27 +187,31 @@ class UserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'new_password' => ['required', 'confirmed', 'min:8'],
-        ]);
-
         $user = Auth::user();
-        $user->password = Hash::make($request->new_password);
+
+        if (is_null($user->google_id)) {
+            $request->validate([
+                'current_password' => ['required', 'current_password'],
+                'password' => ['required', 'confirmed', 'min:8'],
+            ]);
+        } else {
+            $request->validate([
+                'password' => ['required', 'confirmed', 'min:8'],
+            ]);
+        }
+
+        $user->password = Hash::make($request->password);
+
         $user->save();
 
         return redirect()->route('password.edit')->with('success', 'Password berhasil diperbarui.');
     }
 
-    public function destroy(Request $request)
+    public function destroy()
     {
         $user = Auth::user();
-
-        Auth::logout();
         $user->delete();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Akun Anda berhasil dihapus.');
+        return redirect('/')->with('success', 'Akun berhasil dihapus.');
     }
 }

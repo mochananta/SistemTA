@@ -20,6 +20,11 @@
                     </div>
                 @endif
 
+                @if (session('warning_nhp') && auth()->user()->nohp == null)
+                    <x-status-box color="yellow" icon="fas fa-exclamation-triangle" title="Lengkapi Data Profil"
+                        message="Akun Anda belum memiliki nomor HP. Harap lengkapi agar bisa melanjutkan pengajuan atau konsultasi." />
+                @endif
+
                 <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
 

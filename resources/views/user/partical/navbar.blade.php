@@ -26,27 +26,25 @@
                     Layanan</a>
             </div>
 
-            <!-- Auth Buttons or User Dropdown (Desktop) -->
-            <div class="hidden xl:flex items-center gap-4">
+            <div class="hidden xl:flex items-center gap-4" x-data="{ open: false }">
                 @auth
-                    <div class="relative group">
-                        <button
+                    <div class="relative">
+                        <button @click="open = !open"
                             class="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition">
                             <img src="{{ Auth::user()->profile_photo_url ?? asset('default-avatar.png') }}" alt="Avatar"
                                 class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
-                            <span <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                 {{ \Illuminate\Support\Str::limit(Auth::user()->name, 9, '...') }}
                             </span>
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor"
-                                stroke-width="2" viewBox="0 0 24 24">
+                            <svg x-bind:class="open ? 'rotate-180' : ''"
+                                class="w-4 h-4 text-gray-500 dark:text-gray-300 transform transition-transform duration-200"
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 
-                        <!-- Dropdown Menu -->
-                        <div
-                            class="absolute right-0 mt-3 w-44 bg-white dark:bg-gray-700 rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                            <!-- Link to Profile -->
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="absolute right-0 mt-3 w-44 bg-white dark:bg-gray-700 rounded-lg shadow-xl py-2 z-50">
                             <a href="{{ route('user.profile') }}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-500" fill="none"
@@ -57,7 +55,6 @@
                                 Profil Saya
                             </a>
 
-                            <!-- Logout -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit"
@@ -73,7 +70,6 @@
                         </div>
                     </div>
                 @else
-                    <!-- Login/Register Buttons -->
                     <a href="{{ route('login') }}"
                         class="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition">
                         Sign in
@@ -85,9 +81,7 @@
                 @endauth
             </div>
 
-            <!-- Right side icons -->
             <div class="flex items-center gap-2 ml-2">
-                <!-- Dark Mode Toggle -->
                 <button id="darkModeToggle"
                     class="p-2 rounded-full text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <svg id="sunIcon" class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +96,6 @@
                     </svg>
                 </button>
 
-                <!-- Hamburger for Mobile -->
                 <button id="mobileMenuButton"
                     class="xl:hidden p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -115,8 +108,8 @@
         </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="xl:hidden bg-white dark:bg-gray-800 shadow-md transition-all duration-300 ease-in-out">
+    <div id="mobileMenu"
+        class="hidden xl:hidden bg-white dark:bg-gray-800 shadow-md transition-all duration-300 ease-in-out">
         <div class="px-6 py-4 space-y-3">
             <!-- Link Menu -->
             <a href="{{ url('/') }}"
@@ -131,13 +124,24 @@
             <a href="#lacak"
                 class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">Lacak
                 Layanan</a>
-
-            <!-- Authenticated User Menu -->
+            @auth
+                <div class="flex items-center gap-3 px-3 py-2 border-t border-gray-200 dark:border-gray-600 pt-4">
+                    <img src="{{ Auth::user()->profile_photo_url ?? asset('default-avatar.png') }}" alt="Avatar"
+                        class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-gray-800 dark:text-white">
+                            {{ \Illuminate\Support\Str::limit(Auth::user()->name, 18, '...') }}
+                        </span>
+                        <a href="{{ route('user.profile') }}"
+                            class="text-sm text-blue-600 hover:underline dark:text-blue-400">Lihat Profil</a>
+                    </div>
+                </div>
+            @endauth
             @auth
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
-                        class="block w-1/2 text-center px-4 py-2 text-sm font-medium border border-primary-600 text-primary-600 rounded-lg shadow-md hover:bg-primary-600 hover:text-white transition">
+                        class="block w-full text-center mt-3 px-4 py-2 text-sm font-medium border border-red-600 text-red-600 rounded-lg shadow-md hover:bg-red-600 hover:text-white transition">
                         Logout
                     </button>
                 </form>

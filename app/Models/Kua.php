@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kua extends Model
 {
     use HasFactory;
-    protected $fillable = ['nama', 'alamat'];
+    protected $fillable = ['nama', 'alamat', 'kecamatan'];
 
     public function pengajuanSurat()
     {

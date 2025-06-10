@@ -8,7 +8,8 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
+                <a href="{{ route('user.layanan.konsultasi') }}"
+                    class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
                     Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rumah Ibadah</span>
@@ -56,24 +57,27 @@
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none"
                                 required>
                         </div>
-                        
-                        <div>
+
+                        <div x-data="{ open: false }">
                             <label for="kua_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 <i class="fas fa-mosque mr-1 text-green-600"></i> Pilih KUA <span
                                     class="text-red-600">*</span>
                             </label>
                             <div class="relative">
-                                <select id="kua_id" name="kua_id" required
+                                <select id="kua_id" name="kua_id" required @focus="open = true" @blur="open = false"
                                     class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
                                     <option value="" disabled selected>-- Pilih KUA Tujuan --</option>
                                     @foreach ($kuas as $kua)
-                                        <option value="{{ $kua->id }}">{{ $kua->nama }} - {{ $kua->alamat }}
+                                        <option value="{{ $kua->id }}">
+                                            {{ \Illuminate\Support\Str::limit($kua->nama . ' - ' . $kua->alamat, 60) }}
                                         </option>
                                     @endforeach
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg x-bind:class="open ? 'rotate-180' : ''"
+                                        class="w-4 h-4 text-gray-500 dark:text-gray-400 transform transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
@@ -85,47 +89,83 @@
                         </div>
 
                         <!-- 1. Pilih Kecamatan -->
-                        <div>
-                            <label for="kecamatan" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <div x-data="{ open: false }">
+                            <label for="kecamatan" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Kecamatan <span class="text-red-600">*</span>
                             </label>
-                            <select name="kecamatan" id="kecamatan"
-                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                <option value="">-- Pilih Kecamatan --</option>
-                                @foreach ($kecamatans as $kecamatan)
-                                    <option value="{{ $kecamatan->kecamatan }}">{{ $kecamatan->kecamatan }}</option>
-                                @endforeach
-                            </select>
+                            <div class="relative">
+                                <select name="kecamatan" id="kecamatan" required @focus="open = true" @blur="open = false"
+                                    class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                    <option value="">-- Pilih Kecamatan --</option>
+                                    @foreach ($kecamatans as $kecamatan)
+                                        <option value="{{ $kecamatan->kecamatan }}">{{ $kecamatan->kecamatan }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-bind:class="open ? 'rotate-180' : ''"
+                                        class="w-4 h-4 text-gray-500 dark:text-gray-400 transform transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">
+                                Kecamatan akan terisi otomatis berdasarkan KUA yang dipilih, namun Anda tetap bisa mengubah
+                                jika diperlukan.
+                            </p>
                         </div>
 
                         <!-- 2. Pilih Jenis Rumah Ibadah -->
-                        <div>
-                            <label for="jenis" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <div x-data="{ open: false }">
+                            <label for="jenis" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Jenis Rumah Ibadah <span class="text-red-600">*</span>
                             </label>
-                            <select id="jenis" name="jenis"
-                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                <option value="">-- Pilih Jenis --</option>
-                                <option value="Masjid">Masjid</option>
-                                <option value="Gereja Kristen">Gereja Kristen</option>
-                                <option value="Gereja Katolik">Gereja Katolik</option>
-                                <option value="Pura">Pura</option>
-                                <option value="Vihara">Vihara</option>
-                                <option value="Klenteng">Klenteng</option>
-                            </select>
+                            <div class="relative">
+                                <select id="jenis" name="jenis" required @focus="open = true" @blur="open = false"
+                                    class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                    <option value="">-- Pilih Jenis --</option>
+                                    <option value="Masjid">Masjid</option>
+                                    <option value="Gereja Kristen">Gereja Kristen</option>
+                                    <option value="Gereja Katolik">Gereja Katolik</option>
+                                    <option value="Pura">Pura</option>
+                                    <option value="Vihara">Vihara</option>
+                                    <option value="Klenteng">Klenteng</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-bind:class="open ? 'rotate-180' : ''"
+                                        class="w-4 h-4 text-gray-500 dark:text-gray-400 transform transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- 3. Pilih Rumah Ibadah -->
-                        <div>
+                        <div x-data="{ open: false }">
                             <label for="rumah_ibadah_id"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Rumah Ibadah <span class="text-red-600">*</span>
                             </label>
-
-                            <select name="rumah_ibadah_id" id="rumah_ibadah_id"
-                                class="mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
-                                <option value="">-- Pilih Rumah Ibadah --</option>
-                            </select>
+                            <div class="relative">
+                                <select name="rumah_ibadah_id" id="rumah_ibadah_id" required @focus="open = true" @blur="open = false"
+                                    class="appearance-none mt-1 block w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:outline-none transition">
+                                    <option value="">-- Pilih Rumah Ibadah --</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-bind:class="open ? 'rotate-180' : ''"
+                                        class="w-4 h-4 text-gray-500 dark:text-gray-400 transform transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
                         <div>

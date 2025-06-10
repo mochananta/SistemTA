@@ -16,14 +16,22 @@
                     class="w-24 h-24 rounded-full object-cover border-4 border-green-500 shadow">
 
                 <div class="flex-1">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $user->name }}</h2>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $user->email }}</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
+                        {{ $user->name }}
+                    </h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                        {{ $user->email }}
+                    </p>
                     @if ($user->nohp)
-                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">{{ $user->nohp }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                            {{ $user->nohp }}
+                        </p>
                     @endif
 
                     <div class="mt-4 flex gap-4 items-center">
-                        <a href="{{ route('profile.edit') }}" title="Edit Profil">
+                        <!-- Edit Profile -->
+                        <a href="{{ route('profile.edit') }}" title="Edit Profil"
+                            class="hover:scale-110 transition-transform duration-150">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="w-5 h-5 text-gray-600 hover:text-blue-600 transition" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -32,7 +40,9 @@
                             </svg>
                         </a>
 
-                        <a href="{{ route('password.edit') }}" title="Ganti Password">
+                        <!-- Ganti Password -->
+                        <a href="{{ route('password.edit') }}" title="Ganti Password"
+                            class="hover:scale-110 transition-transform duration-150">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="w-5 h-5 text-gray-600 hover:text-yellow-600 transition" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -41,11 +51,13 @@
                             </svg>
                         </a>
 
+                        <!-- Hapus Akun -->
                         <form action="{{ route('profile.destroy') }}" method="POST"
                             onsubmit="return confirm('Yakin ingin menghapus akun ini?')" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Hapus Akun">
+                            <button type="submit" title="Hapus Akun"
+                                class="hover:scale-110 transition-transform duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="w-5 h-5 text-gray-600 hover:text-red-600 mt-1 transition" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -195,23 +207,44 @@
                                                             Detail Pengajuan Surat
                                                         </h2>
 
-                                                        <div class="text-sm space-y-2 text-gray-700 dark:text-gray-300">
-                                                            <div class="mt-2">
+                                                        <div class="text-sm space-y-3 text-gray-700 dark:text-gray-300">
+                                                            <div>
                                                                 <span class="font-medium">Jenis Surat:</span>
                                                                 <span>{{ $surat->jenis_surat }}</span>
                                                             </div>
-                                                            <div class="mt-2">
+                                                            <div>
                                                                 <span class="font-medium">Tanggal Pengajuan:</span>
                                                                 <span>{{ $surat->created_at->format('d M Y, H:i') }}</span>
                                                             </div>
-                                                            <div class="mt-2">
-                                                                <span class="font-medium">Status:</span>
-                                                                <span>{{ ucfirst($surat->status) }}</span>
+                                                            <div>
+                                                                <span class="font-medium">Alamat:</span>
+                                                                <span>{{ $surat->alamat ?? '-' }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="font-medium">KUA Tujuan:</span>
+                                                                <span>{{ $surat->kua->nama ?? '-' }}</span>
                                                             </div>
                                                             @if ($surat->jadwal_pengambilan)
-                                                                <div class="mt-2">
+                                                                <div>
                                                                     <span class="font-medium">Jadwal Pengambilan:</span>
                                                                     <span>{{ \Carbon\Carbon::parse($surat->jadwal_pengambilan)->format('d M Y, H:i') }}</span>
+                                                                </div>
+                                                            @endif
+
+                                                            @if ($surat->diambil_pada)
+                                                                <div>
+                                                                    <span class="font-medium">Diambil Pada</span>
+                                                                    <span>{{ \Carbon\Carbon::parse($surat->diambil_pada)->format('d M Y, H:i') }}</span>
+                                                                </div>
+                                                            @endif
+
+                                                            @if ($surat->file_path)
+                                                                <div>
+                                                                    <span class="font-medium">Dokumen Surat:</span>
+                                                                    <a href="{{ asset('storage/' . $surat->file_path) }}"
+                                                                        target="_blank" class="text-blue-600 underline">
+                                                                        Lihat Dokumen
+                                                                    </a>
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -362,7 +395,6 @@
                                                     </div>
                                                 </div>
 
-
                                                 <!-- Modal -->
                                                 <div id="modal-konsultasi-{{ $konsultasi->id }}"
                                                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
@@ -375,37 +407,55 @@
 
                                                         <h2
                                                             class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-                                                            Detail Konsultasi
-                                                        </h2>
+                                                            Detail Konsultasi</h2>
 
-                                                        <div class="text-sm space-y-2 text-gray-700 dark:text-gray-300">
-                                                            <div>
-                                                                <span class="font-medium">Jenis Konsultasi:</span>
+                                                        <div class="text-sm space-y-3 text-gray-700 dark:text-gray-300">
+                                                            <div><span class="font-medium">Jenis Konsultasi:</span>
                                                                 <span>{{ $konsultasi->jenis_konsultasi }}</span>
                                                             </div>
-                                                            <div>
-                                                                <span class="font-medium">Tanggal Pengajuan:</span>
+                                                            <div><span class="font-medium">Alamat:</span>
+                                                                <span>{{ $konsultasi->alamat }}</span>
+                                                            </div>
+                                                            <div><span class="font-medium">KUA Tujuan:</span>
+                                                                <span>{{ $konsultasi->kua->nama ?? '-' }}</span>
+                                                            </div>
+                                                            <div><span class="font-medium">Tanggal Pengajuan:</span>
                                                                 <span>{{ $konsultasi->created_at->format('d M Y, H:i') }}</span>
                                                             </div>
-                                                            <div>
-                                                                <span class="font-medium">Status:</span>
-                                                                <span>{{ $konsultasi->status }}</span>
-                                                            </div>
+
                                                             @if ($konsultasi->jadwal_konsultasi_tanggal && $konsultasi->jadwal_konsultasi_jam)
                                                                 <div>
                                                                     <span class="font-medium">Jadwal Konsultasi:</span>
                                                                     <span>{{ \Carbon\Carbon::parse($konsultasi->jadwal_konsultasi_tanggal . ' ' . $konsultasi->jadwal_konsultasi_jam)->format('d M Y, H:i') }}</span>
                                                                 </div>
                                                             @endif
-                                                            @if ($konsultasi->catatan)
-                                                                <div>
-                                                                    <span class="font-medium">Catatan:</span>
-                                                                    <span>{{ $konsultasi->catatan }}</span>
+
+                                                            @if ($konsultasi->jenis_konsultasi === 'Rumah Ibadah' && $konsultasi->rumahIbadah)
+                                                                <div class="mt-4 border-t pt-3">
+                                                                    <h3
+                                                                        class="font-semibold text-gray-800 dark:text-white">
+                                                                        Detail Rumah Ibadah</h3>
+                                                                    <div><span class="font-medium">Nama:</span>
+                                                                        <span>{{ $konsultasi->rumahIbadah->nama }}</span>
+                                                                    </div>
+                                                                    <div><span class="font-medium">Jenis:</span>
+                                                                        <span>{{ $konsultasi->rumahIbadah->jenis }}</span>
+                                                                    </div>
+                                                                    <div><span class="font-medium">Alamat:</span>
+                                                                        <span>{{ $konsultasi->rumahIbadah->alamat }}</span>
+                                                                    </div>
+                                                                    <div><span class="font-medium">Kontak:</span>
+                                                                        <span>{{ $konsultasi->rumahIbadah->kontak ?? '-' }}</span>
+                                                                    </div>
+                                                                    <div><span class="font-medium">Kecamatan:</span>
+                                                                        <span>{{ $konsultasi->rumahIbadah->kecamatan ?? '-' }}</span>
+                                                                    </div>
                                                                 </div>
                                                             @endif
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </td>
                                         </tr>
                                     @empty

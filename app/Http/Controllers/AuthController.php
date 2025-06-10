@@ -35,6 +35,7 @@ class AuthController extends Controller
                         'email' => $googleUser->getEmail(),
                         'google_id' => $googleUser->getId(),
                         'password' => bcrypt(Str::random(12)),
+                        'profile_photo_path' => $googleUser->getAvatar(), 
                     ]);
                 }
             }

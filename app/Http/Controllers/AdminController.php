@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Konsultasi;
+use App\Models\Kua;
 use App\Models\PengajuanSurat;
+use App\Models\RumahIbadah;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,59 +14,41 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        $totalRumahIbadah = RumahIbadah::count();
+        $totalKua = Kua::count();
+        $nikahBulanIni = PengajuanSurat::whereYear('created_at', date('Y'))
+            ->whereMonth('created_at', date('m'))
+            ->count();
+        $konsultasiSelesai = Konsultasi::where('status', 'Selesai')->count();
 
-        $countAllSurat = PengajuanSurat::count();
-        $countApprovedSurat = PengajuanSurat::where('status', 'disetujui')->count();
-        $countRejectedSurat = PengajuanSurat::where('status', 'ditolak')->count();
-
-
-        $countAllKonsultasi = Konsultasi::count();
-        $countApprovedKonsultasi = Konsultasi::where('status', 'disetujui')->count();
-        $countRejectedKonsultasi = Konsultasi::where('status', 'ditolak')->count();
-
-
-        $months = collect(range(1, 12))->map(function ($m) {
-            return Carbon::create()->month($m)->format('F');
-        });
-
-        $monthlyCountsSurat = collect(range(1, 12))->map(function ($m) {
-            return PengajuanSurat::whereMonth('created_at', $m)->count();
-        });
-
-        $monthlyCountsKonsultasi = collect(range(1, 12))->map(function ($m) {
-            return Konsultasi::whereMonth('created_at', $m)->count();
-        });
-
-
-        $jenisSuratData = PengajuanSurat::select('jenis_surat', DB::raw('count(*) as total'))
-            ->groupBy('jenis_surat')
+        // Data untuk chart: jumlah pengajuan masuk & selesai tiap bulan
+        $monthlyData = PengajuanSurat::selectRaw('MONTH(created_at) as month, 
+                COUNT(*) as total,
+                SUM(CASE WHEN status = "Selesai Diambil" THEN 1 ELSE 0 END) as selesai')
+            ->whereYear('created_at', date('Y'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy('month')
             ->get();
 
-        $jenisSuratLabels = $jenisSuratData->pluck('jenis_surat');
-        $jenisSuratCounts = $jenisSuratData->pluck('total');
+        $bulanLabels = [];
+        $jumlahPengajuan = [];
+        $jumlahSelesai = [];
 
-        $currentMonth = Carbon::now()->month;
-        $monthlyCountsSuratSum = PengajuanSurat::whereMonth('created_at', $currentMonth)->count();
-        $monthlyCountsKonsultasiSum = Konsultasi::whereMonth('created_at', $currentMonth)->count();
+        foreach (range(1, 12) as $bulan) {
+            $bulanLabels[] = date('M', mktime(0, 0, 0, $bulan, 1));
+            $bulanData = $monthlyData->firstWhere('month', $bulan);
+            $jumlahPengajuan[] = $bulanData->total ?? 0;
+            $jumlahSelesai[] = $bulanData->selesai ?? 0;
+        }
 
-        $countPendingSurat = PengajuanSurat::where('status', 'Menunggu Verifikasi')->count();
-        $countPendingKonsultasi = Konsultasi::where('status', 'Menunggu Verifikasi')->count();
         return view('admin.index', compact(
-            'countAllSurat',
-            'countApprovedSurat',
-            'countRejectedSurat',
-            'countAllKonsultasi',
-            'countApprovedKonsultasi',
-            'countRejectedKonsultasi',
-            'months',
-            'monthlyCountsSurat',
-            'monthlyCountsKonsultasi',
-            'jenisSuratLabels',
-            'jenisSuratCounts',
-            'monthlyCountsSuratSum',
-            'monthlyCountsKonsultasiSum',
-            'countPendingSurat',
-            'countPendingKonsultasi',
+            'totalRumahIbadah',
+            'totalKua',
+            'nikahBulanIni',
+            'konsultasiSelesai',
+            'bulanLabels',
+            'jumlahPengajuan',
+            'jumlahSelesai'
         ));
     }
 }

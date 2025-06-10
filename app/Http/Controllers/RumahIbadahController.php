@@ -41,6 +41,19 @@ class RumahIbadahController extends Controller
         return view('admin.ibadah.view', compact('data', 'jenisList', 'kecamatanList'));
     }
 
+    public function searchRumahIbadah(Request $request)
+    {
+        $query = $request->get('q');
+
+        $data = RumahIbadah::when($query, function ($q) use ($query) {
+            $q->where('nama', 'like', '%' . $query . '%');
+        })
+            ->orderBy('nama')
+            ->limit(15)
+            ->get();
+
+        return response()->json($data);
+    }
 
     public function getRumahIbadah(Request $request)
     {
@@ -56,6 +69,19 @@ class RumahIbadahController extends Controller
 
         $rumahIbadah = $query->select('id', 'nama', 'alamat')->orderBy('nama')->get();
 
+        return response()->json($rumahIbadah);
+    }
+
+    public function filterRumahIbadah(Request $request)
+    {
+        $kecamatan = $request->query('kecamatan');
+        dd('Kecamatan diterima:', $kecamatan);
+
+        if (!$kecamatan) {
+            return response()->json([]);
+        }
+
+        $rumahIbadah = RumahIbadah::where('kecamatan', $kecamatan)->get(['id', 'nama']);
         return response()->json($rumahIbadah);
     }
 }

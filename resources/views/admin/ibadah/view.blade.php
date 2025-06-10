@@ -68,7 +68,6 @@
                                                 <th>Alamat</th>
                                                 <th>Kontak</th>
                                                 <th>Kecamatan</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>

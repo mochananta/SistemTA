@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,12 +50,17 @@ class User extends Authenticatable
 
     public function getProfilePhotoUrlAttribute()
     {
-        if ($this->profile_photo_path) {
+        if ($this->profile_photo_path && !Str::startsWith($this->profile_photo_path, 'http')) {
             return asset('storage/' . $this->profile_photo_path);
+        }
+
+        if ($this->profile_photo_path && Str::startsWith($this->profile_photo_path, 'http')) {
+            return $this->profile_photo_path;
         }
 
         return asset('default-avatar.png');
     }
+
 
     /**
      * The attributes that should be hidden for serialization.

@@ -20,6 +20,22 @@
         <h2 class="text-center text-2xl font-bold text-gray-800 mb-2">Kementerian Agama</h2>
         <p class="text-center text-sm text-gray-500 mb-6">Masuk ke akun Anda untuk mengakses sistem</p>
 
+        @if (session('status'))
+            <div class="mb-4 p-3 text-sm text-green-800 bg-green-100 rounded">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="mb-4 p-3 text-sm text-red-800 bg-red-100 rounded">
+                <ul class="list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -41,8 +57,9 @@
                 <div class="flex justify-between mb-1">
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-xs text-green-600 hover:underline">Lupa
-                            password?</a>
+                        <a href="{{ route('password.request') }}" class="text-xs text-green-600 hover:underline">
+                            Lupa password?
+                        </a>
                     @endif
                 </div>
                 <div class="relative">

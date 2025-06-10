@@ -20,6 +20,24 @@
         <h2 class="text-center text-2xl font-bold text-gray-800 mb-2">Kementerian Agama</h2>
         <p class="text-center text-sm text-gray-500 mb-6">Masuk ke akun Anda untuk mengakses sistem</p>
 
+        @if (session('status'))
+            <div class="bg-green-100 text-green-700 p-3 rounded mb-4 text-sm">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('register') }}">
             @csrf
 

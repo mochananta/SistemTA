@@ -31,13 +31,12 @@ Route::get('/status-layanan', function (Request $request) {
         return response()->json(['error' => 'Parameter kode_layanan dan nohp diperlukan'], 400);
     }
 
-    // Cari di model PengajuanSurat atau Konsultasi
-    $data = PengajuanSurat::with('user')->where('kode_layanan', $kode)->whereHas('user', function($q) use ($nohp) {
+    $data = PengajuanSurat::with('user')->where('kode_layanan', $kode)->whereHas('user', function ($q) use ($nohp) {
         $q->where('nohp', $nohp);
     })->first();
 
     if (!$data) {
-        $data = Konsultasi::with('user')->where('kode_layanan', $kode)->whereHas('user', function($q) use ($nohp) {
+        $data = Konsultasi::with('user')->where('kode_layanan', $kode)->whereHas('user', function ($q) use ($nohp) {
             $q->where('nohp', $nohp);
         })->first();
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\CustomNewPasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\PelacakanController;
@@ -22,26 +23,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [UserController::class, 'index'])->name('user.home');
-
-Route::get('/pengajuan-surat', [UserController::class, 'jenissuratview'])->name('user.layanan.surat');
-Route::get('/konsultasi', [UserController::class, 'jeniskonsultasiview'])->name('user.layanan.konsultasi');
 Route::post('/lacak-layanan', [PelacakanController::class, 'cek'])->name('lacak.cek');
 Route::get('/lacak/download/{kode_layanan}', [PelacakanController::class, 'downloadPDF'])->name('lacak.download');
 
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::get('/search-rumah-ibadah', [RumahIbadahController::class, 'searchRumahIbadah']);
+
+Route::middleware(['auth', 'check.phone'])->group(function () {
+    Route::get('/pengajuan-surat', [UserController::class, 'jenissuratview'])->name('user.layanan.surat');
+    Route::get('/konsultasi', [UserController::class, 'jeniskonsultasiview'])->name('user.layanan.konsultasi');
+});
+
+Route::post('/reset-password', [CustomNewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
 
 //form pengajuan surat & konsultasi
 Route::middleware(['auth'])->group(function () {
     Route::post('/pengajuan-surat/store', [PengajuanSuratController::class, 'store'])->name('pengajuan.store');
     Route::post('/konsultasi/store', [KonsultasiController::class, 'store'])->name('konsultasi.store');
     Route::get('/form/{jenis}', [UserController::class, 'showForm'])->name('form.jenis');
+    Route::get('/get-rumah-ibadah', [RumahIbadahController::class, 'filterRumahIbadah']);
+
     Route::get('/profil', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
-
     Route::get('/profile/password', [UserController::class, 'editPassword'])->name('password.edit');
-    Route::post('/profile/password', [UserController::class, 'updatePassword'])->name('password.update');
+    Route::post('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
     Route::delete('/profile/delete', [UserController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/surat/{id}/reapply', [PengajuanSuratController::class, 'reapply'])->name('surat.reapply');
@@ -51,6 +60,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/konsultasi/{id}/reapply', [KonsultasiController::class, 'reapply'])->name('konsultasi.reapply');
     Route::get('/konsultasi/{id}/edit', [KonsultasiController::class, 'edit'])->name('konsultasi.edit');
     Route::put('/konsultasi/{id}', [KonsultasiController::class, 'update'])->name('konsultasi.update');
+
+    Route::get('/api/kuas/{id}', function ($id) {
+        $kua = \App\Models\Kua::findOrFail($id);
+        return response()->json(['kecamatan' => $kua->kecamatan]);
+    });
 });
 
 //admin kua & sistem
