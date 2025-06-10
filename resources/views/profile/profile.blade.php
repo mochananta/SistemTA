@@ -1,6 +1,9 @@
 @extends('user.landing')
 
 @section('content')
+    @php
+        $konsultasiList = $konsultasi;
+    @endphp
     <section id="profile" class="mt-12 py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-8 text-center">
@@ -107,17 +110,76 @@
                                                     Detail
                                                 </button>
 
-                                                @if (in_array(strtolower($surat->status), ['gagal diambil', 'ditolak']))
-                                                    <form action="{{ route('surat.reapply', $surat->id) }}" method="POST"
-                                                        class="inline">
-                                                        @csrf
-                                                        <button type="submit"
-                                                            class="mt-1 inline-block text-xs font-medium text-white bg-green-600 px-2 py-1 rounded hover:bg-green-700 transition"
-                                                            onclick="return confirm('Ajukan ulang surat ini?')">
-                                                            Ajukan Ulang
-                                                        </button>
-                                                    </form>
+                                                @if (in_array(strtolower($surat->status), ['ditolak', 'gagal diambil']))
+                                                    <button
+                                                        onclick="document.getElementById('modal-edit-{{ $surat->id }}').classList.remove('hidden')"
+                                                        class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
+                                                        Ajukan Ulang
+                                                    </button>
                                                 @endif
+
+                                                <div id="modal-edit-{{ $surat->id }}"
+                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
+                                                    <div
+                                                        class="relative bg-white dark:bg-gray-900 rounded-xl shadow-lg w-full max-w-lg p-6 mx-4">
+                                                        <button
+                                                            onclick="document.getElementById('modal-edit-{{ $surat->id }}').classList.add('hidden')"
+                                                            class="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition text-xl font-bold">&times;
+                                                        </button>
+
+                                                        <h2
+                                                            class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                                                            Ajukan Ulang Surat
+                                                        </h2>
+
+                                                        <form method="POST"
+                                                            action="{{ route('pengajuan.update', $surat->id) }}"
+                                                            enctype="multipart/form-data" class="space-y-4 text-sm">
+                                                            @csrf
+
+                                                            <div>
+                                                                <label>Alamat:</label>
+                                                                <input type="text" name="alamat"
+                                                                    value="{{ $surat->alamat }}" required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Tanggal Pengajuan:</label>
+                                                                <input type="date" name="tanggal_pengajuan"
+                                                                    value="{{ \Carbon\Carbon::parse($surat->tanggal_pengajuan)->format('Y-m-d') }}"
+                                                                    required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Pilih KUA:</label>
+                                                                <select name="kua_id" required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                                    @foreach ($kuas as $kua)
+                                                                        <option value="{{ $kua->id }}"
+                                                                            {{ $surat->kua_id == $kua->id ? 'selected' : '' }}>
+                                                                            {{ $kua->nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Ganti File (jika perlu):</label>
+                                                                <input type="file" name="file_path"
+                                                                    accept=".pdf,.jpg,.jpeg,.png"
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div class="text-right">
+                                                                <button type="submit"
+                                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                                                                    Kirim Pengajuan Ulang
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
 
                                                 <div id="modal-{{ $surat->id }}"
                                                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
@@ -172,12 +234,12 @@
                     <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-3">Riwayat Konsultasi</h3>
 
                     @foreach ([
-                            'diproses' => 'Sedang Diproses',
-                            'dijadwalkan' => 'Sudah Dijadwalkan',
-                            'selesai' => 'Selesai',
-                            'tidak_hadir' => 'Tidak Hadir',
-                            'ditolak' => 'Ditolak',
-                        ] as $key => $judul)
+            'diproses' => 'Sedang Diproses',
+            'dijadwalkan' => 'Sudah Dijadwalkan',
+            'selesai' => 'Selesai',
+            'tidak_hadir' => 'Tidak Hadir',
+            'ditolak' => 'Ditolak',
+        ] as $key => $judul)
                         <div class="mb-4">
                             <h4 class="text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">{{ $judul }}</h4>
                             <table class="w-full text-xs table-auto border border-gray-200 dark:border-gray-700">
@@ -191,42 +253,123 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $data = $konsultasi[$key] ?? collect();
+                                        $data = $konsultasiList[$key] ?? collect();
                                     @endphp
 
-                                    @forelse ($data as $item)
+                                    @forelse ($data as $konsultasi)
                                         <tr class="border-t border-gray-200 dark:border-gray-600">
-                                            <td class="px-2 py-1">{{ $item->jenis_konsultasi }}</td>
-                                            <td class="px-2 py-1">{{ $item->created_at->format('d M Y, H:i') }}</td>
+                                            <td class="px-2 py-1">{{ $konsultasi->jenis_konsultasi }}</td>
+                                            <td class="px-2 py-1">{{ $konsultasi->created_at->format('d M Y, H:i') }}</td>
                                             <td class="px-2 py-1">
                                                 <span
                                                     class="px-2 py-0.5 rounded-full font-medium
-                                    @switch($item->status)
-                                        @case('Menunggu Verifikasi') bg-yellow-100 text-yellow-800 @break
-                                        @case('Diproses') bg-blue-100 text-blue-800 @break
-                                        @case('Dijadwalkan') bg-indigo-100 text-indigo-800 @break
-                                        @case('Selesai') bg-green-100 text-green-800 @break
-                                        @case('Tidak Hadir') bg-red-100 text-red-800 @break
-                                        @case('Ditolak') bg-red-100 text-red-800 @break
-                                        @default bg-gray-200 text-gray-800
-                                    @endswitch">
-                                                    {{ $item->status }}
+                                                @switch($konsultasi->status)
+                                                    @case('Menunggu Verifikasi') bg-yellow-100 text-yellow-800 @break
+                                                    @case('Diproses') bg-blue-100 text-blue-800 @break
+                                                    @case('Dijadwalkan') bg-indigo-100 text-indigo-800 @break
+                                                    @case('Selesai') bg-green-100 text-green-800 @break
+                                                    @case('Tidak Hadir') bg-red-100 text-red-800 @break
+                                                    @case('Ditolak') bg-red-100 text-red-800 @break
+                                                    @default bg-gray-200 text-gray-800
+                                                @endswitch">
+                                                    {{ $konsultasi->status }}
                                                 </span>
                                             </td>
                                             <td class="px-1 py-1">
                                                 <button
-                                                    onclick="document.getElementById('modal-konsultasi-{{ $item->id }}').classList.remove('hidden')"
+                                                    onclick="document.getElementById('modal-konsultasi-{{ $konsultasi->id }}').classList.remove('hidden')"
                                                     class="mt-1 inline-block text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded hover:bg-blue-700 transition">
                                                     Detail
                                                 </button>
 
+                                                @if (in_array(strtolower($konsultasi->status), ['ditolak', 'tidak hadir']))
+                                                    <button
+                                                        onclick="document.getElementById('modal-reapply-konsultasi-{{ $konsultasi->id }}').classList.remove('hidden')"
+                                                        class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
+                                                        Ajukan Ulang
+                                                    </button>
+                                                @endif
+
+                                                <div id="modal-reapply-konsultasi-{{ $konsultasi->id }}"
+                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
+                                                    <div
+                                                        class="relative bg-white dark:bg-gray-900 rounded-xl shadow-lg w-full max-w-lg p-6 mx-4">
+                                                        <button
+                                                            onclick="document.getElementById('modal-reapply-konsultasi-{{ $konsultasi->id }}').classList.add('hidden')"
+                                                            class="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition text-xl font-bold">&times;
+                                                        </button>
+
+                                                        <h2
+                                                            class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                                                            Ajukan Ulang Konsultasi</h2>
+
+                                                        <form method="POST"
+                                                            action="{{ route('konsultasi.update', $konsultasi->id) }}"
+                                                            enctype="multipart/form-data" class="space-y-4 text-sm">
+                                                            @csrf
+                                                            @method('PUT')
+
+                                                            <input type="hidden" name="is_reapply" value="1">
+                                                            <div>
+                                                                <label>Alamat:</label>
+                                                                <input type="text" name="alamat"
+                                                                    value="{{ $konsultasi->alamat }}" required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Tanggal Konsultasi:</label>
+                                                                <input type="date" name="tanggal_konsultasi"
+                                                                    value="{{ \Carbon\Carbon::parse($konsultasi->tanggal_konsultasi)->format('Y-m-d') }}"
+                                                                    required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Pilih KUA:</label>
+                                                                <select name="kua_id" required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                                    @foreach ($kuas as $kua)
+                                                                        <option value="{{ $kua->id }}"
+                                                                            {{ $konsultasi->kua_id == $kua->id ? 'selected' : '' }}>
+                                                                            {{ $kua->nama }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Isi Konsultasi:</label>
+                                                                <input type="text" name="isi_konsultasi"
+                                                                    value="{{ $konsultasi->isi_konsultasi }}" required
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div>
+                                                                <label>Ganti File (opsional):</label>
+                                                                <input type="file" name="file_path"
+                                                                    accept=".pdf,.jpg,.jpeg,.png"
+                                                                    class="w-full border rounded px-3 py-2 dark:bg-gray-800 dark:text-white">
+                                                            </div>
+
+                                                            <div class="text-right">
+                                                                <button type="submit"
+                                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                                                                    Kirim Pengajuan Ulang
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+
                                                 <!-- Modal -->
-                                                <div id="modal-konsultasi-{{ $item->id }}"
+                                                <div id="modal-konsultasi-{{ $konsultasi->id }}"
                                                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
                                                     <div
                                                         class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-md p-6 mx-4 animate-fadeIn">
                                                         <button
-                                                            onclick="document.getElementById('modal-konsultasi-{{ $item->id }}').classList.add('hidden')"
+                                                            onclick="document.getElementById('modal-konsultasi-{{ $konsultasi->id }}').classList.add('hidden')"
                                                             class="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition text-xl font-bold">&times;
                                                         </button>
 
@@ -238,26 +381,26 @@
                                                         <div class="text-sm space-y-2 text-gray-700 dark:text-gray-300">
                                                             <div>
                                                                 <span class="font-medium">Jenis Konsultasi:</span>
-                                                                <span>{{ $item->jenis_konsultasi }}</span>
+                                                                <span>{{ $konsultasi->jenis_konsultasi }}</span>
                                                             </div>
                                                             <div>
                                                                 <span class="font-medium">Tanggal Pengajuan:</span>
-                                                                <span>{{ $item->created_at->format('d M Y, H:i') }}</span>
+                                                                <span>{{ $konsultasi->created_at->format('d M Y, H:i') }}</span>
                                                             </div>
                                                             <div>
                                                                 <span class="font-medium">Status:</span>
-                                                                <span>{{ $item->status }}</span>
+                                                                <span>{{ $konsultasi->status }}</span>
                                                             </div>
-                                                            @if ($item->jadwal_konsultasi_tanggal && $item->jadwal_konsultasi_jam)
+                                                            @if ($konsultasi->jadwal_konsultasi_tanggal && $konsultasi->jadwal_konsultasi_jam)
                                                                 <div>
                                                                     <span class="font-medium">Jadwal Konsultasi:</span>
-                                                                    <span>{{ \Carbon\Carbon::parse($item->jadwal_konsultasi_tanggal . ' ' . $item->jadwal_konsultasi_jam)->format('d M Y, H:i') }}</span>
+                                                                    <span>{{ \Carbon\Carbon::parse($konsultasi->jadwal_konsultasi_tanggal . ' ' . $konsultasi->jadwal_konsultasi_jam)->format('d M Y, H:i') }}</span>
                                                                 </div>
                                                             @endif
-                                                            @if ($item->catatan)
+                                                            @if ($konsultasi->catatan)
                                                                 <div>
                                                                     <span class="font-medium">Catatan:</span>
-                                                                    <span>{{ $item->catatan }}</span>
+                                                                    <span>{{ $konsultasi->catatan }}</span>
                                                                 </div>
                                                             @endif
                                                         </div>

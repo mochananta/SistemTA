@@ -37,4 +37,5 @@ class Konsultasi extends Model
     {
         return $this->belongsTo(RumahIbadah::class, 'rumah_ibadah_id');
     }
+    
 }

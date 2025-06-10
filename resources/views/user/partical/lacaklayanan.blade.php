@@ -51,7 +51,6 @@
                     <div
                         class="mt-8 max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 border dark:border-gray-700">
                         <div class="space-y-4">
-                            {{-- Nomor Layanan --}}
                             <div>
                                 <label class="text-sm font-semibold text-gray-600 dark:text-gray-300">Nomor
                                     Layanan</label>
@@ -59,7 +58,6 @@
                                     class="w-full mt-1 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white font-semibold tracking-wider" />
                             </div>
 
-                            {{-- Nama Pemohon --}}
                             <div>
                                 <label class="text-sm font-semibold text-gray-600 dark:text-gray-300">Nama
                                     Pemohon/Pengirim</label>
@@ -68,7 +66,6 @@
                                     class="w-full mt-1 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white" />
                             </div>
 
-                            {{-- Jenis Layanan --}}
                             @php
                                 $isSurat = get_class($data) === \App\Models\PengajuanSurat::class;
                                 $label = $isSurat ? 'PENGAJUAN SURAT' : 'KONSULTASI';
@@ -169,6 +166,43 @@
                                     @case('gagal diambil')
                                         <x-status-box color="red" icon="fas fa-exclamation-triangle" title="Gagal Diambil"
                                             message="Anda tidak mengambil dokumen dalam waktu 2 hari setelah jadwal yang telah ditentukan. Silakan hubungi petugas untuk proses lebih lanjut atau ajukan ulang bila diperlukan." />
+                                    @break
+
+                                    @case('diproses')
+                                        <x-status-box color="blue" icon="fas fa-spinner" title="Diproses"
+                                            message="Permohonan konsultasi Anda sedang diproses oleh petugas. Mohon tunggu informasi selanjutnya." />
+                                    @break
+
+                                    @case('dijadwalkan')
+                                        <div
+                                            class="bg-yellow-50 dark:bg-yellow-900 p-5 rounded-lg border border-yellow-200 dark:border-yellow-700 shadow-md">
+                                            <h3
+                                                class="text-yellow-700 dark:text-yellow-300 text-2xl font-bold mb-3 flex items-center gap-2">
+                                                <i class="fas fa-calendar-alt"></i> Konsultasi Dijadwalkan
+                                            </h3>
+                                            <p class="text-sm text-gray-800 dark:text-gray-200">
+                                                Jadwal konsultasi Anda telah ditentukan. Silakan hadir sesuai jadwal berikut:
+                                            </p>
+                                            <ul class="mt-2 text-sm text-gray-700 dark:text-gray-100 space-y-1">
+                                                <li><strong>Tanggal:</strong>
+                                                    {{ \Carbon\Carbon::parse($data->jadwal_konsultasi_tanggal)->translatedFormat('d M Y') }}
+                                                </li>
+                                                <li><strong>Jam:</strong> {{ $data->jadwal_konsultasi_jam }}</li>
+                                            </ul>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
+                                                Mohon hadir tepat waktu dan bawa dokumen jika diminta.
+                                            </p>
+                                        </div>
+                                    @break
+
+                                    @case('selesai')
+                                        <x-status-box color="green" icon="fas fa-check-double" title="Selesai"
+                                            message="Sesi konsultasi Anda telah selesai. Terima kasih telah menggunakan layanan kami." />
+                                    @break
+
+                                    @case('tidak hadir')
+                                        <x-status-box color="red" icon="fas fa-user-slash" title="Tidak Hadir"
+                                            message="Anda tidak hadir dalam sesi konsultasi yang telah dijadwalkan. Silakan ajukan ulang jika diperlukan." />
                                     @break
 
                                     @default

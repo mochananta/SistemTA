@@ -188,7 +188,7 @@ class PengajuanSuratController extends Controller
             $file = $request->file('dokumen_penolakan');
             $filename = 'penolakan_' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('penolakan', $filename, 'public');
-            $surat->dokumen_penolakan = $path; // Pastikan kolom ini ada di DB
+            $surat->dokumen_penolakan = $path;
         }
 
         $surat->status = 'ditolak';
@@ -204,35 +204,72 @@ class PengajuanSuratController extends Controller
      */
     public function reapply($id)
     {
-        $surat = PengajuanSurat::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $surat = PengajuanSurat::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
         if (!in_array(strtolower($surat->status), ['gagal diambil', 'ditolak'])) {
             return redirect()->back()->with('error', 'Surat ini tidak bisa diajukan ulang.');
         }
 
-        $newSurat = $surat->replicate();
-        $newSurat->status = 'Menunggu Verifikasi';
-        $newSurat->created_at = now();
-        $newSurat->updated_at = now();
-        $newSurat->save();
+        if ($surat->dokumen_penolakan && Storage::disk('public')->exists($surat->dokumen_penolakan)) {
+            Storage::disk('public')->delete($surat->dokumen_penolakan);
+        }
 
-        return redirect()->back()->with('success', 'Pengajuan ulang berhasil dikirim.');
+        $surat->update([
+            'catatan' => null,
+            'dokumen_penolakan' => null,
+        ]);
+
+        $surat->refresh(); 
+
+        return redirect()->route('pengajuan.edit', $surat->id)
+            ->with('success', 'Silakan perbaiki data sebelum mengajukan ulang.');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
-    }
+        $surat = PengajuanSurat::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
+        return view('pengajuan.edit', compact('surat'));
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'alamat' => 'required|string',
+            'tanggal_pengajuan' => 'required|date',
+            'kua_id' => 'required|exists:kuas,id',
+            'file_path' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5048',
+        ]);
+
+        $surat = PengajuanSurat::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $data = [
+            'alamat' => $request->alamat,
+            'tanggal_pengajuan' => $request->tanggal_pengajuan,
+            'kua_id' => $request->kua_id,
+            'status' => 'Menunggu Verifikasi',
+            'updated_at' => now(),
+        ];
+
+        if ($request->hasFile('file_path')) {
+            $path = $request->file('file_path')->store('pengajuan_surat', 'public');
+            $data['file_path'] = $path;
+        }
+
+        $surat->update($data);
+
+        return redirect()->back()->with('success', 'Pengajuan berhasil diperbarui.');
     }
 
     /**
