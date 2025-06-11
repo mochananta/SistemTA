@@ -51,7 +51,7 @@
                     <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus
                         autocomplete="name"
                         class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
-                        placeholder="Nama Lengkap">
+                        placeholder="Isi Nama Lengkap Anda">
                 </div>
             </div>
 
@@ -87,20 +87,21 @@
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                        <i data-feather="lock" class="w-5 h-5"></i>
+                        <i  data-feather="lock" class="w-5 h-5"></i>
                     </span>
                     <input type="password" id="password" name="password" required
                         class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
                         placeholder="••••••••">
                     <button type="button" onclick="togglePassword('password', 'eyeIcon1')"
                         class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
-                        <i id="eyeIcon1" data-feather="eye" class="w-5 h-5"></i>
-                    </button>
+                    <i id="eyeIcon" data-feather="eye" class="w-5 h-5"></i>
                 </div>
             </div>
+           
 
             <!-- Konfirmasi Password -->
-            <div class="mb-6">
+            
+          <div class="mb-6">
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi
                     Password</label>
                 <div class="relative">
@@ -108,14 +109,15 @@
                         <i data-feather="lock" class="w-5 h-5"></i>
                     </span>
                     <input type="password" id="password_confirmation" name="password_confirmation" required
+                        autocomplete="new-password"
                         class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
                         placeholder="••••••••">
                     <button type="button" onclick="togglePassword('password_confirmation', 'eyeIcon2')"
                         class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
-                        <i id="eyeIcon2" data-feather="eye" class="w-5 h-5"></i>
+                        <i id="eyeIcon" data-feather="eye" class="w-5 h-5"></i>
                     </button>
                 </div>
-            </div>
+            </div> 
 
             <!-- Terms Checkbox (opsional jika Jetstream aktif) -->
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())

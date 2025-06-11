@@ -43,7 +43,7 @@
                             </svg>
                         </button>
 
-                        <div x-show="open" @click.away="open = false" x-transition
+                        <div x-show="open" @click.away="open = false" x-transition x-cloak
                             class="absolute right-0 mt-3 w-44 bg-white dark:bg-gray-700 rounded-lg shadow-xl py-2 z-50">
                             <a href="{{ route('user.profile') }}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition">

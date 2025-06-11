@@ -98,7 +98,7 @@
                                                     </li>
                                                 </ul>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
-                                                    Mohon hadir sesuai jadwal dan bawa identitas diri.
+                                                    Mohon hadir sesuai jadwal dan bawa surat bukti pengajuan.
                                                 </p>
                                             @else
                                                 <p class="text-sm text-gray-800 dark:text-gray-200">
@@ -190,11 +190,20 @@
                                                 <li><strong>Jam:</strong> {{ $data->jadwal_konsultasi_jam }}</li>
                                             </ul>
                                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
-                                                Mohon hadir tepat waktu dan bawa dokumen jika diminta.
+                                                Mohon hadir tepat waktu dan bawa dokumen bukti pengajuan yang sudah tersedia.
                                             </p>
-                                        </div>
-                                    @break
 
+                                            @unless ($isSurat)
+                                                <div class="text-center mt-4">
+                                                    <a href="{{ route('lacak.download', ['kode_layanan' => $data->kode_layanan]) }}"
+                                                        class="inline-block bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold py-2 px-4 rounded transition">
+                                                        <i class="fas fa-download mr-2"></i> Download Bukti Pengajuan (PDF)
+                                                    </a>
+                                                </div>
+                                            @endunless
+                                        </div>
+                                    @break  
+                                            
                                     @case('selesai')
                                         <x-status-box color="green" icon="fas fa-check-double" title="Selesai"
                                             message="Sesi konsultasi Anda telah selesai. Terima kasih telah menggunakan layanan kami." />

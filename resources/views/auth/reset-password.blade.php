@@ -50,7 +50,7 @@
 
                 <button type="submit"
                     class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-semibold transition">
-                    Reset Password
+                    Reset Password  
                 </button>
             </form>
         </div>

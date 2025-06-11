@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Bukti Pengajuan Layanan</title>
@@ -73,11 +74,12 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="header">
         <img src="/public/user/kemenag.png" alt="Logo Kemenag">
-        <h1>Kementerian Agama Republik Indonesia</h1>
+        <h1>Kementerian Agama Banyuwangi</h1>
         <p>Pelayanan Terpadu Satu Pintu (PTSP) - Kantor Urusan Agama</p>
     </div>
 
@@ -85,29 +87,38 @@
 
     <div class="info">
         <p><span>Kode Layanan</span>: {{ $data->kode_layanan }}</p>
-        <p><span>Nama Pemohon</span>: {{ $data->nama }}</p>
-        <p><span>Layanan</span>: 
+        <p><span>Nama Pemohon</span>: {{ $data->user->name }}</p>
+        <p><span>No HP</span>: {{ $data->user->nohp }}</p>
+        <p><span>Layanan</span>:
             {{ $isSurat ? 'PENGAJUAN SURAT - ' . strtoupper($data->jenis_surat) : 'KONSULTASI - ' . strtoupper($data->jenis_konsultasi) }}
         </p>
         <p><span>Status</span>: <strong>DISETUJUI</strong></p>
-        <p><span>Tanggal Disetujui</span>: {{ $data->updated_at->format('d M Y, H:i') }}</p>
+        <p><span>Tanggal {{ $isSurat ? 'Disetujui' : 'Dijadwalkan' }}</span>: {{ $data->updated_at->format('d M Y, H:i') }}</p>
     </div>
 
     @if ($isSurat)
-        <p>Silakan membawa <strong>berkas asli</strong> ke kantor KUA tujuan untuk proses lanjutan.</p>
+        @if (!empty($data->jadwal_pengambilan))
+            <p><strong>Jadwal Pengambilan:</strong>
+                {{ \Carbon\Carbon::parse($data->jadwal_pengambilan)->format('d M Y, H:i') }}</p>
+        @endif
+
         <p style="font-size: 11px; margin-top: 5px;"><em>Pastikan dokumen sesuai dengan yang telah diunggah.</em></p>
     @else
-        <p>Silakan datang sesuai jadwal berikut untuk konsultasi di kantor KUA:</p>
-        <ul>
-            <li><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($data->tanggal_konsultasi)->format('d M Y') }}</li>
-            <li><strong>Jam:</strong> {{ $data->jam_konsultasi }}</li>
-        </ul>
-        <p style="font-size: 11px;"><em>Mohon hadir tepat waktu dan bawa dokumen jika diminta.</em></p>
+        @if ($data->status === 'dijadwalkan')
+            <p>Silakan datang sesuai jadwal berikut untuk konsultasi di kantor KUA:</p>
+            <ul>
+                <li><strong>Tanggal:</strong>
+                    {{ \Carbon\Carbon::parse($data->jadwal_konsultasi_tanggal)->format('d M Y') }}</li>
+                <li><strong>Jam:</strong> {{ $data->jadwal_konsultasi_jam }}</li>
+            </ul>
+            <p style="font-size: 11px;"><em>Mohon hadir tepat waktu dan bawa dokumen jika diminta.</em></p>
+        @endif
     @endif
 
     <div class="footer">
-        Dokumen ini dicetak otomatis oleh sistem PTSP KUA - Tidak memerlukan tanda tangan.
+        Dokumen ini dicetak otomatis oleh sistem PTSP KUA.
     </div>
 
 </body>
+
 </html>

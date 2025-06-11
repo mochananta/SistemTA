@@ -15,55 +15,62 @@ class PelacakanController extends Controller
      */
     public function cek(Request $request)
     {
-    $request->validate([
-        'kode_layanan' => 'required|string',
-        'nohp' => 'required|string',
-    ]);
+        $request->validate([
+            'kode_layanan' => 'required|string',
+            'nohp' => 'required|string',
+        ]);
 
-    $user = User::where('nohp', $request->nohp)->first();
+        $user = User::where('nohp', $request->nohp)->first();
 
-    if (!$user) {
-        return redirect(url('/') . "#lacak")->with('lacak_error', 'Nomor HP tidak ditemukan.');
-    }
+        if (!$user) {
+            return redirect(url('/') . "#lacak")->with('lacak_error', 'Nomor HP tidak ditemukan.');
+        }
 
-    $data = PengajuanSurat::where('kode_layanan', $request->kode_layanan)
-        ->where('user_id', $user->id)
-        ->first();
-
-    if (!$data) {
-        $data = Konsultasi::where('kode_layanan', $request->kode_layanan)
+        $data = PengajuanSurat::where('kode_layanan', $request->kode_layanan)
             ->where('user_id', $user->id)
             ->first();
-    }
 
-    if (!$data) {
-        return redirect(url('/') . "#lacak")->with('lacak_error', 'Data layanan tidak ditemukan. Periksa kembali input Anda.');
-    }
+        if (!$data) {
+            $data = Konsultasi::where('kode_layanan', $request->kode_layanan)
+                ->where('user_id', $user->id)
+                ->first();
+        }
 
-    // Pastikan relasi user di-load
-    $data->load('user');
+        if (!$data) {
+            return redirect(url('/') . "#lacak")->with('lacak_error', 'Data layanan tidak ditemukan. Periksa kembali input Anda.');
+        }
 
-    return redirect(url('/') . "#lacak")->with('lacak_data', $data);
+        $data->load('user');
+
+        return redirect(url('/') . "#lacak")->with('lacak_data', $data);
     }
 
 
     public function downloadPDF($kode_layanan)
     {
-        $data = PengajuanSurat::where('kode_layanan', $kode_layanan)->first()
-            ?? Konsultasi::where('kode_layanan', $kode_layanan)->first();
+        $data = PengajuanSurat::with('user')->where('kode_layanan', $kode_layanan)->first()
+            ?? Konsultasi::with('user')->where('kode_layanan', $kode_layanan)->first();
 
-        if (!$data || $data->status !== 'disetujui') {
-            abort(404);
+        if (!$data) {
+            abort(404, 'Data tidak ditemukan');
         }
 
-        $isSurat = get_class($data) === PengajuanSurat::class;
+        // Sesuaikan logika status di sini
+        $isSurat = $data instanceof PengajuanSurat;
+
+        if (
+            ($isSurat && $data->status !== 'Disetujui') ||
+            (!$isSurat && $data->status !== 'Dijadwalkan')
+        ) {
+            abort(403, 'Status belum memenuhi syarat untuk cetak PDF');
+        }
 
         $pdf = Pdf::loadView('user.pdf.bukti_pengajuan', [
             'data' => $data,
             'isSurat' => $isSurat
         ]);
 
-        return $pdf->download('bukti_pengajuan_' . $kode_layanan . '.pdf');
+        return $pdf->download('bukti_pengajuan' . '.pdf');
     }
 
     /**
