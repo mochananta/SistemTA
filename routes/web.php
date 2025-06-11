@@ -30,6 +30,8 @@ Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('g
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
 Route::get('/search-rumah-ibadah', [RumahIbadahController::class, 'searchRumahIbadah']);
 
+Route::get('/rumah-ibadah', [UserController::class, 'rumahibadah'])->name('user.partical.rumahibadahdetail');
+
 Route::middleware(['auth', 'check.phone'])->group(function () {
     Route::get('/pengajuan-surat', [UserController::class, 'jenissuratview'])->name('user.layanan.surat');
     Route::get('/konsultasi', [UserController::class, 'jeniskonsultasiview'])->name('user.layanan.konsultasi');
@@ -88,8 +90,11 @@ Route::middleware([
     Route::delete('/Konsultasi/{id}', [KonsultasiController::class, 'destroyKonsultasi'])->name('Konsultasi.delete');
 
     Route::get('/ibadahview', [RumahIbadahController::class, 'index'])->name('admin.ibadah.view');
-    Route::post('/import-rumah-ibadah', [RumahIbadahController::class, 'import'])->name('rumah-ibadah.import');
+    Route::get('rumahibadah/{id}/edit', [RumahIbadahController::class, 'edit'])->name('admin.ibadah.edit');
+    Route::put('/rumahibadah/{id}', [RumahIbadahController::class, 'update'])->name('admin.ibadah.update');
+    Route::delete('rumahibadah/{id}', [RumahIbadahController::class, 'destroy'])->name('admin.ibadah.delete');
 
+    Route::post('/import-rumah-ibadah', [RumahIbadahController::class, 'import'])->name('rumah-ibadah.import');
     Route::get('/rekapview', [RekapController::class, 'index'])->name('admin.rekap.view');
 });
 

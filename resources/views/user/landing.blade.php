@@ -33,19 +33,20 @@
         </svg>
     </button>
 
-    <!-- Add Chart.js -->
+    <!-- Chart & Visual -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.37.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('user/darkmode.js') }}"></script>
     <script src="{{ asset('user/kodelayanan.js') }}"></script>
-    <script src="{{ asset('user/animasi.js') }}"></script>
     <script src="{{ asset('user/statistik.js') }}"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+
 
 
     @if (session('success'))

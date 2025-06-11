@@ -6,8 +6,6 @@ use App\Models\Konsultasi;
 use App\Models\Kua;
 use App\Models\PengajuanSurat;
 use App\Models\RumahIbadah;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -16,39 +14,84 @@ class AdminController extends Controller
     {
         $totalRumahIbadah = RumahIbadah::count();
         $totalKua = Kua::count();
-        $nikahBulanIni = PengajuanSurat::whereYear('created_at', date('Y'))
-            ->whereMonth('created_at', date('m'))
-            ->count();
+        $suratSelesai = PengajuanSurat::where('status', 'Selesai Diambil')->count();
         $konsultasiSelesai = Konsultasi::where('status', 'Selesai')->count();
 
-        // Data untuk chart: jumlah pengajuan masuk & selesai tiap bulan
-        $monthlyData = PengajuanSurat::selectRaw('MONTH(created_at) as month, 
-                COUNT(*) as total,
-                SUM(CASE WHEN status = "Selesai Diambil" THEN 1 ELSE 0 END) as selesai')
-            ->whereYear('created_at', date('Y'))
+        $bulanLabels = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Agu',
+            'Sep',
+            'Okt',
+            'Nov',
+            'Des'
+        ];
+
+        // --- Filter Tahun Pengajuan Surat ---
+        $tahunPengajuanDipilih = request()->get('tahun_pengajuan', date('Y'));
+
+        $monthlyData = PengajuanSurat::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $tahunPengajuanDipilih)
             ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy('month')
             ->get();
 
-        $bulanLabels = [];
         $jumlahPengajuan = [];
-        $jumlahSelesai = [];
-
         foreach (range(1, 12) as $bulan) {
-            $bulanLabels[] = date('M', mktime(0, 0, 0, $bulan, 1));
             $bulanData = $monthlyData->firstWhere('month', $bulan);
             $jumlahPengajuan[] = $bulanData->total ?? 0;
-            $jumlahSelesai[] = $bulanData->selesai ?? 0;
         }
 
+        $tahunListPengajuan = PengajuanSurat::selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year');
+
+        $bulanSekarang = date('m');
+        $tahunSekarang = date('Y');
+
+        $pengajuanBulanIni = PengajuanSurat::whereMonth('created_at', $bulanSekarang)
+            ->whereYear('created_at', $tahunSekarang)
+            ->count();
+
+        // --- Filter Tahun Konsultasi ---
+        $tahunDipilih = request()->get('tahun_konsultasi', date('Y'));
+
+        $monthlyKonsultasi = Konsultasi::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $tahunDipilih)
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy('month')
+            ->get();
+
+        $jumlahKonsultasi = [];
+        foreach (range(1, 12) as $bulan) {
+            $bulanData = $monthlyKonsultasi->firstWhere('month', $bulan);
+            $jumlahKonsultasi[] = $bulanData->total ?? 0;
+        }
+
+        $tahunListKonsultasi = Konsultasi::selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year');
+
         return view('admin.index', compact(
+            'jumlahKonsultasi',
+            'tahunListKonsultasi',
+            'tahunDipilih',
             'totalRumahIbadah',
             'totalKua',
-            'nikahBulanIni',
             'konsultasiSelesai',
+            'pengajuanBulanIni',
             'bulanLabels',
             'jumlahPengajuan',
-            'jumlahSelesai'
+            'suratSelesai',
+            'tahunListPengajuan',
+            'tahunPengajuanDipilih'
         ));
     }
 }

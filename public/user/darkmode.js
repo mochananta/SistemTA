@@ -86,9 +86,9 @@ document.addEventListener("DOMContentLoaded", function () {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    createPieChart();
-    createDonutChart();
-    createLineChart();
+    // createPieChart();
+    // createDonutChart();
+    // createLineChart();
 
     const animateOnScroll = function () {
         const elements = document.querySelectorAll(".animate-on-scroll");
@@ -108,213 +108,213 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("scroll", animateOnScroll);
 });
 
-function createPieChart() {
-    const ctx = document.getElementById("pieChart");
+// function createPieChart() {
+//     const ctx = document.getElementById("pieChart");
 
-    if (!ctx) return;
+//     if (!ctx) return;
 
-    new Chart(ctx, {
-        type: "pie",
-        data: {
-            labels: [
-                "Islam",
-                "Kristen/Protestan",
-                "Katolik",
-                "Hindu",
-                "Buddha",
-                "Konghucu",
-            ],
-            datasets: [
-                {
-                    data: [86.7, 7.6, 3.1, 1.7, 0.8, 0.1],
-                    backgroundColor: [
-                        "#22c55e", // Green
-                        "#3b82f6", // Blue
-                        "#6366f1", // Indigo
-                        "#a855f7", // Purple
-                        "#eab308", // Yellow
-                        "#ef4444", // Red
-                    ],
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: "right",
-                    labels: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "#f3f4f6"
-                            : "#374151",
-                    },
-                },
-            },
-        },
-    });
-}
+//     new Chart(ctx, {
+//         type: "pie",
+//         data: {
+//             labels: [
+//                 "Islam",
+//                 "Kristen/Protestan",
+//                 "Katolik",
+//                 "Hindu",
+//                 "Buddha",
+//                 "Konghucu",
+//             ],
+//             datasets: [
+//                 {
+//                     data: [86.7, 7.6, 3.1, 1.7, 0.8, 0.1],
+//                     backgroundColor: [
+//                         "#22c55e", // Green
+//                         "#3b82f6", // Blue
+//                         "#6366f1", // Indigo
+//                         "#a855f7", // Purple
+//                         "#eab308", // Yellow
+//                         "#ef4444", // Red
+//                     ],
+//                     borderWidth: 1,
+//                 },
+//             ],
+//         },
+//         options: {
+//             responsive: true,
+//             maintainAspectRatio: false,
+//             plugins: {
+//                 legend: {
+//                     position: "right",
+//                     labels: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "#f3f4f6"
+//                             : "#374151",
+//                     },
+//                 },
+//             },
+//         },
+//     });
+// }
 
-function createDonutChart() {
-    const ctx = document.getElementById("donutChart");
+// function createDonutChart() {
+//     const ctx = document.getElementById("donutChart");
 
-    if (!ctx) return;
+//     if (!ctx) return;
 
-    new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: [
-                "Haji (35%)",
-                "Pendidikan (30%)",
-                "Nikah (20%)",
-                "Wakaf (10%)",
-                "Lainnya (5%)",
-            ],
-            datasets: [
-                {
-                    data: [35, 30, 20, 10, 5],
-                    backgroundColor: [
-                        "#22c55e", // Green
-                        "#8b5cf6", // Purple
-                        "#ec4899", // Pink
-                        "#f97316", // Orange
-                        "#3b82f6", // Blue
-                    ],
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: "70%",
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "#f3f4f6"
-                            : "#374151",
-                    },
-                },
-            },
-        },
-    });
-}
+//     new Chart(ctx, {
+//         type: "doughnut",
+//         data: {
+//             labels: [
+//                 "Haji (35%)",
+//                 "Pendidikan (30%)",
+//                 "Nikah (20%)",
+//                 "Wakaf (10%)",
+//                 "Lainnya (5%)",
+//             ],
+//             datasets: [
+//                 {
+//                     data: [35, 30, 20, 10, 5],
+//                     backgroundColor: [
+//                         "#22c55e", // Green
+//                         "#8b5cf6", // Purple
+//                         "#ec4899", // Pink
+//                         "#f97316", // Orange
+//                         "#3b82f6", // Blue
+//                     ],
+//                     borderWidth: 1,
+//                 },
+//             ],
+//         },
+//         options: {
+//             responsive: true,
+//             maintainAspectRatio: false,
+//             cutout: "70%",
+//             plugins: {
+//                 legend: {
+//                     position: "bottom",
+//                     labels: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "#f3f4f6"
+//                             : "#374151",
+//                     },
+//                 },
+//             },
+//         },
+//     });
+// }
 
-function createLineChart() {
-    const ctx = document.getElementById("lineChart");
+// function createLineChart() {
+//     const ctx = document.getElementById("lineChart");
 
-    if (!ctx) return;
+//     if (!ctx) return;
 
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["2019", "2020", "2021", "2022", "2023"],
-            datasets: [
-                {
-                    label: "Haji & Umrah",
-                    data: [450000, 100000, 200000, 450000, 554124],
-                    borderColor: "#22c55e",
-                    backgroundColor: "rgba(34, 197, 94, 0.1)",
-                    tension: 0.3,
-                    fill: true,
-                },
-                {
-                    label: "Pernikahan",
-                    data: [180000, 175000, 195000, 210000, 221000],
-                    borderColor: "#ec4899",
-                    backgroundColor: "rgba(236, 72, 153, 0.1)",
-                    tension: 0.3,
-                    fill: true,
-                },
-                {
-                    label: "Pendidikan",
-                    data: [1400000, 1450000, 1500000, 1550000, 1650000],
-                    borderColor: "#8b5cf6",
-                    backgroundColor: "rgba(139, 92, 246, 0.1)",
-                    tension: 0.3,
-                    fill: true,
-                },
-                {
-                    label: "Wakaf",
-                    data: [65000, 68000, 72000, 78000, 82400],
-                    borderColor: "#f97316",
-                    backgroundColor: "rgba(249, 115, 22, 0.1)",
-                    tension: 0.3,
-                    fill: true,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "rgba(255, 255, 255, 0.1)"
-                            : "rgba(0, 0, 0, 0.1)",
-                    },
-                    ticks: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "#f3f4f6"
-                            : "#374151",
-                    },
-                },
-                x: {
-                    grid: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "rgba(255, 255, 255, 0.1)"
-                            : "rgba(0, 0, 0, 0.1)",
-                    },
-                    ticks: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "#f3f4f6"
-                            : "#374151",
-                    },
-                },
-            },
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        color: document.documentElement.classList.contains(
-                            "dark"
-                        )
-                            ? "#f3f4f6"
-                            : "#374151",
-                    },
-                },
-            },
-        },
-    });
-}
+//     new Chart(ctx, {
+//         type: "line",
+//         data: {
+//             labels: ["2019", "2020", "2021", "2022", "2023"],
+//             datasets: [
+//                 {
+//                     label: "Haji & Umrah",
+//                     data: [450000, 100000, 200000, 450000, 554124],
+//                     borderColor: "#22c55e",
+//                     backgroundColor: "rgba(34, 197, 94, 0.1)",
+//                     tension: 0.3,
+//                     fill: true,
+//                 },
+//                 {
+//                     label: "Pernikahan",
+//                     data: [180000, 175000, 195000, 210000, 221000],
+//                     borderColor: "#ec4899",
+//                     backgroundColor: "rgba(236, 72, 153, 0.1)",
+//                     tension: 0.3,
+//                     fill: true,
+//                 },
+//                 {
+//                     label: "Pendidikan",
+//                     data: [1400000, 1450000, 1500000, 1550000, 1650000],
+//                     borderColor: "#8b5cf6",
+//                     backgroundColor: "rgba(139, 92, 246, 0.1)",
+//                     tension: 0.3,
+//                     fill: true,
+//                 },
+//                 {
+//                     label: "Wakaf",
+//                     data: [65000, 68000, 72000, 78000, 82400],
+//                     borderColor: "#f97316",
+//                     backgroundColor: "rgba(249, 115, 22, 0.1)",
+//                     tension: 0.3,
+//                     fill: true,
+//                 },
+//             ],
+//         },
+//         options: {
+//             responsive: true,
+//             maintainAspectRatio: false,
+//             scales: {
+//                 y: {
+//                     beginAtZero: true,
+//                     grid: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "rgba(255, 255, 255, 0.1)"
+//                             : "rgba(0, 0, 0, 0.1)",
+//                     },
+//                     ticks: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "#f3f4f6"
+//                             : "#374151",
+//                     },
+//                 },
+//                 x: {
+//                     grid: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "rgba(255, 255, 255, 0.1)"
+//                             : "rgba(0, 0, 0, 0.1)",
+//                     },
+//                     ticks: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "#f3f4f6"
+//                             : "#374151",
+//                     },
+//                 },
+//             },
+//             plugins: {
+//                 legend: {
+//                     position: "bottom",
+//                     labels: {
+//                         color: document.documentElement.classList.contains(
+//                             "dark"
+//                         )
+//                             ? "#f3f4f6"
+//                             : "#374151",
+//                     },
+//                 },
+//             },
+//         },
+//     });
+// }
 
-document
-    .getElementById("darkModeToggle")
-    .addEventListener("click", function () {
-        setTimeout(() => {
-            Chart.getChart("pieChart")?.destroy();
-            Chart.getChart("donutChart")?.destroy();
-            Chart.getChart("lineChart")?.destroy();
+// document
+//     .getElementById("darkModeToggle")
+//     .addEventListener("click", function () {
+//         setTimeout(() => {
+//             Chart.getChart("pieChart")?.destroy();
+//             Chart.getChart("donutChart")?.destroy();
+//             Chart.getChart("lineChart")?.destroy();
 
-            createPieChart();
-            createDonutChart();
-            createLineChart();
-        }, 50);
-    });
+//             // createPieChart();
+//             createDonutChart();
+//             createLineChart();
+//         }, 50);
+//     });

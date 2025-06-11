@@ -214,4 +214,28 @@ class UserController extends Controller
 
         return redirect('/')->with('success', 'Akun berhasil dihapus.');
     }
+
+    public function rumahibadah(Request $request)
+    {
+        $query = RumahIbadah::query();
+
+        if ($request->filled('jenis')) {
+            $query->where('jenis', $request->jenis);
+        }
+
+        if ($request->filled('kecamatan')) {
+            $query->where('kecamatan', $request->kecamatan);
+        }
+        
+        if ($request->filled('q')) {
+            $query->where('nama', 'like', '%' . $request->q . '%');
+        }
+
+        $data = $query->paginate(10)->withQueryString();
+
+        $jenisList = RumahIbadah::select('jenis')->distinct()->pluck('jenis');
+        $kecamatanList = RumahIbadah::select('kecamatan')->distinct()->pluck('kecamatan');
+
+        return view('user.partical.rumahibadahdetail', compact('data', 'jenisList', 'kecamatanList'));
+    }
 }

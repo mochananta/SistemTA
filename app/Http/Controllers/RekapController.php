@@ -14,6 +14,7 @@ class RekapController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         $tipe = $request->input('tipe', 'surat');
         $kuaId = $request->input('kua_id');
 
@@ -21,24 +22,33 @@ class RekapController extends Controller
         $konsultasiData = [];
 
         if ($tipe === 'surat') {
-            $query = PengajuanSurat::where('status', 'Selesai Diambil');
+            $query = PengajuanSurat::where('status', 'Selesai Diambil')->with(['user', 'kua']);
 
-            if ($kuaId) {
+            if ($user->role === 'admin_kua') {
+                $query->where('kua_id', $user->kua_id);
+            }
+
+            if ($kuaId && $user->role === 'admin_sistem') {
                 $query->where('kua_id', $kuaId);
             }
 
-            $suratData = $query->with('kua')->get();
+            $suratData = $query->get();
         } elseif ($tipe === 'konsultasi') {
-            $query = Konsultasi::where('status', 'Selesai');
+            $query = Konsultasi::where('status', 'Selesai')->with(['user', 'kua']);
 
-            if ($kuaId) {
+            if ($user->role === 'admin_kua') {
+                $query->where('kua_id', $user->kua_id);
+            }
+
+            if ($kuaId && $user->role === 'admin_sistem') {
                 $query->where('kua_id', $kuaId);
             }
 
-            $konsultasiData = $query->with('kua')->get();
+            $konsultasiData = $query->get();
         }
 
-        $kualist = Kua::all();
+        $kualist = $user->role === 'admin_sistem' ? Kua::all() : collect();
+
         return view('admin.rekap.view', compact('tipe', 'kuaId', 'suratData', 'konsultasiData', 'kualist'));
     }
 

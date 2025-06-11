@@ -141,7 +141,7 @@
                     </tbody>
                 </table>
                 <div class="mt-6 text-center">
-                    <a href="https://docs.google.com/spreadsheets/d/1wO58I9B6IsX0RjnjzRUsVJcR5fFexehK/edit?usp=sharing&ouid=111628064766446575941&rtpof=true&sd=true"
+                    <a href="{{ route('user.partical.rumahibadahdetail') }}"
                         class="inline-block bg-indigo-600 text-white text-sm px-5 py-2 rounded hover:bg-indigo-700 transition">
                         Lihat Semua Rumah Ibadah
                     </a>
