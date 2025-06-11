@@ -10,7 +10,7 @@
         <!-- Header -->
         <tr>
             <td align="center" style="background-color: #43A047; padding: 30px 20px;">
-                <img src="https://1.bp.blogspot.com/-guWx_fglu-Q/X4fAFtyCyFI/AAAAAAAAFqE/n11dZY5gCwIe9QWIe5QMc4-Sy8tZt--HQCLcBGAsYHQ/s1578/logo%2Bkemenag.png" alt="Kemenag" style="height: 60px; margin-bottom: 10px;">
+                {{-- <img src="https://1.bp.blogspot.com/-guWx_fglu-Q/X4fAFtyCyFI/AAAAAAAAFqE/n11dZY5gCwIe9QWIe5QMc4-Sy8tZt--HQCLcBGAsYHQ/s1578/logo%2Bkemenag.png" alt="Kemenag" style="height: 60px; margin-bottom: 10px;"> --}}
                 <h1 style="color: white; font-size: 24px; font-weight: bold; margin: 0;">Kementerian Agama</h1>
             </td>
         </tr>
