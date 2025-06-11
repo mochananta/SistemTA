@@ -68,6 +68,7 @@
                                                 <th>Alamat</th>
                                                 <th>Kontak</th>
                                                 <th>Kecamatan</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -80,6 +81,25 @@
                                                     <td class="p-2">{{ $item->kontak ?? '-' }}</td>
                                                     <td class="p-2">{{ $item->kecamatan ?? '-' }}</td>
                                                     </td>
+                                                    <td class="p-2 d-flex gap-2">
+                                                        <a href="{{ route('admin.ibadah.edit', $item->id) }}"
+                                                            title="Edit" class="text-primary">
+                                                            <i class="mdi mdi-pencil mdi-24px"></i>
+                                                        </a>
+
+                                                        <form action="{{ route('admin.ibadah.delete', $item->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')"
+                                                            class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" title="Hapus"
+                                                                style="background: none; border: none; color: red; cursor: pointer;">
+                                                                <i class="mdi mdi-delete mdi-24px"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+
                                                 </tr>
                                             @empty
                                                 <tr>

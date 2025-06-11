@@ -43,20 +43,43 @@
     <script src="{{ asset('admin/vendors/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/progressbar.js/progressbar.min.js') }}"></script>
     <script src="{{ asset('admin/vendors/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js') }}"></script>
-    <script src="{{ asset('admin/vendors/justgage/raphael-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('admin/vendors/justgage/justgage.js') }}"></script>
     <script src="{{ asset('admin/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('admin/js/dashboard.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    @if (isset($bulanLabels) && isset($jumlahPengajuan) && isset($jumlahSelesai))
+
+    @if (isset($bulanLabels) && isset($jumlahPengajuan))
         <script>
             const pengajuanLabels = @json($bulanLabels);
             const pengajuanData = @json($jumlahPengajuan);
-            const selesaiData = @json($jumlahSelesai);
         </script>
         <script src="{{ asset('js/admin/dashboard-charts.js') }}"></script>
+    @endif
+
+    @if (isset($jumlahKonsultasi))
+        <script>
+            const konsultasiChart = document.getElementById('konsultasiChart').getContext('2d');
+            new Chart(konsultasiChart, {
+                type: 'bar',
+                data: {
+                    labels: @json($bulanLabels),
+                    datasets: [{
+                        label: 'Jumlah Konsultasi',
+                        data: @json($jumlahKonsultasi),
+                        backgroundColor: '#00c292'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            precision: 0
+                        }
+                    }
+                }
+            });
+        </script>
     @endif
 
     @if (session('success'))

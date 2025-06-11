@@ -44,8 +44,8 @@
                 <div class="card text-dark" style="background-color: #C5B358;">
                     <div class="card-body text-center">
                         <i class="mdi mdi-calendar-check-outline mdi-36px mb-2"></i>
-                        <h6 class="mb-1">Layanan Nikah Bulan Ini</h6>
-                        <h4 class="fw-semibold count-up" data-value="{{ $nikahBulanIni }}">0</h4>
+                        <h6 class="mb-1">Layanan Pengajuan Surat Selesai</h6>
+                        <h4 class="fw-semibold count-up" data-value="{{ $suratSelesai }}">0</h4>
                     </div>
                 </div>
             </div>
@@ -64,29 +64,41 @@
             <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
                             <h4 class="card-title">Pengajuan Surat Perbulan</h4>
-                            <h4 class="text-success font-weight-bold">
-                                Total
-                                <span class="text-dark ms-3">{{ array_sum($jumlahPengajuan) }}</span>
-                            </h4>
+                            <form method="GET" action="{{ route('admin.index') }}">
+                                <select name="tahun_pengajuan" onchange="this.form.submit()"
+                                    class="form-select form-select-sm">
+                                    @foreach ($tahunListPengajuan as $th)
+                                        <option value="{{ $th }}"
+                                            {{ $th == $tahunPengajuanDipilih ? 'selected' : '' }}>
+                                            {{ $th }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
                         </div>
-                        <div id="pengajuan-tracker-legend" class="support-tracker-legend"></div>
-                        <canvas id="pengajuanTracker"></canvas>
+                        <canvas id="pengajuanTracker" height="150"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 grid-margin grid-margin-md-0 stretch-card">
+            <div class="col-sm-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-lg-flex align-items-center justify-content-between mb-4">
-                            <h4 class="card-title">Product Orders</h4>
-                            <p class="text-dark">+5.2% vs last 7 days</p>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="card-title">Konsultasi Perbulan</h4>
+                            <form method="GET" action="{{ route('admin.index') }}">
+                                <select name="tahun_konsultasi" onchange="this.form.submit()"
+                                    class="form-select form-select-sm">
+                                    @foreach ($tahunListKonsultasi as $th)
+                                        <option value="{{ $th }}" {{ $th == $tahunDipilih ? 'selected' : '' }}>
+                                            {{ $th }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
                         </div>
-                        <div class="product-order-wrap padding-reduced">
-                            <div id="productorder-gage" class="gauge productorder-gage"></div>
-                        </div>
+                        <canvas id="konsultasiChart" height="150"></canvas>
                     </div>
                 </div>
             </div>

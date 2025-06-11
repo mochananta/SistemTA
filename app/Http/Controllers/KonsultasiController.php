@@ -73,7 +73,6 @@ class KonsultasiController extends Controller
         $user = auth()->user();
         $nohp = $user->nohp ?? $request->input('nohp', 'tidak tersedia');
 
-
         $konsultasi = Konsultasi::create([
             'user_id' => auth()->id(),
             'kua_id' => $request->kua_id,

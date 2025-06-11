@@ -35,6 +35,7 @@
                                             </select>
                                         </div>
                                     @endif
+
                                     <button type="submit" class="btn btn-primary btn-sm">Filter</button>
                                     <a href="{{ route('admin.rekap.view') }}" class="btn btn-secondary btn-sm">Reset</a>
                                 </form>
@@ -90,7 +91,9 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="11" class="text-center text-muted">Tidak ada data.
+                                                        <td colspan="11" class="text-center py-4 text-muted">
+                                                            <i class="mdi mdi-database-remove display-4 d-block mb-2"></i>
+                                                            <strong>Belum ada data pengajuan surat selesai.</strong>
                                                         </td>
                                                     </tr>
                                                 @endforelse
@@ -141,7 +144,9 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="8" class="text-center text-muted">Tidak ada data.
+                                                        <td colspan="11" class="text-center py-4 text-muted">
+                                                            <i class="mdi mdi-database-remove display-4 d-block mb-2"></i>
+                                                            <strong>Belum ada data konsultasi selesai.</strong>
                                                         </td>
                                                     </tr>
                                                 @endforelse

@@ -6,6 +6,7 @@ use App\Imports\RumahIbadahImport;
 use App\Models\RumahIbadah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -84,5 +85,35 @@ class RumahIbadahController extends Controller
 
         $rumahIbadah = RumahIbadah::where('kecamatan', $kecamatan)->get(['id', 'nama']);
         return response()->json($rumahIbadah);
+    }
+
+    public function edit($id)
+    {
+        $item = RumahIbadah::findOrFail($id);
+        return view('admin.ibadah.edit', compact('item'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'jenis' => 'required|string|max:100',
+            'alamat' => 'required|string',
+            'kecamatan' => 'nullable|string',
+            'kontak' => 'nullable|string|max:20',
+        ]);
+
+        $item = RumahIbadah::findOrFail($id);
+        $item->update($request->all());
+
+        return redirect()->route('admin.ibadah.view')->with('success', 'Data berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $item = RumahIbadah::findOrFail($id);
+        $item->delete();
+
+        return redirect()->route('admin.ibadah.view')->with('success', 'Data berhasil dihapus.');
     }
 }

@@ -141,10 +141,10 @@
                     </tbody>
                 </table>
                 <div class="mt-6 text-center">
-                    {{-- <a href=""
+                    <a href="{{ route('user.partical.rumahibadahdetail') }}"
                         class="inline-block bg-indigo-600 text-white text-sm px-5 py-2 rounded hover:bg-indigo-700 transition">
                         Lihat Semua Rumah Ibadah
-                    </a> --}}
+                    </a>
                 </div>
             </div>
         </div>

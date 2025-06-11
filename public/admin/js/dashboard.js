@@ -1146,27 +1146,7 @@
 			});
 			document.getElementById('support-tracker-legend').innerHTML = barChart.generateLegend();
 		}
-		var productorderGage = new JustGage({
-			id: 'productorder-gage',
-			value: 3245,
-			min: 0,
-			max: 5000,
-			hideMinMax: true,
-			symbol: 'K',
-			label: 'You have done 57.6% more ordes today',
-			valueFontColor: "#001737",
-			labelFontColor: "#001737",
-			gaugeWidthScale: 0.3,
-			counter: true,
-			relativeGaugeSize: true,
-			gaugeColor: "#f0f0f0",
-			levelColors: [ "#fcd53b" ]
-		});
 		$("#productorder-gage").append('<div class="product-order"><div class="icon-inside-circle"><i class="mdi mdi-basket"></i></div></div>');
 
-		// Remove pro banner on close
-    document.querySelector('#bannerClose').addEventListener('click',function() {
-			$('#pro-banner').slideUp();
-    });
 	});
 })(jQuery);

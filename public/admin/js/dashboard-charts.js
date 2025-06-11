@@ -4,35 +4,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = document.getElementById("pengajuanTracker").getContext("2d");
 
     new Chart(ctx, {
-        type: 'bar',
+        type: "bar",
         data: {
             labels: pengajuanLabels,
             datasets: [
                 {
-                    label: 'Pengajuan Masuk',
+                    label: "Pengajuan Masuk",
                     data: pengajuanData,
-                    backgroundColor: '#3f51b5'
+                    backgroundColor: "#3f51b5",
                 },
-                {
-                    label: 'Selesai Diambil',
-                    data: selesaiData,
-                    backgroundColor: '#cfd8dc'
-                }
-            ]
+            ],
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: "top",
                 },
             },
             scales: {
                 y: {
-                    beginAtZero: true
-                }
-            }
-        }
+                    beginAtZero: true,
+                },
+            },
+        },
     });
 });
