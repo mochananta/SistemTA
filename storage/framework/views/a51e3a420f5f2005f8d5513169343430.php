@@ -14,7 +14,7 @@
 
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ url('/') }}#layanan"
+                        <a href="<?php echo e(url('/')); ?>#layanan"
                             class="px-6 py-3 bg-green-700 hover:bg-green-800 text-white font-medium rounded-lg shadow-lg transition duration-300">Layanan
                             Kami
                         </a>
@@ -24,10 +24,11 @@
 
                 <!-- Right Image -->
                 <div class="md:w-1/2 relative">
-                    <img src="{{ asset ('user/herokemenag.jpg')}}"
+                    <img src="<?php echo e(asset ('user/herokemenag.jpg')); ?>"
                         alt="Kementerian Agama"
                         class="w-full h-auto rounded-xl shadow-lg transition transform hover:scale-[1.02] duration-500">
                 </div>
             </div>
         </div>
     </section>
+<?php /**PATH C:\xampp\htdocs\SistemTA\resources\views/user/partical/hero.blade.php ENDPATH**/ ?>

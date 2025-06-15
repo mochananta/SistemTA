@@ -8,7 +8,8 @@
             <div class="mb-6 text-sm text-primary-600 dark:text-primary-400">
                 <a href="/" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Beranda</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
-                <a href="{{ route('user.layanan.konsultasi') }}" class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
+                <a href="{{ route('user.layanan.konsultasi') }}"
+                    class="font-medium text-gray-800 dark:text-gray-300 hover:text-primary-600">Layanan
                     Konsultasi</a>
                 <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
                 <span class="text-gray-600 dark:text-gray-300">Pelayanan Rekomendasi Nikah</span>
@@ -88,11 +89,9 @@
                             dialog (jangan lupa menyalin nomor layanan agar formulir konsultasi dapat di lacak)</li>
                         <li>Untuk memastikan konsultasi sudah dijawab, anda bisa mengecek status layanan dimenu Lacak
                             Layanan dengan memasukkan nomor layanan dan nomor hp pemohon.</li>
-                        <li>Status layanan: - Menunggu persetujuan, permohonan menunggu persetujuan kepala kantor/unit
-                            kerja
-                            terkait - Masih dalam proses, permohonan masih dalam proses verifikasi kepala kantor/unit
-                            kerja
-                            terkait.</li>
+                        <li>Status layanan: - Menunggu verifikasi, permohonan menunggu persetujuan kepala kantor/unit
+                            kerja terkait - dalam proses, permohonan masih dalam proses verifikasi kepala
+                            kantor/unit kerja terkait.</li>
                         <li>Selesai, permohonan sudah disetujui, bila surat membutuhkan jawaban dokumen siap untuk
                             didownload pemohon melalui lacak layanan.</li>
                         <li> Anda dapat memeriksa status konsultasi pada bagian Profil. </li>
@@ -198,9 +197,7 @@
                             </button>
                         </div>
                         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                            Jika proses permohonan berhasil, pemohon akan mendapatkan <strong>NOMOR LAYANAN</strong> yang
-                            akan tampil melalui dialog box dan juga dikirim melalui pesan whatsapp (jika nomor HP pemohon
-                            nomor whatsapp).
+                            Setelah mengirim, Anda akan mendapat <strong>Nomor Layanan</strong> untuk pelacakan status.
                         </p>
                     </form>
                 </div>

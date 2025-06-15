@@ -105,10 +105,10 @@
                             dialog (jangan lupa menyalin nomor layanan agar formulir konsultasi dapat di lacak)</li>
                         <li>Untuk memastikan Pengajuan Surat sudah selesai, anda bisa mengecek status layanan dimenu Lacak
                             Layanan dengan memasukkan nomor layanan dan nomor hp pemohon.</li>
-                        <li>Status layanan: - Menunggu persetujuan, permohonan menunggu persetujuan kepala kantor/unit kerja
+                        <li>Status layanan: - Menunggu verifikasi, permohonan menunggu persetujuan kepala kantor/unit kerja
                             terkait - Masih dalam proses, permohonan masih dalam proses verifikasi kepala kantor/unit kerja
                             terkait.</li>
-                        <li>Selesai, permohonan sudah disetujui, bila surat membutuhkan jawaban dokumen siap untuk
+                        <li>Disetujui, permohonan sudah disetujui, bila surat membutuhkan jawaban dokumen siap untuk
                             didownload pemohon melalui lacak layanan.</li>
                         <li> Anda dapat memeriksa status pengajuan surat pada bagian Profil. </li>
                     </ul>
@@ -201,8 +201,7 @@
                             </button>
                         </div>
                         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                            Setelah mengirim, Anda akan mendapat <strong>Nomor Layanan</strong> untuk pelacakan status, juga
-                            via WhatsApp jika tersedia.
+                            Setelah mengirim, Anda akan mendapat <strong>Nomor Layanan</strong> untuk pelacakan status.
                         </p>
                     </form>
                 </div>

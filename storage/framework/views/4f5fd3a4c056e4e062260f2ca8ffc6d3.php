@@ -1,8 +1,8 @@
-@extends('admin.dashboard')
-@section('content')
-    @php
+
+<?php $__env->startSection('content'); ?>
+    <?php
         $isAdminSistem = Auth::user()->role === 'admin_sistem';
-    @endphp
+    ?>
 
     <div class="container-fluid page-body-wrapper">
         <div class="main-panel">
@@ -13,28 +13,29 @@
                             <div class="card-body">
                                 <h4 class="card-title">List Data Pengajuan Surat</h4>
                                 <form method="GET" class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                                    @if ($isAdminSistem)
+                                    <?php if($isAdminSistem): ?>
                                         <div class="flex-grow-1 flex-sm-grow-0" style="min-width: 200px;">
                                             <select name="kua_id" class="form-select">
                                                 <option value="">-- Semua KUA --</option>
-                                                @foreach ($kualist as $kua)
-                                                    <option value="{{ $kua->id }}"
-                                                        {{ request('kua_id') == $kua->id ? 'selected' : '' }}>
-                                                        {{ $kua->nama }}
+                                                <?php $__currentLoopData = $kualist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kua): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($kua->id); ?>"
+                                                        <?php echo e(request('kua_id') == $kua->id ? 'selected' : ''); ?>>
+                                                        <?php echo e($kua->nama); ?>
+
                                                     </option>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
 
                                     <div style="width: 400px">
                                         <input type="search" name="search" placeholder="Cari nama..." class="form-control"
-                                            value="{{ request('search') }}">
+                                            value="<?php echo e(request('search')); ?>">
                                     </div>
 
                                     <div class="d-flex gap-2 flex-wrap flex-sm-nowrap">
                                         <button type="submit" class="btn btn-primary">Cari</button>
-                                        <a href="{{ route('admin.surat.view') }}" class="btn btn-secondary">Reset</a>
+                                        <a href="<?php echo e(route('admin.surat.view')); ?>" class="btn btn-secondary">Reset</a>
                                     </div>
                                 </form>
 
@@ -57,51 +58,53 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $index => $item)
+                                            <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $item->user->name ?? '-' }}</td>
-                                                    <td>{{ $item->user->email ?? '-' }}</td>
-                                                    <td>{{ $item->user->nohp ?? '-' }}</td>
-                                                    <td>{{ $item->alamat }}</td>
-                                                    <td>{{ $item->tanggal_pengajuan }}</td>
-                                                    <td>{{ $item->jenis_surat }}</td>
-                                                    <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}
+                                                    <td><?php echo e($index + 1); ?></td>
+                                                    <td><?php echo e($item->user->name ?? '-'); ?></td>
+                                                    <td><?php echo e($item->user->email ?? '-'); ?></td>
+                                                    <td><?php echo e($item->user->nohp ?? '-'); ?></td>
+                                                    <td><?php echo e($item->alamat); ?></td>
+                                                    <td><?php echo e($item->tanggal_pengajuan); ?></td>
+                                                    <td><?php echo e($item->jenis_surat); ?></td>
+                                                    <td><?php echo e($item->kua->nama ?? '-'); ?> - <?php echo e($item->kua->alamat ?? '-'); ?>
+
                                                     <td>
-                                                        @if ($item->status === 'Disetujui')
-                                                            @if ($item->jadwal_pengambilan)
+                                                        <?php if($item->status === 'Disetujui'): ?>
+                                                            <?php if($item->jadwal_pengambilan): ?>
                                                                 <span class="text-success">
-                                                                    {{ \Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y, H:i') }}
+                                                                    <?php echo e(\Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y, H:i')); ?>
+
                                                                     WIB
                                                                 </span>
-                                                            @else
+                                                            <?php else: ?>
                                                                 <span class="text-danger">Belum Diatur</span>
-                                                            @endif
-                                                        @else
+                                                            <?php endif; ?>
+                                                        <?php else: ?>
                                                             <span class="text-muted">-</span>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </td>
 
                                                     <td>
-                                                        @if ($item->status !== 'Menunggu Verifikasi')
-                                                            <a href="{{ asset('storage/' . $item->file_path) }}"
+                                                        <?php if($item->status !== 'Menunggu Verifikasi'): ?>
+                                                            <a href="<?php echo e(asset('storage/' . $item->file_path)); ?>"
                                                                 target="_blank" class="text-primary">
                                                                 <i class="mdi mdi-file-document mdi-24px"></i>
                                                             </a>
-                                                        @else
+                                                        <?php else: ?>
                                                             <span class="text-muted">Belum diverifikasi</span>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </td>
-                                                    <td> <span class="badge bg-primary">{{ ucfirst($item->status) }}</span>
+                                                    <td> <span class="badge bg-primary"><?php echo e(ucfirst($item->status)); ?></span>
                                                     </td>
                                                     <td class="d-flex gap-2">
-                                                        <form action="{{ route('Surat.updateStatus', $item->id) }}"
+                                                        <form action="<?php echo e(route('Surat.updateStatus', $item->id)); ?>"
                                                             method="POST">
-                                                            @csrf
+                                                            <?php echo csrf_field(); ?>
                                                             <select name="status" class="form-select form-select-sm"
-                                                                onchange="handleSuratStatusChange(this, {{ $item->id }})">
+                                                                onchange="handleSuratStatusChange(this, <?php echo e($item->id); ?>)">
                                                                 <option value="">Pilih Status</option>
-                                                                @php
+                                                                <?php
                                                                     $statusOptions = [
                                                                         'Diverifikasi',
                                                                         'Dokumen Lengkap',
@@ -109,26 +112,27 @@
                                                                         'Selesai Diambil',
                                                                         'gagal diambil',
                                                                     ];
-                                                                @endphp
-                                                                @foreach ($statusOptions as $status)
-                                                                    <option value="{{ $status }}"
-                                                                        @if ($status == $item->status) selected @endif>
-                                                                        {{ ucfirst($status) }}
+                                                                ?>
+                                                                <?php $__currentLoopData = $statusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <option value="<?php echo e($status); ?>"
+                                                                        <?php if($status == $item->status): ?> selected <?php endif; ?>>
+                                                                        <?php echo e(ucfirst($status)); ?>
+
                                                                     </option>
-                                                                @endforeach
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                             </select>
                                                         </form>
 
                                                         <button type="button" data-bs-toggle="modal"
-                                                            data-bs-target="#rejectModal{{ $item->id }}" title="Tolak"
+                                                            data-bs-target="#rejectModal<?php echo e($item->id); ?>" title="Tolak"
                                                             style="background: none; border: none; color: orange; cursor: pointer;">
                                                             <i class="mdi mdi-close-circle-outline mdi-24px"></i>
                                                         </button>
 
-                                                        <form action="{{ route('Surat.delete', $item->id) }}"
+                                                        <form action="<?php echo e(route('Surat.delete', $item->id)); ?>"
                                                             method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
+                                                            <?php echo csrf_field(); ?>
+                                                            <?php echo method_field('DELETE'); ?>
                                                             <button type="submit" title="Hapus"
                                                                 onclick="return confirm('Yakin ingin menghapus data ini?')"
                                                                 style="background: none; border: none; color: red; cursor: pointer;">
@@ -137,16 +141,16 @@
                                                         </form>
                                                     </td>
                                                 </tr>
-                                            @endforeach
-                                            @if ($data->isEmpty())
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($data->isEmpty()): ?>
                                                 <tr>
-                                                    <td colspan="{{ $isAdminSistem ? 15 : 15 }}"
+                                                    <td colspan="<?php echo e($isAdminSistem ? 15 : 15); ?>"
                                                         class="text-center py-4 text-muted">
                                                         <i class="mdi mdi-database-remove display-4 d-block mb-2"></i>
                                                         <strong>Belum ada data masuk.</strong>
                                                     </td>
                                                 </tr>
-                                            @endif
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -154,18 +158,19 @@
                                 <div class="d-flex justify-content-between align-items-center mt-4 flex-column">
                                     <nav>
                                         <ul class="pagination pagination-sm">
-                                            {{ $data->links() }}
+                                            <?php echo e($data->links()); ?>
+
                                         </ul>
                                     </nav>
                                 </div>
 
-                                @foreach ($data as $item)
-                                    <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
+                                <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="modal fade" id="rejectModal<?php echo e($item->id); ?>" tabindex="-1"
                                         aria-labelledby="rejectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <form action="{{ route('Surat.reject', $item->id) }}" method="POST"
+                                            <form action="<?php echo e(route('Surat.reject', $item->id)); ?>" method="POST"
                                                 enctype="multipart/form-data">
-                                                @csrf
+                                                <?php echo csrf_field(); ?>
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">Tolak Pengajuan</h5>
@@ -197,11 +202,11 @@
                                     </div>
 
                                     <!-- Modal Jadwal -->
-                                    <div class="modal fade" id="jadwalModalSurat{{ $item->id }}" tabindex="-1"
+                                    <div class="modal fade" id="jadwalModalSurat<?php echo e($item->id); ?>" tabindex="-1"
                                         aria-labelledby="jadwalModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <form method="POST" action="{{ route('Surat.updateStatus', $item->id) }}">
-                                                @csrf
+                                            <form method="POST" action="<?php echo e(route('Surat.updateStatus', $item->id)); ?>">
+                                                <?php echo csrf_field(); ?>
                                                 <input type="hidden" name="status" value="Disetujui">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -228,11 +233,11 @@
                                     </div>
 
                                     <!-- Modal untuk pilih tanggal diambil -->
-                                    <div class="modal fade" id="diambilModalSurat{{ $item->id }}" tabindex="-1"
+                                    <div class="modal fade" id="diambilModalSurat<?php echo e($item->id); ?>" tabindex="-1"
                                         aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <form action="{{ route('Surat.updateStatus', $item->id) }}" method="POST">
-                                                @csrf
+                                            <form action="<?php echo e(route('Surat.updateStatus', $item->id)); ?>" method="POST">
+                                                <?php echo csrf_field(); ?>
                                                 <input type="hidden" name="status" value="Selesai Diambil">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -257,7 +262,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
                     </div>
@@ -266,4 +271,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.dashboard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\SistemTA\resources\views/admin/surat/view.blade.php ENDPATH**/ ?>
