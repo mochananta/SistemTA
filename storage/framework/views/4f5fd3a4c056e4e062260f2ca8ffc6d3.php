@@ -70,19 +70,19 @@
                                                     <td><?php echo e($item->kua->nama ?? '-'); ?> - <?php echo e($item->kua->alamat ?? '-'); ?>
 
                                                     <td>
-                                                        <?php if($item->status === 'Disetujui'): ?>
-                                                            <?php if($item->jadwal_pengambilan): ?>
-                                                                <span class="text-success">
-                                                                    <?php echo e(\Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y, H:i')); ?>
+                                                        <div class="text-success small">
+                                                            <?php if($item->status === 'Disetujui' && $item->jadwal_pengambilan): ?>
+                                                                <?php echo e(\Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y')); ?>
 
-                                                                    WIB
-                                                                </span>
-                                                            <?php else: ?>
+                                                                -
+                                                                <?php echo e(\Carbon\Carbon::parse($item->jadwal_pengambilan)->addDays(7)->translatedFormat('d M Y')); ?>
+
+                                                            <?php elseif($item->status === 'Disetujui'): ?>
                                                                 <span class="text-danger">Belum Diatur</span>
+                                                            <?php else: ?>
+                                                                <span class="text-muted">-</span>
                                                             <?php endif; ?>
-                                                        <?php else: ?>
-                                                            <span class="text-muted">-</span>
-                                                        <?php endif; ?>
+                                                        </div>
                                                     </td>
 
                                                     <td>

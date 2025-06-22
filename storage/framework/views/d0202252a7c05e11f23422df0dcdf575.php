@@ -107,6 +107,7 @@
                                                     class="px-2 py-0.5 rounded-full font-medium
                                                 <?php switch($surat->status):
                                                     case ('Menunggu Verifikasi'): ?> bg-yellow-100 text-yellow-800 <?php break; ?>
+                                                    <?php case ('Menunggu Jadwal Ulang'): ?> bg-yellow-100 text-yellow-800 <?php break; ?>
                                                     <?php case ('Diverifikasi'): ?> bg-blue-100 text-blue-800 <?php break; ?>
                                                     <?php case ('Dokumen Lengkap'): ?> bg-green-100 text-green-800 <?php break; ?>
                                                     <?php case ('Disetujui'): ?> bg-blue-100 text-blue-800 <?php break; ?>
@@ -126,12 +127,25 @@
                                                     Detail
                                                 </button>
 
-                                                <?php if(in_array(strtolower($surat->status), ['ditolak', 'gagal diambil'])): ?>
+                                                <?php $status = strtolower($surat->status); ?>
+
+                                                <?php if($status === 'ditolak'): ?>
                                                     <button
                                                         onclick="document.getElementById('modal-edit-<?php echo e($surat->id); ?>').classList.remove('hidden')"
                                                         class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
                                                         Ajukan Ulang
                                                     </button>
+                                                <?php endif; ?>
+
+                                                <?php if($status === 'gagal diambil'): ?>
+                                                    <form action="<?php echo e(route('pengajuan.ajukanPerpanjangan', $surat->id)); ?>"
+                                                        method="POST" class="inline">
+                                                        <?php echo csrf_field(); ?>
+                                                        <button type="submit"
+                                                            class="text-xs bg-yellow-600 text-white px-2 py-1 rounded hover:bg-yellow-700">
+                                                            Ajukan Penjadwalan Ulang
+                                                        </button>
+                                                    </form>
                                                 <?php endif; ?>
 
                                                 <div id="modal-edit-<?php echo e($surat->id); ?>"

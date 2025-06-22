@@ -104,6 +104,7 @@
                                                     class="px-2 py-0.5 rounded-full font-medium
                                                 @switch($surat->status)
                                                     @case('Menunggu Verifikasi') bg-yellow-100 text-yellow-800 @break
+                                                    @case('Menunggu Jadwal Ulang') bg-yellow-100 text-yellow-800 @break
                                                     @case('Diverifikasi') bg-blue-100 text-blue-800 @break
                                                     @case('Dokumen Lengkap') bg-green-100 text-green-800 @break
                                                     @case('Disetujui') bg-blue-100 text-blue-800 @break
@@ -122,12 +123,25 @@
                                                     Detail
                                                 </button>
 
-                                                @if (in_array(strtolower($surat->status), ['ditolak', 'gagal diambil']))
+                                                @php $status = strtolower($surat->status); @endphp
+
+                                                @if ($status === 'ditolak')
                                                     <button
                                                         onclick="document.getElementById('modal-edit-{{ $surat->id }}').classList.remove('hidden')"
                                                         class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
                                                         Ajukan Ulang
                                                     </button>
+                                                @endif
+
+                                                @if ($status === 'gagal diambil')
+                                                    <form action="{{ route('pengajuan.ajukanPerpanjangan', $surat->id) }}"
+                                                        method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="text-xs bg-yellow-600 text-white px-2 py-1 rounded hover:bg-yellow-700">
+                                                            Ajukan Penjadwalan Ulang
+                                                        </button>
+                                                    </form>
                                                 @endif
 
                                                 <div id="modal-edit-{{ $surat->id }}"

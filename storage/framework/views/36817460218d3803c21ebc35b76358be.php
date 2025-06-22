@@ -94,8 +94,12 @@
                                                     dokumen pada:
                                                 </p>
                                                 <ul class="mt-2 text-sm text-gray-700 dark:text-gray-100 space-y-1">
-                                                    <li><strong>Tanggal & Waktu:</strong>
+                                                    <li><strong>Tanggal & Waktu Pengambilan:</strong>
                                                         <?php echo e(\Carbon\Carbon::parse($data->jadwal_pengambilan)->translatedFormat('d M Y, H:i')); ?>
+
+                                                    </li>
+                                                    <li><strong>Batas Maksimal Pengambilan:</strong>
+                                                        <?php echo e(\Carbon\Carbon::parse($data->jadwal_pengambilan)->addDays(7)->translatedFormat('d M Y, H:i')); ?>
 
                                                     </li>
                                                 </ul>
@@ -221,6 +225,29 @@
 <?php endif; ?>
                                     <?php break; ?>
 
+                                    <?php case ('menunggu jadwal ulang'): ?>
+                                        <?php if (isset($component)) { $__componentOriginalf0940b4d501e1b7a4494cca474f29f21 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf0940b4d501e1b7a4494cca474f29f21 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.status-box','data' => ['color' => 'orange','icon' => 'fas fa-clock','title' => 'Menunggu Jadwal Ulang','message' => 'Permintaan penjadwalan ulang Anda sedang diproses oleh admin. Mohon tunggu jadwal baru dari petugas.']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('status-box'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['color' => 'orange','icon' => 'fas fa-clock','title' => 'Menunggu Jadwal Ulang','message' => 'Permintaan penjadwalan ulang Anda sedang diproses oleh admin. Mohon tunggu jadwal baru dari petugas.']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf0940b4d501e1b7a4494cca474f29f21)): ?>
+<?php $attributes = $__attributesOriginalf0940b4d501e1b7a4494cca474f29f21; ?>
+<?php unset($__attributesOriginalf0940b4d501e1b7a4494cca474f29f21); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf0940b4d501e1b7a4494cca474f29f21)): ?>
+<?php $component = $__componentOriginalf0940b4d501e1b7a4494cca474f29f21; ?>
+<?php unset($__componentOriginalf0940b4d501e1b7a4494cca474f29f21); ?>
+<?php endif; ?>
+                                    <?php break; ?>
+
                                     <?php case ('gagal diambil'): ?>
                                         <?php if (isset($component)) { $__componentOriginalf0940b4d501e1b7a4494cca474f29f21 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf0940b4d501e1b7a4494cca474f29f21 = $attributes; } ?>
@@ -297,8 +324,8 @@
                                                 </div>
                                             <?php endif; ?>
                                         </div>
-                                    <?php break; ?>  
-                                            
+                                    <?php break; ?>
+
                                     <?php case ('selesai'): ?>
                                         <?php if (isset($component)) { $__componentOriginalf0940b4d501e1b7a4494cca474f29f21 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf0940b4d501e1b7a4494cca474f29f21 = $attributes; } ?>

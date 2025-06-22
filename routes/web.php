@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [UserController::class, 'index'])->name('user.home');
+Route::get('/about', [UserController::class, 'about'])->name('user.about');
 Route::post('/lacak-layanan', [PelacakanController::class, 'cek'])->name('lacak.cek');
 Route::get('/lacak/download/{kode_layanan}', [PelacakanController::class, 'downloadPDF'])->name('lacak.download');
 
@@ -54,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/password', [UserController::class, 'editPassword'])->name('password.edit');
     Route::post('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
     Route::delete('/profile/delete', [UserController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/pengajuan/{id}/ajukan-perpanjangan', [PengajuanSuratController::class, 'ajukanPerpanjangan'])->name('pengajuan.ajukanPerpanjangan');
 
     Route::post('/surat/{id}/reapply', [PengajuanSuratController::class, 'reapply'])->name('surat.reapply');
     Route::get('/pengajuan/{id}/edit', [PengajuanSuratController::class, 'edit'])->name('pengajuan.edit');

@@ -68,18 +68,17 @@
                                                     <td>{{ $item->jenis_surat }}</td>
                                                     <td>{{ $item->kua->nama ?? '-' }} - {{ $item->kua->alamat ?? '-' }}
                                                     <td>
-                                                        @if ($item->status === 'Disetujui')
-                                                            @if ($item->jadwal_pengambilan)
-                                                                <span class="text-success">
-                                                                    {{ \Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y, H:i') }}
-                                                                    WIB
-                                                                </span>
-                                                            @else
+                                                        <div class="text-success small">
+                                                            @if ($item->status === 'Disetujui' && $item->jadwal_pengambilan)
+                                                                {{ \Carbon\Carbon::parse($item->jadwal_pengambilan)->translatedFormat('d M Y') }}
+                                                                -
+                                                                {{ \Carbon\Carbon::parse($item->jadwal_pengambilan)->addDays(7)->translatedFormat('d M Y') }}
+                                                            @elseif ($item->status === 'Disetujui')
                                                                 <span class="text-danger">Belum Diatur</span>
+                                                            @else
+                                                                <span class="text-muted">-</span>
                                                             @endif
-                                                        @else
-                                                            <span class="text-muted">-</span>
-                                                        @endif
+                                                        </div>
                                                     </td>
 
                                                     <td>

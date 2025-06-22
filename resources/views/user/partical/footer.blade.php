@@ -79,7 +79,11 @@
         </div>
 
         <div class="pt-8 mt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
-            <p class="text-gray-400 text-sm">© 2025 Kementerian Agama Republik Indonesia. All Rights Reserved.</p>
+            <p class="text-gray-400 text-sm text-center md:text-left">
+                © 2025 Kementerian Agama Republik Indonesia. All Rights Reserved /
+                <a href="{{ route('user.about') }}" class="text-gray-400 hover:text-white text-sm transition">Tim Developer Poliwangi</a>
+            </p>
+
             <div class="flex space-x-6 mt-4 md:mt-0">
                 <a href="#" class="text-gray-400 hover:text-white text-sm transition">Kebijakan Privasi</a>
                 <a href="#" class="text-gray-400 hover:text-white text-sm transition">Syarat & Ketentuan</a>

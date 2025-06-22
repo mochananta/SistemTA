@@ -131,6 +131,20 @@ class PengajuanSuratController extends Controller
             return back()->with('success', 'Status berhasil diperbarui ke Gagal Diambil.');
         }
 
+        if ($surat->status === 'Menunggu Jadwal Ulang' && $request->status === 'Disetujui') {
+            if (!$request->filled('jadwal_pengambilan')) {
+                return back()->with('error', 'Mohon tentukan jadwal pengambilan baru.');
+            }
+
+            $surat->jadwal_pengambilan = $request->jadwal_pengambilan;
+            $surat->diambil_pada = null;
+            $surat->status = 'Disetujui';
+            $surat->catatan = null;
+            $surat->save();
+
+            return back()->with('success', 'Status berhasil diperbarui ke Disetujui (Jadwal ulang).');
+        }
+
         $allowedStatuses = [
             'Menunggu Verifikasi',
             'Diverifikasi',
@@ -138,6 +152,7 @@ class PengajuanSuratController extends Controller
             'Disetujui',
             'Selesai Diambil',
             'gagal diambil',
+            'Menunggu Jadwal Ulang',
         ];
 
         $currentIndex = array_search($surat->status, $allowedStatuses);
@@ -163,10 +178,9 @@ class PengajuanSuratController extends Controller
 
         switch ($request->status) {
             case 'Disetujui':
-                if (!$request->filled('jadwal_pengambilan')) {
-                    return back()->with('error', 'Mohon tentukan jadwal pengambilan.');
-                }
-                $surat->jadwal_pengambilan = $request->jadwal_pengambilan;
+                $surat->jadwal_pengambilan = $request->filled('jadwal_pengambilan')
+                    ? $request->jadwal_pengambilan
+                    : now()->addDays(7);
                 $surat->diambil_pada = null;
                 break;
 
@@ -189,7 +203,6 @@ class PengajuanSuratController extends Controller
 
         return back()->with('success', 'Status berhasil diperbarui.');
     }
-
 
     public function rejectSurat(Request $request, $id)
     {
@@ -305,5 +318,22 @@ class PengajuanSuratController extends Controller
         $surat->delete();
 
         return redirect()->back()->with('error', 'Pengajuan surat berhasil dihapus.');
+    }
+
+    public function ajukanPerpanjangan($id)
+    {
+        $pengajuan = PengajuanSurat::findOrFail($id);
+
+        // Validasi hanya bisa perpanjang dari status gagal diambil
+        if (strtolower($pengajuan->status) !== 'gagal diambil') {
+            return back()->with('error', 'Pengajuan ini tidak dapat diperpanjang.');
+        }
+
+        // Ubah status kembali ke "Menunggu Verifikasi" atau "Menunggu Jadwal Ulang"
+        $pengajuan->status = 'Menunggu Jadwal Ulang';
+        $pengajuan->catatan = 'Pemohon mengajukan ulang jadwal pengambilan.';
+        $pengajuan->save();
+
+        return back()->with('success', 'Permintaan perpanjangan jadwal berhasil diajukan. Mohon tunggu jadwal baru dari admin.');
     }
 }
