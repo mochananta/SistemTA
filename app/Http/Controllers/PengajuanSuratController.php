@@ -334,6 +334,6 @@ class PengajuanSuratController extends Controller
         $pengajuan->catatan = 'Pemohon mengajukan ulang jadwal pengambilan.';
         $pengajuan->save();
 
-        return back()->with('success', 'Permintaan perpanjangan jadwal berhasil diajukan. Mohon tunggu jadwal baru dari admin.');
+        return back()->with('success', 'Permintaan perpanjangan jadwal berhasil diajukan.');
     }
 }

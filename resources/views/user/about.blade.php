@@ -29,7 +29,7 @@
                     <img src="{{ asset('user/nanta.jpg') }}" alt="Moh. Ananta"
                         class="w-32 h-32 mx-auto rounded-full mb-4 shadow object-cover">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white">Moh. Ananta</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Backend Developer</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Full Stack Developer</p>
                     <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Politeknik Negeri Banyuwangi</p>
                     <div class="flex justify-center space-x-4 mt-4 text-lg text-gray-600 dark:text-gray-300">
                         <a href="https://instagram.com/your_ig" target="_blank" class="hover:text-pink-500"><i
@@ -41,7 +41,6 @@
                     </div>
                 </div>
 
-                <!-- Anggota 2 -->
                 <div
                     class="bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-8 w-80 text-center hover:shadow-xl transition">
                     <img src="{{ asset('img/foto2.jpg') }}" alt="Nama Developer"
