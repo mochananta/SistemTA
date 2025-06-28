@@ -123,13 +123,18 @@ class UserController extends Controller
         return view('user.layanan.konsultasi');
     }
 
+    public function about()
+    {
+        return view('user.about');
+    }
+
     public function profile()
     {
         $kuas = Kua::all();
         $user = auth()->user();
 
         $pengajuanSurat = [
-            'diproses' => $user->pengajuanSurat()->whereIn('status', ['Menunggu Verifikasi', 'Diverifikasi', 'Dokumen Lengkap'])->latest()->get(),
+            'diproses' => $user->pengajuanSurat()->whereIn('status', ['Menunggu Verifikasi', 'Diverifikasi', 'Dokumen Lengkap', 'Menunggu Jadwal Ulang'])->latest()->get(),
             'disetujui' => $user->pengajuanSurat()->where('status', 'Disetujui')->latest()->get(),
             'selesai' => $user->pengajuanSurat()->where('status', 'Selesai Diambil')->latest()->get(),
             'gagal' => $user->pengajuanSurat()->where('status', 'gagal diambil')->latest()->get(),
@@ -226,7 +231,7 @@ class UserController extends Controller
         if ($request->filled('kecamatan')) {
             $query->where('kecamatan', $request->kecamatan);
         }
-        
+
         if ($request->filled('q')) {
             $query->where('nama', 'like', '%' . $request->q . '%');
         }

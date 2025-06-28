@@ -93,8 +93,11 @@
                                                     dokumen pada:
                                                 </p>
                                                 <ul class="mt-2 text-sm text-gray-700 dark:text-gray-100 space-y-1">
-                                                    <li><strong>Tanggal & Waktu:</strong>
+                                                    <li><strong>Tanggal & Waktu Pengambilan:</strong>
                                                         {{ \Carbon\Carbon::parse($data->jadwal_pengambilan)->translatedFormat('d M Y, H:i') }}
+                                                    </li>
+                                                    <li><strong>Batas Maksimal Pengambilan:</strong>
+                                                        {{ \Carbon\Carbon::parse($data->jadwal_pengambilan)->addDays(7)->translatedFormat('d M Y, H:i') }}
                                                     </li>
                                                 </ul>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
@@ -163,6 +166,11 @@
                                             message="Layanan telah selesai. Dokumen diambil pada {{ \Carbon\Carbon::parse($data->diambil_pada)->translatedFormat('d M Y, H:i') }}." />
                                     @break
 
+                                    @case('menunggu jadwal ulang')
+                                        <x-status-box color="orange" icon="fas fa-clock" title="Menunggu Jadwal Ulang"
+                                            message="Permintaan penjadwalan ulang Anda sedang diproses oleh admin. Mohon tunggu jadwal baru dari petugas." />
+                                    @break
+
                                     @case('gagal diambil')
                                         <x-status-box color="red" icon="fas fa-exclamation-triangle" title="Gagal Diambil"
                                             message="Anda tidak mengambil dokumen dalam waktu 2 hari setelah jadwal yang telah ditentukan. Silakan hubungi petugas untuk proses lebih lanjut atau ajukan ulang bila diperlukan." />
@@ -202,8 +210,8 @@
                                                 </div>
                                             @endunless
                                         </div>
-                                    @break  
-                                            
+                                    @break
+
                                     @case('selesai')
                                         <x-status-box color="green" icon="fas fa-check-double" title="Selesai"
                                             message="Sesi konsultasi Anda telah selesai. Terima kasih telah menggunakan layanan kami." />

@@ -4,7 +4,7 @@
             <div>
                 <div class="flex items-center space-x-2 mb-6">
                     <div class="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
-                        <img src="{{ asset('user/kemenag.png') }}" alt="Logo Kemenag" class="h-6 w-6 object-contain">
+                        <img src="<?php echo e(asset('user/kemenag.png')); ?>" alt="Logo Kemenag" class="h-6 w-6 object-contain">
                     </div>
                     <span class="font-semibold text-white text-lg">Kementerian Agama</span>
                 </div>
@@ -50,16 +50,16 @@
             <div>
                 <h4 class="text-lg font-semibold mb-4">Layanan Utama</h4>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('user.layanan.konsultasi') }}"
+                    <li><a href="<?php echo e(route('user.layanan.konsultasi')); ?>"
                             class="text-white-300 hover:text-white hover:underline transition">Layanan
                             Konsultasi</a></li>
-                    <li><a href="{{ route('user.layanan.surat') }}"
+                    <li><a href="<?php echo e(route('user.layanan.surat')); ?>"
                             class="text-white-300 hover:text-white hover:underline transition">Layanan
                             Pengajuan Surat</a></li>
-                    <li><a href="{{ url('/') }}#statistik"
+                    <li><a href="<?php echo e(url('/')); ?>#statistik"
                             class="text-white-300 hover:text-white hover:underline transition">Layanan
                             Statistik</a></li>
-                    <li><a href="{{ url('/') }}#data"
+                    <li><a href="<?php echo e(url('/')); ?>#data"
                             class="text-white-300 hover:text-white hover:underline transition">Layanan
                             Data Tempat Ibadah</a></li>
 
@@ -81,7 +81,7 @@
         <div class="pt-8 mt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
             <p class="text-gray-400 text-sm text-center md:text-left">
                 © 2025 Kementerian Agama Republik Indonesia. All Rights Reserved /
-                <a href="{{ route('user.about') }}" class="text-gray-400 hover:text-white text-sm transition">Tim Developer Poliwangi</a>
+                <a href="<?php echo e(route('user.about')); ?>" class="text-gray-400 hover:text-white text-sm transition">Tim Developer Poliwangi</a>
             </p>
 
             <div class="flex space-x-6 mt-4 md:mt-0">
@@ -92,3 +92,4 @@
         </div>
     </div>
 </footer>
+<?php /**PATH C:\xampp\htdocs\SistemTA\resources\views/user/partical/footer.blade.php ENDPATH**/ ?>

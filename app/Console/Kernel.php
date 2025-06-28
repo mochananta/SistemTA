@@ -12,9 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('surat:cek-gagal-diambil')->everyMinute(); 
+        $schedule->call(function () {
+        })->everyMinute();
     }
-
     /**
      * Register the commands for the application.
      */
@@ -22,6 +22,6 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__ . '/Commands');
 
-        require base_path('routes/console.php');    
+        require base_path('routes/console.php');
     }
 }
