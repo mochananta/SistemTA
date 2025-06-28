@@ -78,10 +78,10 @@
 <body>
 
     <div class="header">
-        <img src="/public/user/kemenag.png" alt="Logo Kemenag">
+        {{-- <img src="/public/user/kemenag.png" alt="Logo Kemenag"> --}}
         <h1>Kementerian Agama Banyuwangi</h1>
         <p>Pelayanan Terpadu Satu Pintu (PTSP) - Kantor Urusan Agama</p>
-    </div>
+    </div> 
 
     <div class="title">Bukti Pengajuan Layanan</div>
 
